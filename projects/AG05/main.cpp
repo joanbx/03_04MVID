@@ -1,23 +1,14 @@
 #include <glad/glad.h>
 
-#include "engine/input.hpp"
 #include "engine/window.hpp"
 #include "engine/shader.hpp"
 
-#include <iostream>
-
 #include "engine/texture.hpp"
-#include "engine/geometry/quad.hpp"
 #include "engine/geometry/cube.hpp"
 #include <glm/gtc/matrix_transform.hpp>
 #include <GLFW/glfw3.h>
 
-void handleInput() {
-    std::vector<std::pair<int, int>> keys = Input::instance()->getKeys();
-    for (auto& key : keys) {
-        std::cout << key.first << " - " << key.second << std::endl;
-    }
-}
+void handleInput() {/*Intentionally Left BLank*/ }
 
 void render(const Geometry& geom, const Shader& shader, Texture& tex) {
     glClear(GL_COLOR_BUFFER_BIT);
