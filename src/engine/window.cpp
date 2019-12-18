@@ -15,8 +15,16 @@ void onKeyPress(GLFWwindow* window, int key, int scancode, int action, int mods)
     if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS) {
         glfwSetWindowShouldClose(window, true);
     } else {
-        Input::instance()->addKey(key, action);
+        Input::instance()->keyPressed(key, action);
     }
+}
+
+void onMouseMove(GLFWwindow* window, double x, double y) {
+    Input::instance()->mouseMoved(x, y);
+}
+
+void onScrollMove(GLFWwindow* window, double x, double y) {
+    Input::instance()->scrollMove(x, y);
 }
 
 Window::Window() {
@@ -45,6 +53,9 @@ Window::Window() {
 
     glfwSetFramebufferSizeCallback(window_, onChangeFrameBufferSize);
     glfwSetKeyCallback(window_, onKeyPress);
+    glfwSetCursorPosCallback(window_, onMouseMove);
+    glfwSetScrollCallback(window_, onScrollMove);
+
 }
 
 Window::~Window() {
@@ -61,7 +72,18 @@ bool Window::alive() const {
 }
 
 void Window::frame() const {
-    Input::instance()->clear();
     glfwSwapBuffers(window_);
     glfwPollEvents();
+}
+
+bool Window::keyPressed(int key) {
+    return glfwGetKey(window_, key) == GLFW_PRESS;
+}
+
+void Window::setCaptureMode(bool toggle) const {
+    if (toggle) {
+        glfwSetInputMode(window_, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+    } else {
+        glfwSetInputMode(window_, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+    }
 }

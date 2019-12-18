@@ -10,6 +10,9 @@ class Window {
         bool alive() const;
         void frame() const;
 
+        bool keyPressed(int key);
+
+        void setCaptureMode(bool toggle) const;
     private:
         Window();
         ~Window();

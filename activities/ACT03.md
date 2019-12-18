@@ -9,15 +9,13 @@ Implementar 6 ejercicios complementarios a AG05, basándose en la implementació
 - EJ05.01 - Generar un cubo de manera procedural, a partir de un centro y un radio.
 - EJ05.02 - Cambiar las UVs del cubo, para soportar el unwrapping completo, y pintar el cubo con la textura adjunta.
 - EJ05.03 - A partir de la actividad AG_05, en la escena con los cubos rotando, invertir el orden de la aplicación de las transformaciones (traslación y rotación) y verificar que el orden de aplicación es relevante.
-- EJ05.04 - A partir de la actividad AG_05, en la escena con los cubos rotando, hacer que se roten solo la mitad de los cubos.
-- EJ05.05 - A partir de la actividad AG_05, en la escena con los cubos rotando, montar la escena con 9 cubos formando una X en 3D.
-- EJ05.06 - Crear una escena con un suelo, y varios cubos apoyados en él, a diversas alturas, distancias y tamaños.
+- EJ05.04 - Crear una escena con un suelo, y varios cubos apoyados en él, a diversas alturas, distancias y tamaños.
 
 ## EJ06
 
 Implementar 2 ejercicios complementarios a AG06, basándose en la implementación de dicha AG06 vista en clase realizar:
 
-- EJ06.01 - Sobre la escena del ejercicio 05.06, hacer que la cámara no permita volar y se comporte como una cámara FPS en la cual el personaje siempre estuviera andando sobre el suelo.
+- EJ06.01 - Sobre la escena del ejercicio 05.04, hacer que la cámara no permita volar y se comporte como una cámara FPS en la cual el personaje siempre estuviera andando sobre el suelo.
 - EJ06.02 - Implementar la función LookAt, y no usar la de GLM.
 
 ## EJ07
