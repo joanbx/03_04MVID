@@ -2,7 +2,7 @@
 #define __INPUT_H__
 
 #include <functional>
-#include "window.hpp"
+#include "engine/window.hpp"
 
 class Input {
 public:
@@ -11,30 +11,30 @@ public:
         return &i;
     }
 
-    bool isKeyPressed(int key) {
+    static bool isKeyPressed(int key) {
         return Window::instance()->keyPressed(key);
     }
 
-    void setKeyPressedCallback(const std::function<void(int, int)> f) {
+    void setKeyPressedCallback(const std::function<void(int, int)>& f) {
         _keyPressedCallback = f;
     }
 
-    void setMouseMoveCallback(const std::function<void(float, float)> f) {
+    void setMouseMoveCallback(const std::function<void(float, float)>& f) {
         _mouseMoveCallback = f;
     }
-    void setScrollMoveCallback(const std::function<void(float, float)> f) {
+    void setScrollMoveCallback(const std::function<void(float, float)>& f) {
         _scrollMoveCallback = f;
     }
 
-    void keyPressed(int key, int action) {
+    void keyPressed(int key, int action) const {
         if (_keyPressedCallback) _keyPressedCallback(key, action);
     }
 
-    void mouseMoved(float x, float y) {
+    void mouseMoved(float x, float y) const {
         if (_mouseMoveCallback) _mouseMoveCallback(x, y);
     }
 
-    void scrollMove(float x, float y) {
+    void scrollMove(float x, float y) const {
         if (_scrollMoveCallback) _scrollMoveCallback(x, y);
     }
 

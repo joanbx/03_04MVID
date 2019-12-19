@@ -7,6 +7,8 @@
 #include <iostream>
 
 void onChangeFrameBufferSize(GLFWwindow*, const int32_t width, const int32_t height) noexcept {
+    Window::instance()->setWidth(width);
+    Window::instance()->setHeight(height);
     glViewport(0, 0, width, height);
     std::cout << width << " " << height << std::endl;
 }
@@ -37,53 +39,49 @@ Window::Window() {
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-    window_ = glfwCreateWindow(800, 600, "04MVID", nullptr, nullptr);
-    if (!window_) {
+    _window = glfwCreateWindow(_width, _height, "04MVID", nullptr, nullptr);
+    if (!_window) {
         std::cout << "Error Creating Window" << std::endl;
         glfwTerminate();
         exit(-1);
     }
 
-    glfwMakeContextCurrent(window_);
+    glfwMakeContextCurrent(_window);
 
     if (!gladLoadGL()) {
         std::cout << "Error Initializing GLAD" << std::endl;
         exit(-1);
     }
 
-    glfwSetFramebufferSizeCallback(window_, onChangeFrameBufferSize);
-    glfwSetKeyCallback(window_, onKeyPress);
-    glfwSetCursorPosCallback(window_, onMouseMove);
-    glfwSetScrollCallback(window_, onScrollMove);
+    glfwSetFramebufferSizeCallback(_window, onChangeFrameBufferSize);
+    glfwSetKeyCallback(_window, onKeyPress);
+    glfwSetCursorPosCallback(_window, onMouseMove);
+    glfwSetScrollCallback(_window, onScrollMove);
 
+    setCaptureMode(true);
 }
 
 Window::~Window() {
     glfwTerminate();
 }
 
-Window* Window::instance() {
-    static Window w;
-    return &w;
-}
-
 bool Window::alive() const {
-    return !glfwWindowShouldClose(window_);
+    return !glfwWindowShouldClose(_window);
 }
 
 void Window::frame() const {
-    glfwSwapBuffers(window_);
+    glfwSwapBuffers(_window);
     glfwPollEvents();
 }
 
-bool Window::keyPressed(int key) {
-    return glfwGetKey(window_, key) == GLFW_PRESS;
+bool Window::keyPressed(int key) const {
+    return glfwGetKey(_window, key) == GLFW_PRESS;
 }
 
 void Window::setCaptureMode(bool toggle) const {
     if (toggle) {
-        glfwSetInputMode(window_, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+        glfwSetInputMode(_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
     } else {
-        glfwSetInputMode(window_, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+        glfwSetInputMode(_window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
     }
 }

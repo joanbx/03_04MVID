@@ -4,12 +4,11 @@
 #include "geometry.hpp"
 
 class Cube final : public Geometry {
-public:
-    Cube() = delete;
-    explicit Cube(float size);
+    public:
+        Cube() = delete;
+        explicit Cube(float size);
 
-protected:
-    float _size;
-
+    private:
+        float _size;
 };
 #endif
