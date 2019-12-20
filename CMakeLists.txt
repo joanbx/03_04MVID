@@ -22,6 +22,7 @@ set(ENGINE_SRC_FILES
     ${CMAKE_CURRENT_LIST_DIR}/src/engine/texture.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/engine/window.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/engine/geometry/cube.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/src/engine/geometry/extcube.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/engine/geometry/geometry.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/engine/geometry/quad.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/engine/geometry/sphere.cpp)
@@ -33,6 +34,7 @@ set(ENGINE_HEADER_FILES
     ${CMAKE_CURRENT_LIST_DIR}/include/engine/texture.hpp
     ${CMAKE_CURRENT_LIST_DIR}/include/engine/window.hpp
     ${CMAKE_CURRENT_LIST_DIR}/include/engine/geometry/cube.hpp
+    ${CMAKE_CURRENT_LIST_DIR}/include/engine/geometry/extcube.hpp
     ${CMAKE_CURRENT_LIST_DIR}/include/engine/geometry/geometry.hpp
     ${CMAKE_CURRENT_LIST_DIR}/include/engine/geometry/quad.hpp
     ${CMAKE_CURRENT_LIST_DIR}/include/engine/geometry/sphere.hpp)
