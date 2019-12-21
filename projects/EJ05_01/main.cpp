@@ -59,21 +59,21 @@ uint32_t proceduralCube(glm::vec3& center, float& radius, bool& cubeInsideSphere
 	std::vector<float> normals;			//Vector/Array normal
 	std::vector<uint32_t> indices;		//Vector/Array Indice
 	
-	int faces = 6;						//Cubo tiene 6 caras
+	uint8_t faces = 6;					//Cubo tiene 6 caras
 	uint32_t _nVerts = faces * 2 * 3;	//Número de vértices
 
 	float x=1,y=1,z=1;					//Buffer signos
 	float pos[3] = { 0,0,0 };			//Buffer posiciones
 	float uv[2] = { 0,0 };				//Buffer uv
 	float normal[3] = { 0,0,0 };		//Buffer normal
-	int i = 0;							//Buffer índice
+	uint8_t i = 0;							//Buffer índice
 
 	//Si el cubo está dentro de la esfera (radio= centro a vértice), ésta es la fórmula para calcular distancia de centro del cubo a una cara
 	if (cubeInsideSphere)
 		radius = radius / sqrt(3);
 
-	float angles[6] = {225.0f,135.0f,45.0f,225.0f,45.0f,315.0f}; //ángulos correspondientes a las posiciones de los 6 vértices de los 2 triángulos de un cuadrado.
-	int order[6] = {3,1,-3,-1,-2,2};	//que eje fijo tenemos en cada sequencia (1=x,2=y,3=z), el signo determina si el eje fijo es positivo o negativo
+	float angles[6] = {225.0f,135.0f,45.0f,225.0f,45.0f,315.0f}; //ángulos correspondientes a las posiciones de los 6 vértices de los 2 triángulos de un cuadrado (cara).
+	int order[6] = {3,1,-3,-1,-2,2};	//eje fijo en cada sequencia (1=x,2=y,3=z), el signo determina si el eje fijo es positivo o negativo
 										// FRONTAL - DERECHA - TRASERO - IZQUIERDA - ABAJO - ARRIBA (caras de los cubos desenrollados)
 
 	for (int f = 0; f < faces; ++f) { //Por cada cara
@@ -89,7 +89,6 @@ uint32_t proceduralCube(glm::vec3& center, float& radius, bool& cubeInsideSphere
 				uv[1] = (y < 0) ? 0 : y;
 				//normal
 				normal[0] = 0; normal[1] = 0; normal[2] = z;
-
 			}
 			else if (abs(order[f]) == 2) { //EJE Y fijo
 				//pos
@@ -108,8 +107,8 @@ uint32_t proceduralCube(glm::vec3& center, float& radius, bool& cubeInsideSphere
 				z = -getSign(order[f]) * getSign(sin(angles[p] * PI / 180));//-sin
 				x = getSign(order[f]);
 				//uv
-				uv[1] = (y < 0) ? 0 : y;
 				uv[0] = (z < 0) ? 0 : z;
+				uv[1] = (y < 0) ? 0 : y;
 				//normal
 				normal[0] = x; normal[1] = 0; normal[2] = 0;
 			}
@@ -118,6 +117,7 @@ uint32_t proceduralCube(glm::vec3& center, float& radius, bool& cubeInsideSphere
 			pos[1] = y * radius + center.y;
 			pos[2] = z * radius + center.z;
 
+			//Insertamos arrays e incrementamos índice
 			positions.insert(positions.end(), pos, pos + 3);
 			uvs.insert(uvs.end(), uv, uv + 2);
 			normals.insert(normals.end(), normal, normal + 3);
@@ -126,9 +126,6 @@ uint32_t proceduralCube(glm::vec3& center, float& radius, bool& cubeInsideSphere
 
 			std::cout << pos[0] << "  " << pos[1] << " " << pos[2] << " | " << uv[0] << " " << uv[1] << " | " << normal[0] << "  " << normal[1] << " " << normal[2] << std::endl;
 			
-
-
-
 		}
 		std::cout << "-----------------------" << std::endl;
 	}
@@ -178,7 +175,7 @@ int main(int, char* []) {
 
 	glClearColor(0.0f, 0.3f, 0.6f, 1.0f);
 
-	const Shader shader("../projects/AG05/vertex.vs", "../projects/AG05/fragment.fs");
+	const Shader shader("../projects/EJ05_01/vertex.vs", "../projects/EJ05_01/fragment.fs");
 
 
 	//float center[3] = { 0,0,0 };
@@ -187,9 +184,7 @@ int main(int, char* []) {
 	float radio = 0.5f;
 	bool CubeInsideSphere = false;
 
-
 	uint32_t VBO[4]{ 0,0,0,0 };
-
 
 	const uint32_t VAO = proceduralCube(center, radio, CubeInsideSphere, VBO);
 	//const Cube cube(1.0f);
