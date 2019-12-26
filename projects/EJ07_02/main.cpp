@@ -59,7 +59,7 @@ void handleInput(float dt) {
 		changeParameters[4] = true;
 	}
 	if (input->isKeyPressed(GLFW_KEY_0)) {
-		for (uint8_t i = 0; i < 4; ++i) {
+		for (uint8_t i = 0; i < sizeof(changeParameters)/sizeof(bool); ++i) {
 			changeParameters[i] = false;
 		}
 	}
