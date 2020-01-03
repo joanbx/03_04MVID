@@ -27,7 +27,9 @@ float lastFrame = 0.0f;
 const float deltaTime = 0.0f;
 float lastX, lastY;
 bool firstMouse = true;
+std::string lastMaterial = "";
 
+//Classs Material
 class Material {
 	glm::vec3 ambient;
 	glm::vec3 diffuse;
@@ -138,9 +140,10 @@ void render(const Geometry& object, const Geometry& light, const Shader& s_phong
 
 	sMod = (int(floor(lastFrame))%nMat);
 	
-
-	//std::cout << "Material: "<< sMod << " " << mats[sMod].getName() << " "   << std::endl;
-
+	if (lastMaterial != mats[sMod].getName()) {
+		std::cout << "Material: " << sMod << " " << mats[sMod].getName() << " " << std::endl;
+		lastMaterial = mats[sMod].getName();
+	}
 	
 	s_phong.set("material.ambient", mats[sMod].getAmbient().x, mats[sMod].getAmbient().y, mats[sMod].getAmbient().z);
 	s_phong.set("material.diffuse", mats[sMod].getDiffuse().x, mats[sMod].getDiffuse().y, mats[sMod].getDiffuse().z);

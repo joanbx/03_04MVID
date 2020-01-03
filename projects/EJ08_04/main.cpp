@@ -81,10 +81,12 @@ void render(const Geometry& object, const Geometry& light, const Shader& s_phong
 	glm::vec3 lightDiffuse(0.5f, 0.5f, 0.5f);
 
 	s_light.use();
-
+	
 	glm::mat4 model = glm::mat4(1.0f);
+	
 	model = glm::translate(model, lightPos);
 	model = glm::scale(model, glm::vec3(0.25f));
+	
 	s_light.set("model", model);
 	s_light.set("view", view);
 	s_light.set("proj", proj);
@@ -93,7 +95,9 @@ void render(const Geometry& object, const Geometry& light, const Shader& s_phong
 	light.render();
 
 	s_phong.use();
+	glm::vec3 rotate(0.0f, 1.0f, 0.0f);
 	model = glm::mat4(1.0f);
+	model = glm::rotate(model, 180.0f, rotate);
 	s_phong.set("model", model);
 	s_phong.set("view", view);
 	s_phong.set("proj", proj);

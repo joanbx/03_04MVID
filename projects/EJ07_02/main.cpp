@@ -2,6 +2,7 @@
 EJ07.02 - Cambiar valores de ambient, diffuse, specular y shininess y ver como se comporta el modelo de iluminación.
 Autor: Joan Baixauli
 Ejercicio basado en: AG07
+NOTA: Usar teclas 1,2,3,4,5 y 0 para ver cambios
 */
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
@@ -109,7 +110,7 @@ void render(const Geometry& object, const Geometry& light, const Shader& s_phong
 
 	lightColor = { 1.0f, 1.0f, 1.0f };
 
-	//Con las TECLAS 1 2 3 4 5 cambiamos los valores (Color,Pos-Diffuse, Ambient,Shininees y Specular) conforme el tiempo
+	//Con las TECLAS 1 2 3 4 5 cambiamos los valores (Color,Pos-Diffuse, Ambient,Shininees, Specular) conforme el tiempo
 	//Con la TECLA 0 reseteamos
 
 	if (changeParameters[0]) { //Color -> 1	

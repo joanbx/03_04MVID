@@ -118,7 +118,7 @@ int main(int, char* []) {
 
 	glClearColor(0.0f, 0.3f, 0.6f, 1.0f);
 
-	const Shader s_gouraud("../projects/EJ07_04/Gouraud.vs", "../projects/EJ07_04/Gouraud.fs");
+	const Shader s_gouraud("../projects/EJ07_04/Gouraud.vs", "../projects/EJ07_04/Gouraud.fs"); //Ver Shaders Gouraud!
 	const Shader s_light("../projects/EJ07_04/light.vs", "../projects/EJ07_04/light.fs");
 	const Sphere sphere(1.0f, 50, 50);
 

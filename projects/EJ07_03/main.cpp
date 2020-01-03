@@ -118,7 +118,7 @@ int main(int, char* []) {
 
 	glClearColor(0.0f, 0.3f, 0.6f, 1.0f);
 
-	const Shader s_phong("../projects/EJ07_03/phong.vs", "../projects/EJ07_03/blinn.fs");
+	const Shader s_phong("../projects/EJ07_03/phong.vs", "../projects/EJ07_03/blinn.fs"); //VER SHADER Phong
 	const Shader s_light("../projects/EJ07_03/light.vs", "../projects/EJ07_03/light.fs");
 	const Sphere sphere(1.0f, 50, 50);
 

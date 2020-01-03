@@ -44,7 +44,7 @@ int main(int, char* []) {
 
 	const Shader shader("../projects/EJ05_02/vertex.vs", "../projects/EJ05_02/fragment.fs");
 	//const Cube cube(1.0f);
-	const ExtendedCube extCube(1.0f);
+	const ExtendedCube extCube(1.0f); //<-Ver Clase
 
 	Texture tex("../assets/textures/EJ05.02_cube_uv_b.jpg", Texture::Format::RGB);
 

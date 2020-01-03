@@ -2,6 +2,7 @@
 EJ08.02 - Cambiar valores de ambient, diffuse, specular de la luz y ver como afecta a como se ve el cubo.
 Autor: Joan Baixauli
 Ejercicio basado en: AG08.02
+Nota: Usar teclas 1,2,3 y 0 para ver cambios
 */
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
@@ -118,7 +119,7 @@ void render(const Geometry& object, const Geometry& light, const Shader& s_phong
 	s_phong.set("view", view);
 	s_phong.set("proj", proj);
 
-	if (changeParameters[0] || changeParameters[1] || changeParameters[2]) {
+	if (changeParameters[0] || changeParameters[1] || changeParameters[2]) { //Cambiamos parametros con el tiempo
 		float r_ = sin(lastFrame) / 2.0f + 0.5f;
 		float g_ = cos(lastFrame) / 2.0f + 0.5f;
 		float b_ = (1 - r_);
