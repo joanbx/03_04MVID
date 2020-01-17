@@ -24,6 +24,7 @@ class Camera {
 		glm::mat4 getViewMatrixCustom() const;
         float getFOV() const;
         glm::vec3 getPosition() const;
+		glm::vec3 getFront() const;
 
 		void setFPS(bool fps);
         void handleKeyboard(Movement direction, float dt);
