@@ -173,7 +173,6 @@ void render(const Geometry& floor, const Model& object, const Geometry& light, c
 	s_phong.set("view", view);
 	s_phong.set("proj", proj);
 
-	
 
 	normalMat = glm::inverse(glm::transpose(glm::mat3(model)));
 	s_phong.set("normalMat", normalMat);
