@@ -186,7 +186,7 @@ void render(const Geometry& quad, const Geometry& cube, const Shader& s_phong, c
 	//>---
 
 	
-
+	//FBO CAMERA
 	s_fbo.use();
 
 	glActiveTexture(GL_TEXTURE0);

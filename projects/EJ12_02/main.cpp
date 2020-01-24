@@ -16,9 +16,10 @@ Ejercicio basado en: AG12
 #include "engine/geometry/sphere.hpp"
 #include "engine/geometry/quad.hpp"
 #include "engine/model.hpp"
+#include <iostream>
 
 Camera camera(glm::vec3(0.0f, 0.0f, 3.0f));
-glm::vec3 lightPos(-50.0f, 2.0f, 0.0f);
+glm::vec3 lightPos(0.0f, 2.0f, 0.0f);
 
 float lastFrame = 0.0f;
 float lastX, lastY;
@@ -76,10 +77,12 @@ void render(const Model& object, const Shader& s_normal, const Shader& s_phong) 
 	glm::mat4 view = camera.getViewMatrix();
 	glm::mat4 proj = glm::perspective(glm::radians(camera.getFOV()), 800.0f / 600.0f, 0.1f, 100.0f);
 
-	lightPos = glm::vec3(std::sin((float)glfwGetTime() / 5.0f), 0.0f, std::abs(std::cos((float)glfwGetTime() / 5.0f)));
+	lightPos = glm::vec3(std::sin((float)glfwGetTime()/2.0f)*2.0f, 0.5f, 0.0f);
 
-	//Modelo phong y normal para comparar
+	std::cout << lightPos.x << std::endl;
 
+	//Modelo phong (izquierda) y normal (derecha) para comparar
+	
 	{
 		s_phong.use();
 		glm::mat4 model = glm::mat4(1.0f);
@@ -91,8 +94,8 @@ void render(const Model& object, const Shader& s_normal, const Shader& s_phong) 
 		s_phong.set("proj", proj);
 
 		s_phong.set("light.position", lightPos);
-		s_phong.set("light.ambient", 0.1f, 0.1f, 0.1f);
-		s_phong.set("light.diffuse", 0.5f, 0.5f, 0.5f);
+		s_phong.set("light.ambient", 0.01f, 0.01f, 0.01f);
+		s_phong.set("light.diffuse", 0.9f, 0.9f, 0.9f);
 		s_phong.set("light.specular", 1.0f, 1.0f, 1.0f);
 
 		glm::mat3 normalMat = glm::inverse(glm::transpose(glm::mat3(model)));
@@ -115,8 +118,8 @@ void render(const Model& object, const Shader& s_normal, const Shader& s_phong) 
 		s_normal.set("view", view);
 		s_normal.set("proj", proj);
 		s_normal.set("light.position", lightPos);
-		s_normal.set("light.ambient", 0.1f, 0.1f, 0.1f);
-		s_normal.set("light.diffuse", 0.5f, 0.5f, 0.5f);
+		s_normal.set("light.ambient", 0.01f, 0.01f, 0.01f);
+		s_normal.set("light.diffuse", 0.9f, 0.9f, 0.9f);
 		s_normal.set("light.specular", 1.0f, 1.0f, 1.0f);
 
 
