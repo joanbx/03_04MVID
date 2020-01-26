@@ -64,7 +64,6 @@ public:
 	void setLinear(float linear) { _linear = linear; }
 	void setQuadratic(float quadratic) { _quadratic = quadratic; }
 
-
 	void setShader(const Shader& s_phong, uint32_t i);
 
 };
@@ -80,6 +79,7 @@ class SpotLight {
 	float _cutOff;
 	float _outerCutOff;
 	glm::vec3 _colorSphere;
+	glm::mat4 lightSpaceMatrix;
 
 public:
 	SpotLight(glm::vec3 position = K_position, glm::vec3 direction = K_direction, const glm::vec3 ambient = K_ambient, glm::vec3 diffuse = K_diffuse, glm::vec3 specular = K_specular, float constant = K_constant, float linear = K_linear, float quadratic = K_quadratic, float cutOff = K_cutOff, float outerCutOff = K_outerCutOff, glm::vec3 colorSphere = K_color);
