@@ -78,6 +78,10 @@ bool Window::keyPressed(int key) const {
     return glfwGetKey(_window, key) == GLFW_PRESS;
 }
 
+bool Window::keyReleased(int key) const {
+	return glfwGetKey(_window, key) == GLFW_RELEASE;
+}
+
 void Window::setCaptureMode(bool toggle) const {
     if (toggle) {
         glfwSetInputMode(_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);

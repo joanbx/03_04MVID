@@ -23,6 +23,8 @@ class Window {
 
         bool keyPressed(int key) const;
 
+		bool keyReleased(int key) const;
+
         void setCaptureMode(bool toggle) const;
 
     private:

@@ -15,6 +15,10 @@ public:
         return Window::instance()->keyPressed(key);
     }
 
+	static bool isKeyReleased(int key) {
+		return Window::instance()->keyReleased(key);
+	}
+
     void setKeyPressedCallback(const std::function<void(int, int)>& f) {
         _keyPressedCallback = f;
     }
