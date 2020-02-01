@@ -123,11 +123,7 @@ vec3 CalculateSpotLight(){
     float bias = max(0.05 * (1.0 - dot(norm, lightDir)), 0.005);
     float shadow = ShadowCalculation(fragPosLighSpace, bias);
     vec3 result = (ambient + (1.0 - shadow) * ((diffuse * intensity) + (specular * intensity))) * attenuation ;
-    //vec3 result = (ambient + (1.0 - shadow) * (diffuse * intensity) + (specular * intensity)) * attenuation ;
 
-    //vec3 result = ambient + ((1.0 - shadow) * (diffuse + specular));
-    //vec3 result = (ambient + ( (1.0 - shadow) * ((diffuse * intensity) + (specular * intensity)) ) ) * attenuation;
-    //vec3 result = (ambient + (diffuse * intensity) + (specular * intensity)) * attenuation;
     return result;
     
 }
@@ -136,8 +132,5 @@ void main() {
 
     vec3 phong = CalculateSpotLight();
 
-    //if ( texture( depthMap, (fragPosLighSpace.xy/fragPosLighSpace.w) ).z  <  (fragPosLighSpace.z-bias)/fragPosLighSpace.w ) 
-    //float depthValue = texture(depthMap, uv).r;
-    //FragColor = vec4(vec3(LinearizeDepth(depthValue) / far_plane), 1.0);
     FragColor = vec4(phong, 1.0f);
 }

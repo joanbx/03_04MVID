@@ -176,7 +176,6 @@ void render(const Geometry& quad, const Geometry& cube, const Geometry& sphere,
 	s_light.set("proj", proj);
 	s_light.set("lightColor", spotLight.getColorSphere());
 	sphere.render();
-	
 
 	s_phong.use();
 
