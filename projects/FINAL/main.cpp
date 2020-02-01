@@ -285,7 +285,7 @@ void render(const Geometry& floor, const Model& object, const Model& enemy, cons
 	//OBJECT IMPORTED - SHIP
 
 	GameObject ship(posShip);
-	ship.Rotate(-90.0f, glm::vec3(1.0f, 0.0f, 0.0f));
+	ship.Transform().Rotate(-90.0f, glm::vec3(1.0f, 0.0f, 0.0f));
 	ship.Rotate(180.0f, glm::vec3(0.0f, 0.0f, 1.0f));
 	if (angleShip != 0.0f) ship.Rotate(angleShip, rotShip);
 	ship.Scale(glm::vec3(0.001f, 0.001f, 0.001f));
