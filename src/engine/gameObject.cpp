@@ -1,46 +1,71 @@
 #include "engine/gameObject.hpp"
 #include <glm\ext\matrix_transform.hpp>
 
-GameObject::GameObject(glm::vec3 position)
-{
-	_transform.Translate(position);
+//GameObject::GameObject(const glm::vec3& position)
+//{
+//	_size = glm::vec3(1.00f);
+//	Translate(position);
+//}
+
+GameObject::GameObject(SceneGraph& sG,Node& node) : _sceneGraph(sG) {
+	_position = glm::vec3(1.00f);
 	_size = glm::vec3(1.00f);
+	_rotation = glm::vec3(0.00f);
+	_radians = 0.0f;
+	_scale = glm::vec3(1.00f);
+	_idNode = sG.addNewNode(node);
 }
 
+
+void GameObject::Translate(glm::vec3 position) {
+	_position = position;
+	go = glm::translate(go, position);
+}
+
+void GameObject::Rotate(float angle, glm::vec3 rotation) {
+	_rotation = rotation;
+	go = glm::rotate(go, glm::radians(angle), rotation);
+}
+
+void GameObject::Scale(glm::vec3 scale) {
+	_scale = scale;
+	go = glm::scale(go, scale);
+}
 
 void GameObject::setSize(glm::vec3 size) {
 	_size = size;
 }
 
-void GameObject::Visible(bool visible) {
-	_isVisible = visible;
-
+void GameObject::readyToDraw() {
+	//_node.setDirtyFlag(true);
+	//_node.setTrans(go);
+	_sceneGraph.nodeReady(_idNode, go);
 }
 
 void GameObject::Draw(const Shader& shader, const Geometry& geometry, const glm::mat4& view, const glm::mat4& proj, const Texture& t_albedo, const Texture& t_specular, const Texture& t_normal) {
 	//shader.use();
-	shader.set("model", _transform.t);
+	shader.set("model", go);
 	shader.set("view", view);
 	shader.set("proj", proj);
-	
+
 	t_albedo.use(shader, "material.diffuse", 0);
 	t_specular.use(shader, "material.specular", 1);
 	t_normal.use(shader, "material.normal", 2);
 	glm::mat4 normalMat = glm::inverse(glm::transpose(glm::mat3(go)));
 	shader.set("normalMat", normalMat);
-	
+
 
 	geometry.render();
 }
 
 void GameObject::Draw(const Shader& shader, const Geometry& geometry, const glm::mat4& view, const glm::mat4& proj, bool isNormal) {
 	//shader.use();
-	shader.set("model", _transform.t);
+	shader.set("model", go);
 	shader.set("view", view);
 	shader.set("proj", proj);
 
 	if (isNormal) {
-		glm::mat4 normalMat = glm::inverse(glm::transpose(glm::mat3(_transform.t)));
+		glm::mat4 normalMat = glm::inverse(glm::transpose(glm::mat3(go)));
 		shader.set("normalMat", normalMat);
 	}
 
@@ -50,14 +75,13 @@ void GameObject::Draw(const Shader& shader, const Geometry& geometry, const glm:
 
 void GameObject::Draw(const Shader& shader, const Model& model, const glm::mat4& view, const glm::mat4& proj, bool isNormal) {
 	//shader.use();
-	shader.set("model", _transform.t);
+	shader.set("model", go);
 	shader.set("view", view);
 	shader.set("proj", proj);
-	
+
 	if (isNormal) {
-		glm::mat4 normalMat = glm::inverse(glm::transpose(glm::mat3(_transform.t)));
+		glm::mat4 normalMat = glm::inverse(glm::transpose(glm::mat3(go)));
 		shader.set("normalMat", normalMat);
 	}
 	model.render(shader);
 }
-

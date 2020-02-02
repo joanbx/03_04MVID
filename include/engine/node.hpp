@@ -6,33 +6,41 @@
 #include <engine\transform.hpp>
 #include <engine\Material.hpp>
 #include <engine\Drawable.hpp>
+#include <engine\Assets.hpp>
+#include <engine\model.hpp>
 
 class Node {
 
 private:
 
-	Transform _transform;
+	//Transform _transform;
+	glm::mat4 _trans;
 	bool _dirtyFlag = false;
-	bool _isModel = false;
-	Model& _model;
-	Material _material;
+	
+	int _idAsset;
+	Material& _material;
+	//Material _material;
 
 public:
 
-	Node(std::string path);
+	enum Type {
+		Model,
+		Geometry
+	};
+	Type _type;
 
-	void setModel(Model& model);
-	Model& getModel();
-
-	Material& Node::getMaterial();
-	void Node::setMaterial(Material& material);
+	Node(int idAsset, Material& material, Type type);
+	//Node(Model& model, Material& material, Type type);
+	//Node(Geometry& geometry, Material& material, Type type);
 
 	void setDirtyFlag(bool dirtyFlag);
 
-	void drawNode(const glm::mat4& view, const glm::mat4& proj, Geometry geometry);
-	void drawNode(const glm::mat4& view, const glm::mat4& proj);
-
-	Transform Transform() { return _transform; }
+	void drawNode(const glm::mat4& view, const glm::mat4& proj, Assets& asset);
+	void setTrans(glm::mat4 trans);
+	glm::mat4 getTrans() { return _trans; }
+	int getId() { return _idAsset; }
+	Material getMaterial() { return _material; }
+	//Transform Transform() { return _transform; }
 	bool dirtyFlag() { return _dirtyFlag; }
 };
 

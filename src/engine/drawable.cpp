@@ -1,15 +1,16 @@
 #include "engine/drawable.hpp"
 #include <glm\ext\matrix_transform.hpp>
+#include <iostream>
 
 
 Draw::Draw(const glm::mat4& transform, const glm::mat4& view, const glm::mat4& proj, const Geometry& geometry, Material& material) {
 	
-	material.getShader().set("model", transform);
-	material.getShader().set("view", view);
-	material.getShader().set("proj", proj);
+	material._shader.set("model", transform);
+	material._shader.set("view", view);
+	material._shader.set("proj", proj);
 
 	glm::mat4 normalMat = glm::inverse(glm::transpose(glm::mat3(transform)));
-	material.getShader().set("normalMat", normalMat);
+	material._shader.set("normalMat", normalMat);
 
 	geometry.render();
 
@@ -17,14 +18,14 @@ Draw::Draw(const glm::mat4& transform, const glm::mat4& view, const glm::mat4& p
 
 Draw::Draw(const glm::mat4& transform, const glm::mat4& view, const glm::mat4& proj, const Model& model, Material& material) {
 
-	material.getShader().set("model", transform);
-	material.getShader().set("view", view);
-	material.getShader().set("proj", proj);
+	material._shader.set("model", transform);
+	material._shader.set("view", view);
+	material._shader.set("proj", proj);
 
 	glm::mat4 normalMat = glm::inverse(glm::transpose(glm::mat3(transform)));
-	material.getShader().set("normalMat", normalMat);
+	material._shader.set("normalMat", normalMat);
 
-	model.render(material.getShader());
+	model.render(material._shader);
 
 }
 
@@ -65,7 +66,6 @@ Draw::Draw(const glm::mat4& transform, const Shader& shader, const Model& model,
 	shader.set("model", transform);
 	shader.set("view", view);
 	shader.set("proj", proj);
-
 	if (isNormal) {
 		glm::mat4 normalMat = glm::inverse(glm::transpose(glm::mat3(transform)));
 		shader.set("normalMat", normalMat);

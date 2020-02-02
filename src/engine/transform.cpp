@@ -1,24 +1,24 @@
 #include "engine/transform.hpp"
 #include <glm\ext\matrix_transform.hpp>
 
-//Transform::Transform(const glm::vec3& position)
-//{
-//	Translate(position);
-//}
+Transform::Transform()
+{
+	_transform = glm::mat4(1.0f);
+}
 
 void Transform::Translate(glm::vec3 position) {
 	_position = position;
-	transform = glm::translate(transform, position);
+	_transform = glm::translate(_transform, position);
 }
 
 void Transform::Rotate(float angle, glm::vec3 rotation) {
 	_rotation = rotation;
-	transform = glm::rotate(transform, glm::radians(angle), rotation);
+	_transform = glm::rotate(_transform, glm::radians(angle), rotation);
 }
 
 void Transform::Scale(glm::vec3 scale) {
 	_scale = scale;
-	transform = glm::scale(transform, scale);
+	_transform = glm::scale(_transform, scale);
 }
 
 
