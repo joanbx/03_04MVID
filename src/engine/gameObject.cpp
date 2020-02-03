@@ -9,37 +9,53 @@
 
 GameObject::GameObject(SceneGraph& sG,Node& node) : _sceneGraph(sG) {
 	_position = glm::vec3(1.00f);
+	Translate(_position);
 	_size = glm::vec3(1.00f);
 	_rotation = glm::vec3(0.00f);
 	_radians = 0.0f;
 	_scale = glm::vec3(1.00f);
 	_idNode = sG.addNewNode(node);
+	//std::cout << _idNode << std::endl;
 }
 
+void GameObject::Init() {
+	go = glm::mat4(1.0f);
+	_transform.Init();
+}
 
-void GameObject::Translate(glm::vec3 position) {
+void GameObject::Translate(glm::vec3& position) {
+
+	_transform.Translate(position);
+
 	_position = position;
 	go = glm::translate(go, position);
 }
 
-void GameObject::Rotate(float angle, glm::vec3 rotation) {
+void GameObject::Rotate(float angle, glm::vec3& rotation) {
+
+	_transform.Rotate(angle, rotation);
+
 	_rotation = rotation;
 	go = glm::rotate(go, glm::radians(angle), rotation);
 }
 
-void GameObject::Scale(glm::vec3 scale) {
+void GameObject::Scale(glm::vec3& scale) {
+
+	_transform.Scale(scale);
+
 	_scale = scale;
 	go = glm::scale(go, scale);
 }
 
-void GameObject::setSize(glm::vec3 size) {
+void GameObject::setSize(glm::vec3& size) {
 	_size = size;
 }
 
 void GameObject::readyToDraw() {
 	//_node.setDirtyFlag(true);
 	//_node.setTrans(go);
-	_sceneGraph.nodeReady(_idNode, go);
+	std::cout << "SEND" << std::endl;
+	_sceneGraph.nodeReady(_idNode, _transform);
 }
 
 void GameObject::Draw(const Shader& shader, const Geometry& geometry, const glm::mat4& view, const glm::mat4& proj, const Texture& t_albedo, const Texture& t_specular, const Texture& t_normal) {

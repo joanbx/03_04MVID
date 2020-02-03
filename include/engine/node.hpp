@@ -14,7 +14,7 @@ class Node {
 private:
 
 	//Transform _transform;
-	glm::mat4 _trans;
+	
 	bool _dirtyFlag = false;
 	
 	int _idAsset;
@@ -22,6 +22,7 @@ private:
 	//Material _material;
 
 public:
+	Transform _trans;
 
 	enum Type {
 		Model,
@@ -36,8 +37,8 @@ public:
 	void setDirtyFlag(bool dirtyFlag);
 
 	void drawNode(const glm::mat4& view, const glm::mat4& proj, Assets& asset);
-	void setTrans(glm::mat4 trans);
-	glm::mat4 getTrans() { return _trans; }
+	void setTrans(Transform& trans);
+	Transform getTrans() { return _trans; }
 	int getId() { return _idAsset; }
 	Material getMaterial() { return _material; }
 	//Transform Transform() { return _transform; }

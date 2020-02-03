@@ -18,7 +18,7 @@
 
 class Material {
 		
-		
+	private:
 		//glm::vec3 _ambient;
 		//glm::vec3 _diffuse;
 		//glm::vec3 _specular;
@@ -29,19 +29,29 @@ class Material {
 		DirLight _dirLight;
 		std::vector<SpotLight> _spotLights;
 		std::vector<PointLight> _pointLights;
+		std::string _name;
 
 	public:
 		//Material(const Shader shader,const glm::vec3 ambient = K_ambient,const glm::vec3 diffuse = K_diffuse,const glm::vec3 specular = K_specular,const float shininess = K_shininess, const std::string name= K_name);
 		//Material(const glm::vec3 ambient = K_ambient, const glm::vec3 diffuse = K_diffuse, const glm::vec3 specular = K_specular, const float shininess = K_shininess, const std::string name = K_name);
 
-		const Shader _shader;
-
+		const Shader& _shader;
+		
 		Material(const Shader& shader, DirLight& dirLight, std::vector<SpotLight>& spotLights, std::vector<PointLight>& pointLights);
 		Material(const Shader& shader);
+		Material() = delete;
 
-		void setMaterial();
-		void setMaterialTextures(Texture& albedo, Texture& specular, Texture& normal);
-		void setMaterialLights();
+		Material(const Material&) = default;
+		Material& operator=(const Material&) = default;
+		Material& operator=(Material&&) = default;
+
+		void setMaterial() ;
+		void setMaterialTextures(const Texture& albedo, const Texture& specular, const Texture& normal) ;
+		void setMaterialLights() ;
+
+		std::string getName() {
+			return _name;
+		}
 
 		//Shader& getShader() { return _shader; }
 

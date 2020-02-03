@@ -21,7 +21,7 @@ private:
 	int nodesCount = 0;
 	std::vector<nodes> _nodes;
 	
-	Assets _assets;
+	Assets& _assets;
 	//glm::mat4 _view;
 	//glm::mat4 _proj;
 	///Camera _camera;
@@ -31,7 +31,7 @@ public:
 	int addNewNode(Node& node);
 	//void setViewProj(glm::mat4& view, glm::mat4& proj, Camera& camera);
 	void updateNodes(glm::mat4& view, glm::mat4& proj, Camera& camera);
-	void nodeReady(int id, glm::mat4 t);
+	void nodeReady(int id, Transform& t);
 
 };
 

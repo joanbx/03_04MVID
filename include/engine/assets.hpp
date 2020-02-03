@@ -17,10 +17,11 @@
 class AssetsGeometry {
 
 private:
-	Geometry _geometry;
+	
 	
 public:
 	std::vector<Texture> _textures;
+	Geometry _geometry;
 	enum typeGeometry {
 		quad,
 		cube,
@@ -51,8 +52,8 @@ private:
 	struct geometries
 	{
 		int assetID;
-		const AssetsGeometry& assetGeometry;
-		geometries(int n, const AssetsGeometry& g) : assetID(n), assetGeometry(g) {}
+		const AssetsGeometry assetGeometry;
+		geometries(int n, const AssetsGeometry g) : assetID(n), assetGeometry(g) {}
 
 	};
 
@@ -76,7 +77,7 @@ public:
 			}	
 		}
 	};
-	const AssetsGeometry& getAssetGeometry(int id) {
+	const AssetsGeometry getAssetGeometry(int id) {
 		for (auto& g : _geometries) {
 			if (g.assetID == id)
 				return g.assetGeometry;

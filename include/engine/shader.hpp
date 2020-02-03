@@ -39,8 +39,6 @@ class Shader {
         void set(const char* name, const glm::mat3& value) const;
         void set(const char* name, const glm::mat4& value) const;
 
-		const std::string _name;
-
     private:
         static void loadShader(const char* path, std::string* code);
         static void checkErrors(uint32_t shader, Type type);

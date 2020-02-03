@@ -31,6 +31,7 @@ set(ENGINE_SRC_FILES
     ${CMAKE_CURRENT_LIST_DIR}/src/engine/node.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/engine/sceneGraph.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/engine/gameObject.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/src/engine/easyGO.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/engine/geometry/cube.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/engine/geometry/extcube.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/engine/geometry/geometry.cpp
@@ -54,6 +55,7 @@ set(ENGINE_HEADER_FILES
     ${CMAKE_CURRENT_LIST_DIR}/include/engine/node.hpp
     ${CMAKE_CURRENT_LIST_DIR}/include/engine/sceneGraph.hpp
     ${CMAKE_CURRENT_LIST_DIR}/include/engine/gameObject.hpp
+    ${CMAKE_CURRENT_LIST_DIR}/include/engine/easyGO.hpp
     ${CMAKE_CURRENT_LIST_DIR}/include/engine/geometry/cube.hpp
     ${CMAKE_CURRENT_LIST_DIR}/include/engine/geometry/extcube.hpp
     ${CMAKE_CURRENT_LIST_DIR}/include/engine/geometry/geometry.hpp

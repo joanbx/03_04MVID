@@ -5,6 +5,7 @@ SceneGraph::SceneGraph(Assets& assets) : _assets(assets){ }
 int SceneGraph::addNewNode(Node& node) {
 	int idNode = nodesCount;
 	_nodes.push_back(nodes(idNode, node));
+	std::cout << _nodes.size() << std::endl;
 	nodesCount++;
 	return idNode;
 }
@@ -15,11 +16,17 @@ int SceneGraph::addNewNode(Node& node) {
 //	_camera = camera;
 //}
 
-void SceneGraph::nodeReady(int id, glm::mat4 t) {
+void SceneGraph::nodeReady(int id, Transform& t ) {
+	
+	//std::cout << _nodes.size() << std::endl;
+	//std::cout << _nodes.size() << " " << id << " " << _nodes[1].nodeID << std::endl;
 	for (int i=0; i< _nodes.size(); ++i) {
+		//std::cout << _nodes.size() << " " <<id << " " << _nodes[i].nodeID << std::endl;
 		if (_nodes[i].nodeID == id) {
+			//std::cout << "node found " << id<< std::endl;
 			_nodes[i].node.setDirtyFlag(true);
-			_nodes[i].node.setTrans(t);
+			//_nodes[i].node.setTrans(t);
+			_nodes[i].node._trans = t;
 		}
 	}
 }
@@ -42,7 +49,7 @@ void SceneGraph::updateNodes(glm::mat4& view, glm::mat4& proj, Camera& camera) {
 		}
 		else {
 			for (auto& shaderName : shadersToUse) {
-				if (shaderName != node.node.getMaterial()._shader._name) {
+				if (shaderName != node.node.getMaterial().getName()) {
 					toAdd = true;
 					break;
 				}
@@ -50,7 +57,7 @@ void SceneGraph::updateNodes(glm::mat4& view, glm::mat4& proj, Camera& camera) {
 		}
 				
 		if(toAdd) {
-			shadersToUse.push_back(node.node.getMaterial()._shader._name);
+			shadersToUse.push_back(node.node.getMaterial().getName());
 		}
 
 	}
@@ -60,19 +67,23 @@ void SceneGraph::updateNodes(glm::mat4& view, glm::mat4& proj, Camera& camera) {
 		bool initialized = false;
 		//REMEMBER LIGHT
 		for (auto& node : _nodes) {
-			//std::cout << node.dirtyFlag() << std::endl;
-			if (node.node.getMaterial()._shader._name == s && node.node.dirtyFlag()) {
+			//std::cout << node.node.dirtyFlag() << std::endl;
+			if (node.node.getMaterial().getName() == s && node.node.dirtyFlag()) {
 				if (!initialized) {
-					node.node.getMaterial()._shader.use();
-					node.node.getMaterial()._shader.set("viewPos", camera.getPosition());
-					node.node.getMaterial().setMaterialLights();
+					
+					
+					//std::cout << "SHADER" << node.node.getMaterial().getName() << std::endl;
+					//node.node.getMaterial()._shader.use();
+					//node.node.getMaterial()._shader.set("viewPos", camera.getPosition());
+					//node.node.getMaterial().setMaterialLights();
 					initialized = true;
 				}
 				//draw
+				//std::cout << "DRAW" << node.nodeID << std::endl;
 				node.node.drawNode(view,proj,_assets);
 				node.node.setDirtyFlag(false);
 			}
-
+			
 
 		}
 

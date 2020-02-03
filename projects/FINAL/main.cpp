@@ -20,6 +20,7 @@ Ejercicio basado en: AG10
 #include "engine/model.hpp"
 #include "engine/light.hpp"
 #include "engine/gameObject.hpp"
+#include "engine/easyGO.hpp"
 //#include "engine/assets.hpp"
 //#include "engine/node.hpp"
 #include <iostream>
@@ -45,19 +46,21 @@ glm::vec3 forwardBullet(0.0f, 0.0f, -1.0f);
 
 
 //Create Lights
+DirLight dirLight_(glm::vec3(-0.2f, -1.0f, -0.3f), glm::vec3(0.2f, 0.2f, 0.2f), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(1.0f, 1.0f, 1.0f));
 
-//PointLight* pointLights = new PointLight[nPointLight]{
-//	{glm::vec3(0.0f,2.0f,0.0f), glm::vec3(0.2f,0.2f,0.2f), glm::vec3(0.5f,0.5f,0.5f),glm::vec3(1.0f,1.0f,1.0f), 1.0f, 0.09f, 0.032f, glm::vec3(1.0f,1.0f,1.0f)},
-//	{glm::vec3(3.0f,2.0f,2.0f), glm::vec3(0.2f,0.2f,0.2f), glm::vec3(0.5f,0.5f,0.5f),glm::vec3(1.0f,1.0f,1.0f), 1.0f, 0.09f, 0.032f, glm::vec3(1.0f,1.0f,1.0f)},
-//	{glm::vec3(-3.0f,2.0f,-2.0f), glm::vec3(0.2f,0.2f,0.2f), glm::vec3(0.5f,0.5f,0.5f),glm::vec3(1.0f,1.0f,1.0f), 1.0f, 0.09f, 0.032f, glm::vec3(1.0f,1.0f,1.0f)}
-//
-//};
-//
-//SpotLight* spotLights = new SpotLight[nSpotLight]{
-//	{glm::vec3(-1.0f,0.25f,0.0f), glm::vec3(0.0f, -1.0f,0.0f), glm::vec3(0.2f,0.2f,0.2f), glm::vec3(0.5f,0.5f,0.5f),glm::vec3(1.0f,1.0f,1.0f), 1.0f, 0.2f, 0.32f, 30.0, 40.0, glm::vec3(1.0f,1.0f,1.0f)},
-//	{glm::vec3(1.0f,0.25f,0.0f),glm::vec3(0.0f, -1.0f, 0.0f), glm::vec3(0.2f,0.2f,0.2f), glm::vec3(0.5f,0.5f,0.5f),glm::vec3(1.0f,1.0f,1.0f), 1.0f, 0.2f, 0.32f, 30.0, 40.0, glm::vec3(1.0f,1.0f,1.0f)},
-//	{glm::vec3(0.0f,0.25f,0.0f),glm::vec3(0.0f, -1.0f, 0.0f), glm::vec3(0.2f,0.2f,0.2f), glm::vec3(0.5f,0.5f,0.5f),glm::vec3(1.0f,1.0f,1.0f), 1.0f, 0.2f, 0.32f, 30.0, 40.0, glm::vec3(1.0f,1.0f,1.0f)}
-//};
+
+PointLight* pointLights_ = new PointLight[nPointLight]{
+	{glm::vec3(0.0f,2.0f,0.0f), glm::vec3(0.2f,0.2f,0.2f), glm::vec3(0.5f,0.5f,0.5f),glm::vec3(1.0f,1.0f,1.0f), 1.0f, 0.09f, 0.032f, glm::vec3(1.0f,1.0f,1.0f)},
+	{glm::vec3(3.0f,2.0f,2.0f), glm::vec3(0.2f,0.2f,0.2f), glm::vec3(0.5f,0.5f,0.5f),glm::vec3(1.0f,1.0f,1.0f), 1.0f, 0.09f, 0.032f, glm::vec3(1.0f,1.0f,1.0f)},
+	{glm::vec3(-3.0f,2.0f,-2.0f), glm::vec3(0.2f,0.2f,0.2f), glm::vec3(0.5f,0.5f,0.5f),glm::vec3(1.0f,1.0f,1.0f), 1.0f, 0.09f, 0.032f, glm::vec3(1.0f,1.0f,1.0f)}
+
+};
+
+SpotLight* spotLights_ = new SpotLight[nSpotLight]{
+	{glm::vec3(-1.0f,0.25f,0.0f), glm::vec3(0.0f, -1.0f,0.0f), glm::vec3(0.2f,0.2f,0.2f), glm::vec3(0.5f,0.5f,0.5f),glm::vec3(1.0f,1.0f,1.0f), 1.0f, 0.2f, 0.32f, 30.0, 40.0, glm::vec3(1.0f,1.0f,1.0f)},
+	{glm::vec3(1.0f,0.25f,0.0f),glm::vec3(0.0f, -1.0f, 0.0f), glm::vec3(0.2f,0.2f,0.2f), glm::vec3(0.5f,0.5f,0.5f),glm::vec3(1.0f,1.0f,1.0f), 1.0f, 0.2f, 0.32f, 30.0, 40.0, glm::vec3(1.0f,1.0f,1.0f)},
+	{glm::vec3(0.0f,0.25f,0.0f),glm::vec3(0.0f, -1.0f, 0.0f), glm::vec3(0.2f,0.2f,0.2f), glm::vec3(0.5f,0.5f,0.5f),glm::vec3(1.0f,1.0f,1.0f), 1.0f, 0.2f, 0.32f, 30.0, 40.0, glm::vec3(1.0f,1.0f,1.0f)}
+};
 
 std::vector<PointLight> pointLights;
 std::vector<SpotLight> spotLights;
@@ -201,7 +204,7 @@ bool in_frustum(glm::mat4 M, glm::vec3 p) {
 		Pclip.z < Pclip.w;
 }
 
-GLboolean CheckCollisionXZ(GameObject& go1, GameObject& go2) // AABB - AABB collision
+GLboolean CheckCollisionXZ(EasyGO& go1, EasyGO& go2) // AABB - AABB collision
 {
 	
 	// Collision x-axis?
@@ -223,7 +226,7 @@ GLboolean CheckCollisionXZ(GameObject& go1, GameObject& go2) // AABB - AABB coll
 	return collisionX && collisionZ;
 }
 
-/*
+
 void render(const Geometry& floor, const Model& object, const Model& enemy, const Geometry& sphere, const Shader& s_phong, const Shader& s_normal, const Shader& s_light, const Texture& t_albedo, const Texture& t_specular, const Texture& t_normal) {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glm::vec3 cameraPos = glm::vec3(0.0f, 3.0f, 0.0f);
@@ -271,25 +274,25 @@ void render(const Geometry& floor, const Model& object, const Model& enemy, cons
 	s_normal.set("viewPos",camera.getPosition());
 
 	//DIRLIGHT
-	s_normal.set("Light.direction", dirLight.getDirection());
-	s_normal.set("Light.ambient", dirLight.getAmbient());
-	s_normal.set("Light.diffuse", dirLight.getDiffuse());
-	s_normal.set("Light.specular", dirLight.getSpecular());
+	s_normal.set("Light.direction", dirLight_.getDirection());
+	s_normal.set("Light.ambient", dirLight_.getAmbient());
+	s_normal.set("Light.diffuse", dirLight_.getDiffuse());
+	s_normal.set("Light.specular", dirLight_.getSpecular());
 	s_normal.set("material.shininess", 128);
 
 	//POINTLIGHT
 	for (uint32_t i = 0; i < nPointLight; ++i) {
-		pointLights[i].setShader(s_normal, i);
+		pointLights_[i].setShader(s_normal, i);
 	}
 
 	//SPOTLIGHT
 	for (uint32_t i = 0; i < nSpotLight; ++i) {
-		spotLights[i].setShader(s_normal, i);
+		spotLights_[i].setShader(s_normal, i);
 	}
 
 	//Plane/Floor
 
-	GameObject GOfloor(glm::vec3(0.0f, -0.5f, 0.0f));
+	EasyGO GOfloor(glm::vec3(0.0f, -0.5f, 0.0f));
 	GOfloor.Rotate(-90.0f, glm::vec3(1.0f, 0.0f, 0.0f));
 	GOfloor.Scale(glm::vec3(15.0f, 15.0f, 15.0f));
 
@@ -297,7 +300,7 @@ void render(const Geometry& floor, const Model& object, const Model& enemy, cons
 
 	//OBJECT IMPORTED - SHIP
 
-	GameObject ship(posShip);
+	EasyGO ship(posShip);
 	ship.Rotate(-90.0f, glm::vec3(1.0f, 0.0f, 0.0f));
 	ship.Rotate(180.0f, glm::vec3(0.0f, 0.0f, 1.0f));
 	if (angleShip != 0.0f) ship.Rotate(angleShip, rotShip);
@@ -310,7 +313,7 @@ void render(const Geometry& floor, const Model& object, const Model& enemy, cons
 
 	//OBJECT IMPORTED - SHIP
 
-	GameObject enemyUFO(glm::vec3(1.0f, 2.0f, -2.0f));
+	EasyGO enemyUFO(glm::vec3(1.0f, 2.0f, -2.0f));
 	enemyUFO.Rotate(-10.0f, glm::vec3(1.0f, 0.0f, 0.0f));
 	//enemyUFO.Rotate(180.0f, glm::vec3(0.0f, 0.0f, 1.0f));
 	//if (angleShip != 0.0f) ship.Rotate(angleShip, rotShip);
@@ -326,7 +329,7 @@ void render(const Geometry& floor, const Model& object, const Model& enemy, cons
 		s_light.use();
 		for (int i = 0; i < posBullets.size(); i++) {
 			
-			GameObject bullet(posBullets[i]);
+			EasyGO bullet(posBullets[i]);
 			bullet.Scale(glm::vec3(0.25f));
 			s_light.set("lightColor", glm::vec3(1.0f, 1.0f, 1.0f));
 			bullet.Draw(s_light, sphere, view, proj, false);
@@ -346,26 +349,99 @@ void render(const Geometry& floor, const Model& object, const Model& enemy, cons
 
 
 }
-*/
 
-void render(SceneGraph& sceneGraph, GameObject& ship, GameObject& floor) {
+void render(Material& material, EasyGO& ship, const Model& object, const Shader& s_normal) {
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+
+	glm::mat4 view = glm::lookAt(glm::vec3(0, 15.0f, 0), glm::vec3(0, 0, 0), glm::vec3(0, 0, -1.0f)); //camera.getViewMatrix();
+	glm::mat4 proj = glm::perspective(glm::radians(camera.getFOV()), static_cast<float>(Window::instance()->getWidth()) / Window::instance()->getHeight(), 0.1f, 100.0f);
+
+	//std::cout << proj << std::endl;
+
+
+	
+	s_normal.use();
+
+		//DIRLIGHT
+	s_normal.set("Light.direction", dirLight_.getDirection());
+	s_normal.set("Light.ambient", dirLight_.getAmbient());
+	s_normal.set("Light.diffuse", dirLight_.getDiffuse());
+	s_normal.set("Light.specular", dirLight_.getSpecular());
+	s_normal.set("material.shininess", 128);
+
+	//POINTLIGHT
+	for (uint32_t i = 0; i < nPointLight; ++i) {
+		pointLights_[i].setShader(s_normal, i);
+	}
+
+	//SPOTLIGHT
+	for (uint32_t i = 0; i < nSpotLight; ++i) {
+		spotLights_[i].setShader(s_normal, i);
+	}
+
+	s_normal.set("viewPos", camera.getPosition());
+
+	material.setMaterialLights();
+
+
+	//OBJECT IMPORTED - SHIP
+	//EasyGO ship(posShip);
+
+	//ship.go = glm::mat4(1.0f);
+	//ship.go = glm::translate(ship.go, posShip);
+	//ship.go = glm::rotate(ship.go, -90.0f, glm::vec3(1.0f, 0.0f, 0.0f));
+	//ship.go = glm::rotate(ship.go, 180.0f, glm::vec3(0.0f, 0.0f, 1.0f));
+	//if (angleShip != 0.0f) glm::rotate(ship.go, angleShip, rotShip);
+	//ship.go = glm::scale(ship.go, glm::vec3(0.001f, 0.001f, 0.001f));
+	ship.Init();
+	ship.Translate(posShip);
+	ship.Rotate(-90.0f, glm::vec3(1.0f, 0.0f, 0.0f));
+	ship.Rotate(180.0f, glm::vec3(0.0f, 0.0f, 1.0f));
+	if (angleShip != 0.0f) ship.Rotate(angleShip, rotShip);
+	ship.Scale(glm::vec3(0.001f, 0.001f, 0.001f));
+	ship.Draw(s_normal, object, view, proj, true);
+
+	
+	//material._shader.use();
+
+	//material._shader.set("viewPos", camera.getPosition());
+
+	//material.setMaterialLights();
+
+
+	////OBJECT IMPORTED - SHIP
+	/*EasyGO ship(posShip);
+	ship.Translate(posShip);
+	ship.Rotate(-90.0f, glm::vec3(1.0f, 0.0f, 0.0f));
+	ship.Rotate(180.0f, glm::vec3(0.0f, 0.0f, 1.0f));
+	if (angleShip != 0.0f) ship.Rotate(angleShip, rotShip);
+	ship.Scale(glm::vec3(0.001f, 0.001f, 0.001f));
+	ship.Draw(material._shader, object, view, proj, true);*/
+
+
+
+}
+
+
+void render(SceneGraph& sceneGraph, GameObject& ship) {
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	glm::mat4 view = glm::lookAt(glm::vec3(0, 15.0f, 0), glm::vec3(0, 0, 0), glm::vec3(0, 0, -1.0f)); //camera.getViewMatrix();
 	glm::mat4 proj = glm::perspective(glm::radians(camera.getFOV()), static_cast<float>(Window::instance()->getWidth()) / Window::instance()->getHeight(), 0.1f, 100.0f);
-	floor.Translate(glm::vec3(0.0f, -0.5f, 0.0f));
-	floor.Rotate(-90.0f, glm::vec3(1.0f, 0.0f, 0.0f));
-	floor.Scale(glm::vec3(15.0f, 15.0f, 15.0f));
-	floor.readyToDraw();
+	//floor.Translate(glm::vec3(0.0f, -0.5f, 0.0f));
+	//floor.Rotate(-90.0f, glm::vec3(1.0f, 0.0f, 0.0f));
+	//floor.Scale(glm::vec3(15.0f, 15.0f, 15.0f));
+	//floor.readyToDraw();
 
+	ship.Init();
 	ship.Translate(posShip);
 	ship.Rotate(-90.0f, glm::vec3(1.0f, 0.0f, 0.0f));
 	ship.Rotate(180.0f, glm::vec3(0.0f, 0.0f, 1.0f));
 	if (angleShip != 0.0f) ship.Rotate(angleShip, rotShip);
 	ship.Scale(glm::vec3(0.001f, 0.001f, 0.001f));
 	ship.readyToDraw();
-
 	//sceneGraph.setViewProj(view, proj, camera);
 
 	sceneGraph.updateNodes(view, proj, camera);
@@ -393,6 +469,8 @@ int main(int, char* []) {
 	const Sphere sphere(0.1f, 50, 50);
 	const Quad quad(1.0f);
 
+	//std::cout << object.meshes_.size() << std::endl;
+
 	//Lights
 	DirLight dirLight(glm::vec3(-0.2f, -1.0f, -0.3f), glm::vec3(0.2f, 0.2f, 0.2f), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(1.0f, 1.0f, 1.0f));
 
@@ -412,7 +490,7 @@ int main(int, char* []) {
 	
 	//Load Assets
 	Assets assets;
-	assets.addNewGeometry(AssetsGeometry::quad,1.0, t_albedo, t_specular, t_normal,0);
+	//assets.addNewGeometry(AssetsGeometry::quad,1.0, t_albedo, t_specular, t_normal,0);
 	//assets.addNewGeometry(AssetsGeometry::sphere, 0.1f,1);
 	assets.addNewModel(object, 2);
 	//assets.addNewModel(enemy, 3);
@@ -438,7 +516,9 @@ int main(int, char* []) {
 	
 	//Add GameObjects
 	GameObject ship(sceneGraph, Node(2, mainMaterial, Node::Type::Model));
-	GameObject floor(sceneGraph, Node(0, mainMaterial, Node::Type::Geometry));
+	//GameObject floor(sceneGraph, Node(0, mainMaterial, Node::Type::Geometry));
+
+	//EasyGO ship0(glm::vec3(0.0,0.0,0.0));
 
 	glEnable(GL_CULL_FACE);
 	glCullFace(GL_BACK);
@@ -459,7 +539,8 @@ int main(int, char* []) {
 
 		handleInput(deltaTime);
 		//render(quad, object, enemy, sphere, s_phong, s_normal, s_light, t_albedo, t_specular, t_normal);
-		render(sceneGraph, ship, floor);
+		render(sceneGraph, ship);
+		//render(mainMaterial, ship0, object, s_normal);
 		window->frame();
 	}
 

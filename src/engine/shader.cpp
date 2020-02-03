@@ -53,7 +53,6 @@ Shader::Shader(const char* vertexPath, const char* fragmentPath, const char* geo
         glDeleteShader(geometry);
     }
 
-	 std::string _name(vertexPath);
 }
 
 Shader::~Shader() {
@@ -143,3 +142,7 @@ void Shader::set(const char* name, const glm::mat3& value) const {
 void Shader::set(const char* name, const glm::mat4& value) const {
     glUniformMatrix4fv(glGetUniformLocation(id_, name), 1, GL_FALSE, glm::value_ptr(value));
 }
+
+//void Shader::setName(std::string name) {
+//    _name = name;
+//}
