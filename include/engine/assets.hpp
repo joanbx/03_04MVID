@@ -17,26 +17,37 @@
 class AssetsGeometry {
 
 private:
-	
+	std::vector<Texture> _textures;
+	const Texture& _albedo;
+	const Texture& _specular;
+	const Texture& _normal;
+	const Geometry& _geometry;
 	
 public:
-	std::vector<Texture> _textures;
-	Geometry _geometry;
+	
+	
+	
 	enum typeGeometry {
-		quad,
-		cube,
-		sphere
+		isQuad,
+		isCube,
+		isSphere
 	};
-	AssetsGeometry(typeGeometry type, float size, const Texture& albedo, const Texture& difuse, const Texture& nomral);
-	AssetsGeometry(AssetsGeometry::typeGeometry type, float size);
-	Geometry getGeometry() { return _geometry; }
+	
+	AssetsGeometry(const Geometry& geometry, const Texture& albedo, const Texture& specular, const Texture& normal);
+	//AssetsGeometry(typeGeometry type, float size, const Texture& albedo, const Texture& difuse, const Texture& nomral);
+	//AssetsGeometry(AssetsGeometry::typeGeometry type, float size);
+
+	const Geometry& getGeometry() { return _geometry; }
+	const std::vector<Texture> getTextures() { return _textures; }
+	const Texture& getAlbedo() { return _albedo; }
+	const Texture& getSpecular() { return _specular; }
+	const Texture& getNormal() { return _normal; }
 	//std::vector<Texture>& getTextures() { return _textures; }
 
 };
 
 class Assets {
 
-private:
 	struct models
 	{
 		int assetID;
@@ -45,10 +56,6 @@ private:
 
 	};
 
-	//std::map<std::string, Texture > _textures;
-	//std::map<std::string, Shader > _shaders;
-	//std::map <std::string, AssetsGeometry > _geometries;
-	//std::vector<AssetsGeometry> _geometries;
 	struct geometries
 	{
 		int assetID;
@@ -57,17 +64,31 @@ private:
 
 	};
 
+private:
+	
+
 	std::vector<geometries> _geometries;
 	std::vector<models> _models;
 
-public:
+	//std::vector<Model> models_;
+
+	int countAssets = 0;
 	
 
-	void addNewModel(const Model& m, int id);
+public:
+	
+	//const Assets(const Model& m);
+	int addNewModel(const Model& m);
 	//void addNewTexture(char* path, std::string name);
 	//void addNewShader(char* pathVertex, char* pathFragment,std::string name);
-	void addNewGeometry(AssetsGeometry::typeGeometry type, float size, const Texture& albedo, const Texture& difuse, const Texture& nomral, int id);
-	void addNewGeometry(AssetsGeometry::typeGeometry type, float size, int id);
+	int addNewGeometry(const Geometry& geometry, const Texture& albedo, const Texture& difuse, const Texture& nomral);
+	//int addNewGeometry(AssetsGeometry::typeGeometry type, float size);
+
+	//void Render(const Shader& shader);
+
+	/*const Model& getModel_() {
+		return models_[0];
+	};*/
 
 	//Shader getShader(std::string name) { return _shaders[name]; };
 	const Model& getModel(int id) {
@@ -77,7 +98,7 @@ public:
 			}	
 		}
 	};
-	const AssetsGeometry getAssetGeometry(int id) {
+	AssetsGeometry getAssetGeometry(int id) {
 		for (auto& g : _geometries) {
 			if (g.assetID == id)
 				return g.assetGeometry;

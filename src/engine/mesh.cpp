@@ -1,6 +1,7 @@
 #include "engine/mesh.hpp"
 #include "engine/shader.hpp"
 #include <glad/glad.h>
+#include <iostream>
 
 Mesh::Mesh(std::vector<Vertex> vertices, std::vector<uint32_t> indices,
   std::vector<Texture2> textures): vertices_(vertices), indices_ (indices),
@@ -44,6 +45,7 @@ void Mesh::setupMesh() {
 
 void Mesh::render(const Shader& shader) const {
   // bind appropriate textures
+    
   uint32_t diffuseNr = 1;
   uint32_t specularNr = 1;
   uint32_t normalNr = 1;
@@ -69,6 +71,7 @@ void Mesh::render(const Shader& shader) const {
   }
 
   // draw mesh
+  //std::cout << VAO_ << std::endl;
   glBindVertexArray(VAO_);
   glDrawElements(GL_TRIANGLES, indices_.size(), GL_UNSIGNED_INT, 0);
   glBindVertexArray(0);

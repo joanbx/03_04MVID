@@ -7,15 +7,20 @@
 //	Translate(position);
 //}
 
-GameObject::GameObject(SceneGraph& sG,Node& node) : _sceneGraph(sG) {
+GameObject::GameObject(SceneGraph& sG, Node& node) : _sceneGraph(sG) {
 	_position = glm::vec3(1.00f);
-	Translate(_position);
+	//Translate(_position);
 	_size = glm::vec3(1.00f);
 	_rotation = glm::vec3(0.00f);
 	_radians = 0.0f;
 	_scale = glm::vec3(1.00f);
+	//std::cout << idAsset << " " << material.getName() << " " << type << std::endl;
+	_transform.Translate(_position);
+	_transform.Rotate(_radians, _rotation);
+	_transform.Scale(_scale);
+
 	_idNode = sG.addNewNode(node);
-	//std::cout << _idNode << std::endl;
+	//std::cout << "idNode " << _idNode << std::endl;
 }
 
 void GameObject::Init() {
@@ -54,7 +59,7 @@ void GameObject::setSize(glm::vec3& size) {
 void GameObject::readyToDraw() {
 	//_node.setDirtyFlag(true);
 	//_node.setTrans(go);
-	std::cout << "SEND" << std::endl;
+	//std::cout << "SEND " << _idNode << std::endl;
 	_sceneGraph.nodeReady(_idNode, _transform);
 }
 

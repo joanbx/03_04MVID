@@ -4,12 +4,15 @@
 #include <glm/glm.hpp>
 #include <glm/glm.hpp>
 #include <engine\transform.hpp>
+#include <engine\model.hpp>
 #include <engine\Material.hpp>
 #include <engine\Drawable.hpp>
 #include <engine\Assets.hpp>
 #include <engine\model.hpp>
 
 class Node {
+
+	
 
 private:
 
@@ -19,15 +22,16 @@ private:
 	
 	int _idAsset;
 	Material& _material;
+	Transform _transform;
 	//Material _material;
 
 public:
-	Transform _trans;
-
+	
 	enum Type {
-		Model,
-		Geometry
+		isModel,
+		isGeometry
 	};
+	
 	Type _type;
 
 	Node(int idAsset, Material& material, Type type);
@@ -37,8 +41,12 @@ public:
 	void setDirtyFlag(bool dirtyFlag);
 
 	void drawNode(const glm::mat4& view, const glm::mat4& proj, Assets& asset);
+
+	void DrawModel(const glm::mat4& transform, const Shader& shader, const Model& model, const glm::mat4& view, const glm::mat4& proj, bool isNormal);
+	void DrawGeometry(const glm::mat4& transform, const Shader& shader, const Geometry& geometry, const glm::mat4& view, const glm::mat4& proj, bool isNormal);
+
 	void setTrans(Transform& trans);
-	Transform getTrans() { return _trans; }
+	Transform getTrans() { return _transform; }
 	int getId() { return _idAsset; }
 	Material getMaterial() { return _material; }
 	//Transform Transform() { return _transform; }

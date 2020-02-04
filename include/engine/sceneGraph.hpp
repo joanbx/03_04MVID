@@ -5,7 +5,8 @@
 #include <glm/glm.hpp>
 #include <engine\node.hpp>
 #include <engine\assets.hpp>
-#include <engine\camera.hpp>
+#include <engine\material.hpp>
+#include <engine\shader.hpp>
 
 class SceneGraph {
 
@@ -30,8 +31,8 @@ public:
 	SceneGraph(Assets& assets);
 	int addNewNode(Node& node);
 	//void setViewProj(glm::mat4& view, glm::mat4& proj, Camera& camera);
-	void updateNodes(glm::mat4& view, glm::mat4& proj, Camera& camera);
-	void nodeReady(int id, Transform& t);
+	void updateNodes(glm::mat4& view, glm::mat4& proj, glm::vec3& cameraPos);
+	void nodeReady(int id, Transform t);
 
 };
 

@@ -37,7 +37,7 @@ class Material {
 
 		const Shader& _shader;
 		
-		Material(const Shader& shader, DirLight& dirLight, std::vector<SpotLight>& spotLights, std::vector<PointLight>& pointLights);
+		Material(const Shader& shader, DirLight dirLight, std::vector<SpotLight> spotLights, std::vector<PointLight> pointLights);
 		Material(const Shader& shader);
 		Material() = delete;
 
@@ -52,6 +52,10 @@ class Material {
 		std::string getName() {
 			return _name;
 		}
+
+		DirLight getDirLight() { return _dirLight;  }
+		std::vector<SpotLight> getSpotLights() { return _spotLights;  }
+		std::vector<PointLight> getPointLights() { return _pointLights; }
 
 		//Shader& getShader() { return _shader; }
 

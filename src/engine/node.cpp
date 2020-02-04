@@ -3,7 +3,7 @@
 #include <glm\ext\matrix_transform.hpp>
 
 
-Node::Node(int idAsset,Material& material, Type type) : _idAsset(idAsset), _material(material), _type(type) {
+Node::Node(int idAsset,Material& material, Type type) : _idAsset(idAsset), _material(material), _type(type)  {
 
 }
 
@@ -20,80 +20,71 @@ void Node::drawNode(const glm::mat4& view, const glm::mat4& proj, Assets& asset)
 	//Do Transform
 
 	glm::mat4 m = glm::mat4(1.0);
-	std::cout << _trans.getPosition()[0].y << std::endl;
-	/*std::cout << _trans.getPosition().size() << std::endl;
-	std::cout << _trans.getRotation().size() << std::endl;
-	std::cout << _trans.getRadians().size() << std::endl;
-	std::cout << _trans.getScale().size() << std::endl;*/
-	
-	if (_trans.getPosition().size() > 0) {
-		for (auto& _t : _trans.getPosition()) {
+
+	if (_transform.getPosition().size() > 0) {
+		for (auto& _t : _transform.getPosition()) {
 			m = glm::translate(m, _t);
 		}
 	}
 	
-	if (_trans.getRotation().size() > 0) {
-		for (int i = 0; i < _trans.getRotation().size(); ++i) {
-			m = glm::rotate(m, glm::radians(_trans.getRadians()[i]), _trans.getRotation()[i]);
+	if (_transform.getRotation().size() > 0) {
+		for (int i = 0; i < _transform.getRotation().size(); ++i) {
+			m = glm::rotate(m, glm::radians(_transform.getRadians()[i]), _transform.getRotation()[i]);
 		}
 	}
-	if (_trans.getScale().size() > 0) {
-		for (auto& _s : _trans.getScale()) {
+	if (_transform.getScale().size() > 0) {
+		for (auto& _s : _transform.getScale()) {
 			m = glm::scale(m, _s);
 		}
 	}
+
+	//glm::mat4 model = glm::mat4(1.0f);
+	////model = glm::translate(model, glm::vec3(0.0f, 0.0f, -1.0f));
+	//model = glm::rotate(model, glm::radians(180.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+	//model = glm::rotate(model, glm::radians(90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+	//model = glm::rotate(model, glm::radians(180.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+	//model = glm::scale(model, glm::vec3(0.01f, 0.01f, 0.01f));
 	
-	if (_type == Type::Model) {
+	if (_type == Type::isModel) {
 
-			std::cout << "DRAW" << " " << _material.getName() <<std::endl;
+			//std::cout << "DRAW" << " " << asset.getModel(_idAsset).directory_ <<std::endl;
 			
-			Draw(m, _material._shader, asset.getModel(_idAsset), view, proj, true);
-			//Draw(_transform.transform, view, proj, asset.getModel(_idAsset), _material);
-			
-			/*_material._shader.use();
-			_material._shader.set("viewPos", glm::vec3(0.0f, 10.0f, 0.0f));
-			_material.setMaterialLights();
-			_material._shader.set("model", _trans);
-			_material._shader.set("view", view);
-			_material._shader.set("proj", proj);
-
-			glm::mat4 normalMat = glm::inverse(glm::transpose(glm::mat3(_trans)));
-			_material._shader.set("normalMat", normalMat);*/
-
-			//asset.getModel(_idAsset).render(_material._shader);
+			DrawModel(m, _material._shader, asset.getModel(_idAsset), view, proj, true);
 		
 	}
-	else if(_type == Type::Geometry) { //Geometry
-		//std::cout << _idAsset << std::endl;
-		//if (asset.getAssetGeometry(_idAsset)._textures.size() > 0) {
-			//std::cout << asset.getAssetGeometry(_idAsset)._textures.size() << std::endl;
-		//}
+	else if(_type == Type::isGeometry) { //Geometry
+
+		_material.setMaterialTextures(asset.getAssetGeometry(_idAsset).getAlbedo(), asset.getAssetGeometry(_idAsset).getSpecular(), asset.getAssetGeometry(_idAsset).getNormal());
 		
-		/*if (asset.getAssetGeometry(_idAsset)._textures.size() == 3)
-			_material.setMaterialTextures(asset.getAssetGeometry(_idAsset)._textures[0], asset.getAssetGeometry(_idAsset)._textures[1], asset.getAssetGeometry(_idAsset)._textures[2]);
-		
-		_material._shader.use();
-		_material._shader.set("viewPos", glm::vec3(0.0f, 10.0f, 0.0f));
-		_material.setMaterialLights();
-		_material._shader.set("model", _trans);
-		_material._shader.set("view", view);
-		_material._shader.set("proj", proj);
-
-		glm::mat4 normalMat = glm::inverse(glm::transpose(glm::mat3(_trans)));
-		_material._shader.set("normalMat", normalMat);
-		asset.getAssetGeometry(_idAsset)._geometry.render();*/
-		
-		//Draw(_trans, _material._shader, asset.getAssetGeometry(_idAsset), view, proj, true);
-		//Draw(_trans, _material._shader, asset.getAssetGeometry(_idAsset), view, proj, const Texture & t_albedo, const Texture & t_specular, const Texture & t_normal);
-
-		//Draw(const glm::mat4 & transform, const Shader & shader, const Geometry & geometry, const glm::mat4 & view, const glm::mat4 & proj, bool isNormal);
-		//Draw(const glm::mat4 & transform, const Shader & shader, const Geometry & geometry, const glm::mat4 & view, const glm::mat4 & proj, const Texture & t_albedo, const Texture & t_specular, const Texture & t_normal);
-
-
+		DrawGeometry(m, _material._shader, asset.getAssetGeometry(_idAsset).getGeometry(), view, proj, true);
 	}
 }
 
-void Node::setTrans(Transform& trans)
+void Node::setTrans(Transform& trans) 
 {
-	_trans = trans;
+	std::cout << trans.getPosition()[0].y << std::endl;
+	_transform = trans;
+}
+
+void Node::DrawModel(const glm::mat4& transform, const Shader& shader, const Model& model, const glm::mat4& view, const glm::mat4& proj, bool isNormal) {
+	shader.set("model", transform);
+	shader.set("view", view);
+	shader.set("proj", proj);
+	if (isNormal) {
+		glm::mat4 normalMat = glm::inverse(glm::transpose(glm::mat3(transform)));
+		shader.set("normalMat", normalMat);
+	}
+	model.render(shader);
+}
+
+void Node::DrawGeometry(const glm::mat4& transform, const Shader& shader, const Geometry& geometry, const glm::mat4& view, const glm::mat4& proj, bool isNormal) {
+
+	shader.set("model", transform);
+	shader.set("view", view);
+	shader.set("proj", proj);
+	if (isNormal) {
+		glm::mat4 normalMat = glm::inverse(glm::transpose(glm::mat3(transform)));
+		shader.set("normalMat", normalMat);
+	}
+	geometry.render();
 }

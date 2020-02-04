@@ -18,19 +18,18 @@ private:
 	std::vector<glm::vec3> _rotation;
 	std::vector<float> _radians;
 	std::vector<glm::vec3> _scale;
-	glm::mat4 _transform = glm::mat4(1.0f);
 
 public:
 	
 
-	Transform();
+	//Transform();
 
 	void Init();
 	void Translate(glm::vec3& position);
 	void Rotate(float radians, glm::vec3& direction);
 	void Scale(glm::vec3& scale);
 
-	glm::mat4 getTransform() { return _transform; }
+	//glm::mat4 getTransform() { return _transform; }
 	std::vector<glm::vec3> getPosition() { return _position; }
 	std::vector<glm::vec3> getRotation() { return _rotation; }
 	std::vector<float> getRadians() { return _radians; }

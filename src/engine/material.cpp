@@ -8,7 +8,7 @@
 //
 //}
 
-Material::Material(const Shader& shader, DirLight& dirLight, std::vector<SpotLight>& spotLights, std::vector<PointLight>& pointLights) : _shader(shader) , _dirLight(dirLight), _pointLights(pointLights) {
+Material::Material(const Shader& shader, DirLight dirLight, std::vector<SpotLight> spotLights, std::vector<PointLight> pointLights) : _shader(shader) , _dirLight(dirLight), _pointLights(pointLights), _spotLights(spotLights) {
 	hasLightPorperties = true;
 	using namespace std::chrono;
 	milliseconds ms = duration_cast<milliseconds>(
@@ -36,7 +36,7 @@ void Material::setMaterialLights() {
 	
 	
 	if (hasLightPorperties) {
-		//std::cout << _dirLight.getDirection().x << std::endl;
+		std::cout << _dirLight.getDirection().x << std::endl;
 		//DIRLIGHT
 		_shader.set("Light.direction", _dirLight.getDirection());
 		_shader.set("Light.ambient", _dirLight.getAmbient());

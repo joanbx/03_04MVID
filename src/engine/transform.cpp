@@ -1,10 +1,7 @@
 #include "engine/transform.hpp"
 #include <glm\ext\matrix_transform.hpp>
 
-Transform::Transform()
-{
-	_transform = glm::mat4(1.0f);
-}
+
 
 void Transform::Init()
 {

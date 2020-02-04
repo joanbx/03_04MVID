@@ -16,22 +16,23 @@ int SceneGraph::addNewNode(Node& node) {
 //	_camera = camera;
 //}
 
-void SceneGraph::nodeReady(int id, Transform& t ) {
+void SceneGraph::nodeReady(int id, Transform t ) {
 	
 	//std::cout << _nodes.size() << std::endl;
-	//std::cout << _nodes.size() << " " << id << " " << _nodes[1].nodeID << std::endl;
+	//std::cout << "ReadyNode " << _nodes[0].nodeID << std::endl;
 	for (int i=0; i< _nodes.size(); ++i) {
 		//std::cout << _nodes.size() << " " <<id << " " << _nodes[i].nodeID << std::endl;
 		if (_nodes[i].nodeID == id) {
 			//std::cout << "node found " << id<< std::endl;
 			_nodes[i].node.setDirtyFlag(true);
-			//_nodes[i].node.setTrans(t);
-			_nodes[i].node._trans = t;
+			_nodes[i].node.setTrans(t);
+			// _nodes[i].node._trans = t;
+			
 		}
 	}
 }
 
-void SceneGraph::updateNodes(glm::mat4& view, glm::mat4& proj, Camera& camera) {
+void SceneGraph::updateNodes(glm::mat4& view, glm::mat4& proj, glm::vec3& cameraPos) {
 	//Group by shaders
 
 	std::vector<std::string> shadersToUse;
@@ -70,12 +71,14 @@ void SceneGraph::updateNodes(glm::mat4& view, glm::mat4& proj, Camera& camera) {
 			//std::cout << node.node.dirtyFlag() << std::endl;
 			if (node.node.getMaterial().getName() == s && node.node.dirtyFlag()) {
 				if (!initialized) {
-					
-					
-					//std::cout << "SHADER" << node.node.getMaterial().getName() << std::endl;
-					//node.node.getMaterial()._shader.use();
-					//node.node.getMaterial()._shader.set("viewPos", camera.getPosition());
-					//node.node.getMaterial().setMaterialLights();
+
+					node.node.getMaterial()._shader.use();
+
+					node.node.getMaterial().setMaterialLights();
+
+					node.node.getMaterial()._shader.set("viewPos", cameraPos);
+
+
 					initialized = true;
 				}
 				//draw
