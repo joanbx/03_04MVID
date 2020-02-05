@@ -6,6 +6,7 @@ in vec3 simpleNormal;
 in mat3 TBN;
 in vec3 fragPos;
 in vec2 uv;
+in vec4 fragPosLighSpace;
 
 struct Material {
     sampler2D diffuse;
@@ -53,12 +54,37 @@ struct SpotLight {
     float outerCutOff;
 };
 
-#define NUMBER_POINT_LIGHTS 3
-#define NUMBER_SPOT_LIGHTS 3
+#define NUMBER_POINT_LIGHTS 1
+#define NUMBER_SPOT_LIGHTS 1
 uniform PointLight pointLight[NUMBER_POINT_LIGHTS];
 uniform SpotLight spotLight[NUMBER_SPOT_LIGHTS];
 
 uniform vec3 viewPos;
+
+uniform sampler2D depthMap;
+
+float ShadowCalculation(vec4 fragPosLighSpace, float bias) {
+    vec3 projCoords = fragPosLighSpace.xyz / fragPosLighSpace.w;
+    projCoords = projCoords * 0.5 + 0.5;
+    //float closestDepth = texture(depthMap, projCoords.xy).r;
+    float currentDepth = projCoords.z;
+
+    float shadow = 0.0;
+    vec2 texelSize = 1.0 / textureSize(depthMap, 0);
+    for(int x = -1; x <= 1; ++x) {
+        for (int y = -1; y <=1; ++y) {
+            float pcf = texture(depthMap, projCoords.xy + vec2(x,y) * texelSize).r;
+            shadow += currentDepth -bias > pcf ? 1.0 : 0.0;
+        }
+	}
+    shadow /= 9.0;
+
+    if (projCoords.z > 1.0) {
+     shadow = 0.0;
+	}
+
+    return shadow;
+}
 
 vec3 calcDirectionalLight(DirLight light, vec3 normal, vec3 viewDir, vec3 albedoMap) {
     
@@ -72,7 +98,10 @@ vec3 calcDirectionalLight(DirLight light, vec3 normal, vec3 viewDir, vec3 albedo
     float spec = pow(max(dot(normal, halfwayDir), 0.0), material.shininess);
     vec3 specular = spec * vec3(texture(material.specular, uv)) * light.specular;
 
-    return ambient + diffuse + specular;
+    float bias = max(0.05 * (1.0 - dot(normal, lightDir)), 0.005);
+    float shadow = ShadowCalculation(fragPosLighSpace, bias);
+
+    return ambient + ((1.0 - shadow) * (diffuse + specular));
 }
 
 vec3 calcPointLight(PointLight light, vec3 normal, vec3 viewDir, vec3 albedoMap) {
@@ -120,6 +149,8 @@ vec3 CalcSpotLight(SpotLight light, vec3 normal, vec3 viewDir, vec3 albedoMap) {
 
 }
 
+
+
 void main() {
     vec3 albedo = vec3(texture(material.diffuse, uv));
 
@@ -129,24 +160,19 @@ void main() {
 
     vec3 viewDir = normalize(viewPos - fragPos);
 
-
-    // vec3 albedo = vec3(texture(material.diffuse, uv));
-    // vec3 specular = vec3(texture(material.specular, uv));
-
     vec3 normal2 = normalize(simpleNormal);
-    // vec3 viewDir = normalize(viewPos - fragPos);
     
 
-    vec3 finalColor = calcDirectionalLight(dirLight,normal,viewDir,albedo);
-
-    for (int i = 0; i < NUMBER_POINT_LIGHTS; ++i) {
+    vec3 finalColor = calcDirectionalLight(dirLight,normal2,viewDir,albedo);
+    /*
+   for (int i = 0; i < NUMBER_POINT_LIGHTS; ++i) {
         finalColor += calcPointLight(pointLight[i], normal, viewDir, albedo);
 	}
 
     for (int i = 0; i < NUMBER_SPOT_LIGHTS; ++i) {
         finalColor += CalcSpotLight(spotLight[i], normal, viewDir, albedo);
 	}
-
+   */
     FragColor = vec4(finalColor, 1.0);
 
 }

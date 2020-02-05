@@ -40,10 +40,11 @@ public:
 
 	void setDirtyFlag(bool dirtyFlag);
 
-	void drawNode(const glm::mat4& view, const glm::mat4& proj, Assets& asset);
+	void drawNode(Assets& asset, bool isDepth);
 
-	void DrawModel(const glm::mat4& transform, const Shader& shader, const Model& model, const glm::mat4& view, const glm::mat4& proj, bool isNormal);
-	void DrawGeometry(const glm::mat4& transform, const Shader& shader, const Geometry& geometry, const glm::mat4& view, const glm::mat4& proj, bool isNormal);
+	void DrawModel(const glm::mat4& transform, const Shader& shader, const Model& model, bool isNormal);
+	void DrawGeometry(const glm::mat4& transform, const Shader& shader, const Geometry& geometry, bool isNormal);
+
 
 	void setTrans(Transform& trans);
 	Transform getTrans() { return _transform; }

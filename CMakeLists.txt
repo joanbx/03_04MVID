@@ -26,6 +26,7 @@ set(ENGINE_SRC_FILES
     ${CMAKE_CURRENT_LIST_DIR}/src/engine/assets.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/engine/material.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/engine/light.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/src/engine/shadow.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/engine/transform.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/engine/drawable.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/engine/node.cpp
@@ -50,6 +51,7 @@ set(ENGINE_HEADER_FILES
     ${CMAKE_CURRENT_LIST_DIR}/include/engine/assets.hpp
     ${CMAKE_CURRENT_LIST_DIR}/include/engine/material.hpp
     ${CMAKE_CURRENT_LIST_DIR}/include/engine/light.hpp
+    ${CMAKE_CURRENT_LIST_DIR}/include/engine/shadow.hpp
     ${CMAKE_CURRENT_LIST_DIR}/include/engine/transform.hpp
     ${CMAKE_CURRENT_LIST_DIR}/include/engine/drawable.hpp
     ${CMAKE_CURRENT_LIST_DIR}/include/engine/node.hpp

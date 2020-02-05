@@ -16,7 +16,7 @@ private:
 	};
 
 	GameObject _go;
-	glm::vec3 posShip = glm::vec3(0, 0, 0);
+	glm::vec3 posShip = glm::vec3(0, 1, 0);
 	glm::vec3 rotShip = glm::vec3(0, 0, 0);
 	float angleShip = 0.0f;
 	bool _shoot = false;

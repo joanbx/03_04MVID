@@ -64,7 +64,8 @@ int Assets::addNewModel(const Model& m) {
 int Assets::addNewGeometry(const Geometry& geometry, const Texture& albedo, const Texture& difuse, const Texture& nomral)
 {
 	int id = countAssets;
-	_geometries.push_back(geometries(id, AssetsGeometry(geometry, albedo, difuse, nomral)));
+	geometries g(geometries(id, AssetsGeometry(geometry, albedo, difuse, nomral)));
+	_geometries.push_back(g);
 	countAssets++;
 	return id;
 }

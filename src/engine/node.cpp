@@ -14,7 +14,7 @@ void Node::setDirtyFlag(bool dirtyFlag) {
 
 
 
-void Node::drawNode(const glm::mat4& view, const glm::mat4& proj, Assets& asset)
+void Node::drawNode(Assets& asset, bool isDepth)
 {
 
 	//Do Transform
@@ -38,38 +38,34 @@ void Node::drawNode(const glm::mat4& view, const glm::mat4& proj, Assets& asset)
 		}
 	}
 
-	//glm::mat4 model = glm::mat4(1.0f);
-	////model = glm::translate(model, glm::vec3(0.0f, 0.0f, -1.0f));
-	//model = glm::rotate(model, glm::radians(180.0f), glm::vec3(1.0f, 0.0f, 0.0f));
-	//model = glm::rotate(model, glm::radians(90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
-	//model = glm::rotate(model, glm::radians(180.0f), glm::vec3(0.0f, 0.0f, 1.0f));
-	//model = glm::scale(model, glm::vec3(0.01f, 0.01f, 0.01f));
 	
-	if (_type == Type::isModel) {
-
-			//std::cout << "DRAW" << " " << asset.getModel(_idAsset).directory_ <<std::endl;
-			
-			DrawModel(m, _material._shader, asset.getModel(_idAsset), view, proj, true);
-		
+	if (_type == Type::isModel) {	
+		if(isDepth)
+			DrawModel(m, _material._shadow._depth, asset.getModel(_idAsset), false);
+		else
+			DrawModel(m, _material._shader, asset.getModel(_idAsset), true);		
 	}
 	else if(_type == Type::isGeometry) { //Geometry
 
 		_material.setMaterialTextures(asset.getAssetGeometry(_idAsset).getAlbedo(), asset.getAssetGeometry(_idAsset).getSpecular(), asset.getAssetGeometry(_idAsset).getNormal());
-		
-		DrawGeometry(m, _material._shader, asset.getAssetGeometry(_idAsset).getGeometry(), view, proj, true);
+		if (isDepth)
+			DrawGeometry(m, _material._shadow._depth, asset.getAssetGeometry(_idAsset).getGeometry(), false);
+		else
+			DrawGeometry(m, _material._shader, asset.getAssetGeometry(_idAsset).getGeometry(), true);
 	}
 }
 
 void Node::setTrans(Transform& trans) 
 {
-	std::cout << trans.getPosition()[0].y << std::endl;
+	//std::cout << trans.getPosition()[0].y << std::endl;
 	_transform = trans;
 }
 
-void Node::DrawModel(const glm::mat4& transform, const Shader& shader, const Model& model, const glm::mat4& view, const glm::mat4& proj, bool isNormal) {
+
+void Node::DrawModel(const glm::mat4& transform, const Shader& shader, const Model& model, bool isNormal) {
 	shader.set("model", transform);
-	shader.set("view", view);
-	shader.set("proj", proj);
+	//shader.set("view", view);
+	//shader.set("proj", proj);
 	if (isNormal) {
 		glm::mat4 normalMat = glm::inverse(glm::transpose(glm::mat3(transform)));
 		shader.set("normalMat", normalMat);
@@ -77,11 +73,11 @@ void Node::DrawModel(const glm::mat4& transform, const Shader& shader, const Mod
 	model.render(shader);
 }
 
-void Node::DrawGeometry(const glm::mat4& transform, const Shader& shader, const Geometry& geometry, const glm::mat4& view, const glm::mat4& proj, bool isNormal) {
+void Node::DrawGeometry(const glm::mat4& transform, const Shader& shader, const Geometry& geometry, bool isNormal) {
 
 	shader.set("model", transform);
-	shader.set("view", view);
-	shader.set("proj", proj);
+	//shader.set("view", view);
+	//shader.set("proj", proj);
 	if (isNormal) {
 		glm::mat4 normalMat = glm::inverse(glm::transpose(glm::mat3(transform)));
 		shader.set("normalMat", normalMat);

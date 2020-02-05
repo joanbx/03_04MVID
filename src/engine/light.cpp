@@ -18,6 +18,13 @@ SpotLight::SpotLight(glm::vec3 position, glm::vec3 direction, const glm::vec3 am
 { 
 }
 
+void DirLight::setShader(const Shader& s_phong) {
+	s_phong.set("dirLight.direction", _direction);
+	s_phong.set("dirLight.ambient", _ambient);
+	s_phong.set("dirLight.diffuse", _diffuse);
+	s_phong.set("dirLight.specular", _specular);
+}
+
 void PointLight::setShader(const Shader& s_phong, uint32_t i) {
 	const std::string lightName = prefixPoints + std::to_string(i) + "].";
 	s_phong.set((lightName + "position").c_str(), _position);

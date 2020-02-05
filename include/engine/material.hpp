@@ -5,6 +5,7 @@
 #include "engine/shader.hpp"
 #include <engine\texture.hpp>
 #include <engine\light.hpp>
+#include <engine\shadow.hpp>
 
 #include <glm/glm.hpp>
 #include <vector>
@@ -26,26 +27,27 @@ class Material {
 		////std::vector<Texture> _textures;
 		//std::string _name;
 		bool hasLightPorperties;
+		
 		DirLight _dirLight;
 		std::vector<SpotLight> _spotLights;
 		std::vector<PointLight> _pointLights;
 		std::string _name;
+		
 
 	public:
-		//Material(const Shader shader,const glm::vec3 ambient = K_ambient,const glm::vec3 diffuse = K_diffuse,const glm::vec3 specular = K_specular,const float shininess = K_shininess, const std::string name= K_name);
-		//Material(const glm::vec3 ambient = K_ambient, const glm::vec3 diffuse = K_diffuse, const glm::vec3 specular = K_specular, const float shininess = K_shininess, const std::string name = K_name);
 
 		const Shader& _shader;
-		
-		Material(const Shader& shader, DirLight dirLight, std::vector<SpotLight> spotLights, std::vector<PointLight> pointLights);
-		Material(const Shader& shader);
+		Shadow& _shadow;
+
+		Material(const Shader& shader, Shadow& shadow, DirLight dirLight, std::vector<SpotLight> spotLights, std::vector<PointLight> pointLights);
+		//Material(const Shader& shader);
 		Material() = delete;
 
 		Material(const Material&) = default;
 		Material& operator=(const Material&) = default;
 		Material& operator=(Material&&) = default;
 
-		void setMaterial() ;
+		//void setMaterial() ;
 		void setMaterialTextures(const Texture& albedo, const Texture& specular, const Texture& normal) ;
 		void setMaterialLights() ;
 

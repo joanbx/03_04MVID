@@ -10,12 +10,13 @@ uniform mat4 model;
 uniform mat4 view;
 uniform mat4 proj;
 uniform mat3 normalMat;
+uniform mat4 lightSpaceMatrix;
 
 out mat3 TBN;
 out vec3 fragPos;
 out vec2 uv;
 out vec3 simpleNormal;
-
+out vec4 fragPosLighSpace;
 
 void main() {
     uv = aUv;
@@ -27,13 +28,16 @@ void main() {
     T = normalize(T - dot(T,N) * N);
     vec3 B = cross(N, T);
     TBN = transpose(mat3(T, B, N));
-    
+
+
     //Simple sin ortogonalización:
     // vec3 T = normalize(vec3(model * vec4(aTangent,   0.0)));
     // vec3 B = normalize(vec3(model * vec4(aBitangent, 0.0)));
     // vec3 N = normalize(vec3(model * vec4(aNormal,    0.0)));
     // TBN = mat3(T, B, N);
 
+    //SHADOW
+    fragPosLighSpace = lightSpaceMatrix * vec4(fragPos, 1.0);
     
     gl_Position = proj * view * model * vec4(aPos, 1.0);
 }

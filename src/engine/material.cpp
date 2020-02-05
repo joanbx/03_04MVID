@@ -2,13 +2,8 @@
 #include <iostream>
 #include <chrono>
 
-//Material::Material(const glm::vec3 ambient,const glm::vec3 diffuse,const glm::vec3 specular,const float shininess, const std::string name)
-//	: _ambient(ambient), _diffuse(diffuse), _specular(specular), _shininess(shininess), _name(name)
-//{
-//
-//}
 
-Material::Material(const Shader& shader, DirLight dirLight, std::vector<SpotLight> spotLights, std::vector<PointLight> pointLights) : _shader(shader) , _dirLight(dirLight), _pointLights(pointLights), _spotLights(spotLights) {
+Material::Material(const Shader& shader, Shadow& shadow, DirLight dirLight, std::vector<SpotLight> spotLights, std::vector<PointLight> pointLights) : _shader(shader), _shadow(shadow), _dirLight(dirLight), _pointLights(pointLights), _spotLights(spotLights) {
 	hasLightPorperties = true;
 	using namespace std::chrono;
 	milliseconds ms = duration_cast<milliseconds>(
@@ -18,8 +13,8 @@ Material::Material(const Shader& shader, DirLight dirLight, std::vector<SpotLigh
 	_name = "mat" + std::to_string(ms.count()) + std::to_string(rand() % 1000); //TO BE IMPROVED
 }
 
-Material::Material(const Shader& shader) : _shader(shader) {
-}
+//Material::Material(const Shader& shader) : _shader(shader) {
+//}
 
 void Material::setMaterialTextures(const Texture& albedo, const Texture& specular, const Texture& normal)
 {
@@ -28,21 +23,22 @@ void Material::setMaterialTextures(const Texture& albedo, const Texture& specula
 	normal.use(_shader, "material.normal", 2);
 }
 
-void Material::setMaterial() {
-
-}
+//void Material::setMaterial() {
+//
+//}
 
 void Material::setMaterialLights() {
 	
 	
 	if (hasLightPorperties) {
-		std::cout << _dirLight.getDirection().x << std::endl;
+		//std::cout << _dirLight.getDirection().x << std::endl;
 		//DIRLIGHT
-		_shader.set("Light.direction", _dirLight.getDirection());
+		/*_shader.set("Light.direction", _dirLight.getDirection());
 		_shader.set("Light.ambient", _dirLight.getAmbient());
 		_shader.set("Light.diffuse", _dirLight.getDiffuse());
-		_shader.set("Light.specular", _dirLight.getSpecular());
-		_shader.set("material.shininess", 128);
+		_shader.set("Light.specular", _dirLight.getSpecular());*/
+		_dirLight.setShader(_shader);
+		_shader.set("material.shininess", 32);
 		//SPOTLIGHTS
 		for (int i = 0; i < _spotLights.size(); ++i) {
 			_spotLights[i].setShader(_shader, i);

@@ -33,6 +33,8 @@ public:
 	glm::vec3 getDiffuse() { return _diffuse; }
 	glm::vec3 getSpecular() { return _specular; }
 
+	void setShader(const Shader& s_phong);
+
 };
 class PointLight {
 	glm::vec3 _position;
