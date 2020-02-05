@@ -1,0 +1,41 @@
+#ifndef __SHIP_H__
+#define __SHIP_H__
+
+#include <engine\gameObject.hpp>
+#include <engine/input.hpp>
+#include <GLFW\glfw3.h>
+
+class Ship {
+
+private:
+	enum class MovementShip {
+		ShipForward = 0,
+		ShipBackward = 1,
+		ShipLeft = 2,
+		ShipRight = 3,
+	};
+
+	GameObject _go;
+	glm::vec3 posShip = glm::vec3(0, 0, 0);
+	glm::vec3 rotShip = glm::vec3(0, 0, 0);
+	float angleShip = 0.0f;
+	bool _shoot = false;
+
+public:
+
+	
+	Ship(SceneGraph& sg, Node& node);
+
+	void Start();
+
+	void Update(float dt);
+
+	void handleInput(float dt);
+
+	void shipMovement(MovementShip direction, float dt);
+
+	void shipDraw();
+
+};
+
+#endif

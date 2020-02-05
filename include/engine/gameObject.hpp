@@ -31,6 +31,11 @@ public:
 	//GameObject(const glm::vec3& position = K_positionGo);
 	GameObject(SceneGraph& sG, Node& node);
 	//GameObject(glm::vec3 poition);
+	GameObject(const GameObject&) = default;
+	GameObject(GameObject&&) = default;
+	GameObject& operator=(const GameObject&) = default;
+	GameObject& operator=(GameObject&&) = default;
+
 
 	void Init();
 	void Translate(glm::vec3& position);

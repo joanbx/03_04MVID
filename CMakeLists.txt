@@ -84,6 +84,32 @@ add_custom_command(TARGET EngineLib POST_BUILD
     "${CMAKE_CURRENT_LIST_DIR}/libs/$<CONFIGURATION>/assimp-vc142-mt.dll"
     $<TARGET_FILE_DIR:EngineLib>)
 
+	
+#****************************************************
+# GamePlay
+#****************************************************
+
+set(GAMEPLAY_SRC_FILES
+	${CMAKE_CURRENT_LIST_DIR}/src/gameplay/ship.cpp
+	${CMAKE_CURRENT_LIST_DIR}/src/gameplay/bullet.cpp
+	${CMAKE_CURRENT_LIST_DIR}/src/gameplay/enemy.cpp
+	)
+set(GAMEPLAY_HEADER_FILES
+    ${CMAKE_CURRENT_LIST_DIR}/include/gameplay/ship.hpp
+	${CMAKE_CURRENT_LIST_DIR}/include/gameplay/bullet.hpp
+	${CMAKE_CURRENT_LIST_DIR}/include/gameplay/enemy.hpp
+	)
+
+source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR}/src/gameplay/ PREFIX "Source Files" FILES ${GAMEPLAY_SRC_FILES})
+source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR}/include/gameplay PREFIX "Header Files" FILES ${GAMEPLAY_HEADER_FILES})
+
+add_library(GamePlayLib STATIC ${GAMEPLAY_SRC_FILES} ${GAMEPLAY_HEADER_FILES})
+
+target_include_directories(GamePlayLib PRIVATE ${INCLUDE_PATHS})
+
+configure_platform(GamePlayLib)
+configure_compiler(GamePlayLib)
+
 #****************************************************
 # Projects
 #****************************************************
@@ -120,7 +146,9 @@ foreach(PROJECT ${PROJECT_LIST})
     target_include_directories(${PROJECT} PRIVATE ${INCLUDE_PATHS})
     target_compile_definitions(${PROJECT} PRIVATE -D_GLFW_USE_OPENGL=1)
     target_link_libraries(${PROJECT} PRIVATE EngineLib)
+	target_link_libraries(${PROJECT} PRIVATE GamePlayLib)
     target_compile_features(${PROJECT} PRIVATE cxx_std_14)
     configure_platform(${PROJECT})
     configure_compiler(${PROJECT})
 endforeach()
+

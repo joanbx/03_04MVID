@@ -8,7 +8,7 @@ Ejercicio basado en: AG10
 #include <GLFW/glfw3.h>
 #include <glm/gtc/matrix_transform.hpp>
 #include <string>
-#include <list>
+#include <iostream>
 #include "engine/camera.hpp"
 #include "engine/geometry/cube.hpp"
 #include "engine/input.hpp"
@@ -23,10 +23,10 @@ Ejercicio basado en: AG10
 #include "engine/gameObject.hpp"
 #include "engine/easyGO.hpp"
 #include "engine/drawable.hpp"
-//#include "engine/assets.hpp"
-//#include "engine/node.hpp"
-#include <iostream>
-//#include <engine\sceneGraph.hpp>
+#include "engine/assets.hpp"
+#include "engine/node.hpp"
+#include <engine\sceneGraph.hpp>
+#include <gameplay\ship.hpp>
 
 Camera camera(glm::vec3(0.0f, 10.0f, 0.0f));
 glm::vec3 posShip(0.0f, 3.0f, 0.0f);
@@ -64,8 +64,7 @@ SpotLight* spotLights_ = new SpotLight[nSpotLight]{
 	{glm::vec3(0.0f,4.25f,0.0f),glm::vec3(0.0f, -1.0f, 0.0f), glm::vec3(0.2f,0.2f,0.2f), glm::vec3(0.5f,0.5f,0.5f),glm::vec3(1.0f,1.0f,1.0f), 1.0f, 0.2f, 0.32f, 30.0, 40.0, glm::vec3(1.0f,1.0f,1.0f)}
 };
 
-std::vector<PointLight> pointLights;
-std::vector<SpotLight> spotLights;
+
 //SpotLight* spotLights;
 
 
@@ -76,58 +75,58 @@ enum class Movement {
 	Right = 3,
 };
 
-void ShipMovement(Movement direction, float dt) {
-	const float velocity = 1 * dt;
-	glm::vec3 front = glm::vec3(0, 0, -1);
-	glm::vec3 right = glm::vec3(1, 0, 0);
-
-	switch (direction) {
-		case Movement::Forward: posShip += front * velocity; break;
-		case Movement::Backward: posShip -= front * velocity; break;
-		case Movement::Left: posShip -= right * velocity; break;
-		case Movement::Right: posShip += right * velocity; break;
-		default:;
-	}
-}
-
-
-
-void ShipDirection(Movement direction, float dt) {
-	const float velocity = 10 * dt;
-	glm::vec3 front = glm::vec3(0, 0, -1);
-	glm::vec3 right = glm::vec3(1, 0, 0);
-
-	float angleMAX = 30.0f;
-	float _angleShip = 1.0f;
-
-	switch (direction) {
-		/*case Movement::Forward:
-		rotShip = glm::vec3(1, 0, 0);
-		angleShip += _angleShip * velocity;
-		if (angleShip > angleMAX) angleShip = angleMAX;
-		break;
-	case Movement::Backward:
-		rotShip = glm::vec3(1, 0, 0);
-		angleShip -= _angleShip * velocity;
-		if (angleShip < -angleMAX) angleShip = -angleMAX;
-		break;*/
-	case Movement::Left:
-		rotShip = glm::vec3(0, 1, 0);
-		angleShip += _angleShip * velocity;
-		if (angleShip > angleMAX) angleShip = angleMAX;
-		break;
-	case Movement::Right:
-		rotShip = glm::vec3(0, 1, 0);
-		angleShip -= _angleShip * velocity;
-		if (angleShip < -angleMAX) angleShip = -angleMAX;
-		break;
-	default:;
-	}
-
-
-	std::cout << angleShip << " " << rotShip.x << " " << rotShip.y << " " << rotShip.z << std::endl;
-
-}
+//void ShipMovement(Movement direction, float dt) {
+//	const float velocity = 1 * dt;
+//	glm::vec3 front = glm::vec3(0, 0, -1);
+//	glm::vec3 right = glm::vec3(1, 0, 0);
+//
+//	switch (direction) {
+//		case Movement::Forward: posShip += front * velocity; break;
+//		case Movement::Backward: posShip -= front * velocity; break;
+//		case Movement::Left: posShip -= right * velocity; break;
+//		case Movement::Right: posShip += right * velocity; break;
+//		default:;
+//	}
+//}
+//
+//
+//
+//void ShipDirection(Movement direction, float dt) {
+//	const float velocity = 10 * dt;
+//	glm::vec3 front = glm::vec3(0, 0, -1);
+//	glm::vec3 right = glm::vec3(1, 0, 0);
+//
+//	float angleMAX = 30.0f;
+//	float _angleShip = 1.0f;
+//
+//	switch (direction) {
+//		/*case Movement::Forward:
+//		rotShip = glm::vec3(1, 0, 0);
+//		angleShip += _angleShip * velocity;
+//		if (angleShip > angleMAX) angleShip = angleMAX;
+//		break;
+//	case Movement::Backward:
+//		rotShip = glm::vec3(1, 0, 0);
+//		angleShip -= _angleShip * velocity;
+//		if (angleShip < -angleMAX) angleShip = -angleMAX;
+//		break;*/
+//	case Movement::Left:
+//		rotShip = glm::vec3(0, 1, 0);
+//		angleShip += _angleShip * velocity;
+//		if (angleShip > angleMAX) angleShip = angleMAX;
+//		break;
+//	case Movement::Right:
+//		rotShip = glm::vec3(0, 1, 0);
+//		angleShip -= _angleShip * velocity;
+//		if (angleShip < -angleMAX) angleShip = -angleMAX;
+//		break;
+//	default:;
+//	}
+//
+//
+//	std::cout << angleShip << " " << rotShip.x << " " << rotShip.y << " " << rotShip.z << std::endl;
+//
+//}
 
 
 float lastFrame = 0.0f;
@@ -139,33 +138,33 @@ void handleInput(float dt) {
 
 	if (input->isKeyPressed(GLFW_KEY_W)) {
 		//camera.handleKeyboard(Camera::Movement::Forward, dt);
-		ShipMovement(Movement::Forward, dt);
-		ShipDirection(Movement::Forward, dt);
+		//ShipMovement(Movement::Forward, dt);
+		//ShipDirection(Movement::Forward, dt);
 	}
 	if (input->isKeyPressed(GLFW_KEY_S)) {
-		camera.handleKeyboard(Camera::Movement::Backward, dt);
-		ShipMovement(Movement::Backward, dt);
-		ShipDirection(Movement::Backward, dt);
+		//camera.handleKeyboard(Camera::Movement::Backward, dt);
+		//ShipMovement(Movement::Backward, dt);
+		///ShipDirection(Movement::Backward, dt);
 	}
 	if (input->isKeyPressed(GLFW_KEY_A)) {
 		//camera.handleKeyboard(Camera::Movement::Left, dt);
-		ShipMovement(Movement::Left, dt);
-		ShipDirection(Movement::Left, dt);
+		//ShipMovement(Movement::Left, dt);
+		//ShipDirection(Movement::Left, dt);
 	}
 	if (input->isKeyPressed(GLFW_KEY_D)) {
 		//camera.handleKeyboard(Camera::Movement::Right, dt);
-		ShipMovement(Movement::Right, dt);
-		ShipDirection(Movement::Right, dt);
+		//ShipMovement(Movement::Right, dt);
+		//ShipDirection(Movement::Right, dt);
 	}
 	
-	if (input->isKeyPressed(GLFW_KEY_SPACE) && shoot==false) {
-		shoot = true;
-		posBullets.push_back(posShip);
-		std::cout << "SHOOT" << posBullets.size() << std::endl;
-	}
-	else if (input->isKeyReleased(GLFW_KEY_SPACE) && shoot == true) {
-		shoot = false;
-	}
+	//if (input->isKeyPressed(GLFW_KEY_SPACE) && shoot==false) {
+		//shoot = true;
+		//posBullets.push_back(posShip);
+		//std::cout << "SHOOT" << posBullets.size() << std::endl;
+	//}
+	//else if (input->isKeyReleased(GLFW_KEY_SPACE) && shoot == true) {
+		//shoot = false;
+	//}
 }
 
 void onKeyPress(int key, int action) {
@@ -248,24 +247,24 @@ void render(const Geometry& floor, const Model& object, const Model& enemy, cons
 	//POINTLIGHTS
 	for (uint32_t i = 0; i < nPointLight; i++) {
 		glm::mat4 model = glm::mat4(1.0f);
-		model = glm::translate(model, pointLights[i].getPosition());
+		model = glm::translate(model, pointLights_[i].getPosition());
 		model = glm::scale(model, glm::vec3(0.25f));
 		s_light.set("model", model);
 		s_light.set("view", view);
 		s_light.set("proj", proj);
-		s_light.set("lightColor", pointLights[i].getColorSphere());
+		s_light.set("lightColor", pointLights_[i].getColorSphere());
 
 		//sphere.render();
 	}
 	//SPOTLIGHTS
 	for (uint32_t i = 0; i < nSpotLight; i++) {
 		glm::mat4 model = glm::mat4(1.0f);
-		model = glm::translate(model, spotLights[i].getPosition());
+		model = glm::translate(model, spotLights_[i].getPosition());
 		model = glm::scale(model, glm::vec3(0.25f));
 		s_light.set("model", model);
 		s_light.set("view", view);
 		s_light.set("proj", proj);
-		s_light.set("lightColor", spotLights[i].getColorSphere());
+		s_light.set("lightColor", spotLights_[i].getColorSphere());
 
 		//sphere.render();
 	}
@@ -341,8 +340,7 @@ void render(const Geometry& floor, const Model& object, const Model& enemy, cons
 			bool Collision = CheckCollisionXZ(bullet, enemyUFO);
 
 			if (Collision) enemyAlive = false;
-
-
+			
 			if(in_frustum(proj,posBullets[i]) || Collision){
 				posBullets.erase(posBullets.begin() + i);
 			}
@@ -472,7 +470,7 @@ void render(Assets& assets, EasyGO GOFloor, const Geometry& floor, const Shader&
 }
 
 
-void render(SceneGraph& sceneGraph, GameObject& ship, GameObject& floor, std::vector<GameObject>& enemies) {
+void render(SceneGraph& sceneGraph, float dt, Ship& ship, GameObject& floor, std::vector<GameObject>& enemies) {
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -485,21 +483,23 @@ void render(SceneGraph& sceneGraph, GameObject& ship, GameObject& floor, std::ve
 	floor.Scale(glm::vec3(15.0f, 15.0f, 15.0f));
 	floor.readyToDraw();
 
-	ship.Init();
+	ship.Update(dt);
+
+	/*ship.Init();
 	ship.Translate(posShip);
 	ship.Rotate(-90.0f, glm::vec3(1.0f, 0.0f, 0.0f));
 	ship.Rotate(180.0f, glm::vec3(0.0f, 0.0f, 1.0f));
 	if (angleShip != 0.0f) ship.Rotate(angleShip, rotShip);
 	ship.Scale(glm::vec3(0.001f, 0.001f, 0.001f));
-	ship.readyToDraw();
+	ship.readyToDraw();*/
 
 
-	enemies[0].Init();
+	/*enemies[0].Init();
 	enemies[0].Translate(glm::vec3(1.0f, 2.0f, -2.0f));
 	enemies[0].Rotate(-10.0f, glm::vec3(1.0f, 0.0f, 0.0f));
 	enemies[0].Scale(glm::vec3(0.01f, 0.01f, 0.01f));
 	enemies[0].setSize(glm::vec3(0.34f));
-	enemies[0].readyToDraw();
+	enemies[0].readyToDraw();*/
 
 	sceneGraph.updateNodes(view, proj, camera.getPosition());
 }
@@ -531,12 +531,12 @@ int main(int, char* []) {
 	//Lights
 	DirLight dirLight(glm::vec3(-0.2f, -1.0f, -0.3f), glm::vec3(0.2f, 0.2f, 0.2f), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(1.0f, 1.0f, 1.0f));
 
-	pointLights = {
+	std::vector<PointLight> pointLights = {
 		{ glm::vec3(0.0f, 2.0f, 0.0f), glm::vec3(0.2f, 0.2f, 0.2f), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(1.0f, 1.0f, 1.0f), 1.0f, 0.09f, 0.032f, glm::vec3(1.0f, 1.0f, 1.0f) },
 		{ glm::vec3(3.0f, 2.0f, 2.0f), glm::vec3(0.2f, 0.2f, 0.2f), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(1.0f, 1.0f, 1.0f), 1.0f, 0.09f, 0.032f, glm::vec3(1.0f, 1.0f, 1.0f) },
 		{ glm::vec3(-3.0f, 2.0f, -2.0f), glm::vec3(0.2f, 0.2f, 0.2f), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(1.0f, 1.0f, 1.0f), 1.0f, 0.09f, 0.032f, glm::vec3(1.0f, 1.0f, 1.0f) }
 	};
-	spotLights = {
+	std::vector<SpotLight> spotLights = {
 		{ glm::vec3(-1.0f, 0.25f, 0.0f), glm::vec3(0.0f, -1.0f, 0.0f), glm::vec3(0.2f, 0.2f, 0.2f), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(1.0f, 1.0f, 1.0f), 1.0f, 0.2f, 0.32f, 30.0, 40.0, glm::vec3(1.0f, 1.0f, 1.0f) },
 		{ glm::vec3(1.0f, 0.25f, 0.0f), glm::vec3(0.0f, -1.0f, 0.0f), glm::vec3(0.2f, 0.2f, 0.2f), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(1.0f, 1.0f, 1.0f), 1.0f, 0.2f, 0.32f, 30.0, 40.0, glm::vec3(1.0f, 1.0f, 1.0f) },
 		{ glm::vec3(0.0f, 0.25f, 0.0f), glm::vec3(0.0f, -1.0f, 0.0f), glm::vec3(0.2f, 0.2f, 0.2f), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(1.0f, 1.0f, 1.0f), 1.0f, 0.2f, 0.32f, 30.0, 40.0, glm::vec3(1.0f, 1.0f, 1.0f) }
@@ -555,16 +555,15 @@ int main(int, char* []) {
 	Material mainMaterial(s_normal, dirLight, spotLights, pointLights);
 	//Material mainMaterial(Shader("../projects/FINAL/normalAll.vs", "../projects/FINAL/normalAll.fs"));
 
-	//GObjects...
 
-	//SceneGraph - Nodes <-Do it in GameObjects
-	//std::vector<Model> models = { object, enemy };
 
 	SceneGraph sceneGraph(assets);
 
 	
 	//Add GameObjects
-	GameObject ship(sceneGraph,Node(assetShip, mainMaterial, Node::Type::isModel));
+	//const GameObject shipgo(sceneGraph, Node(assetShip, mainMaterial, Node::Type::isModel));
+	Ship ship(sceneGraph, Node(assetShip, mainMaterial, Node::Type::isModel));
+
 	GameObject floor(sceneGraph, Node(assetFloor, mainMaterial, Node::Type::isGeometry));
 	
 	//Enemy Pool
@@ -575,7 +574,7 @@ int main(int, char* []) {
 		GameObject(sceneGraph, Node(assetEnemy, mainMaterial, Node::Type::isModel))
 	};
 
-	EasyGO GoFloor(glm::vec3(0.0,0.0,0.0));
+	//EasyGO GoFloor(glm::vec3(0.0,0.0,0.0));
 
 	glEnable(GL_CULL_FACE);
 	glCullFace(GL_BACK);
@@ -596,7 +595,7 @@ int main(int, char* []) {
 
 		handleInput(deltaTime);
 		//render(quad, object, enemy_, sphere, s_phong, s_normal, s_light, t_albedoLava, t_specularLava, t_normalLava);
-		render(sceneGraph, ship, floor, enemies);
+		render(sceneGraph, deltaTime, ship, floor, enemies);
 		//render(assets, GoFloor, quad, s_normal, t_albedo, t_specular, t_normal);
 		window->frame();
 	}
