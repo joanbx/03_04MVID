@@ -27,16 +27,16 @@ void Material::setMaterialTextures(const Texture& albedo, const Texture& specula
 //
 //}
 
-void Material::setMaterialLights() {
+void Material::setMaterialProperties(glm::vec3& cameraPos, glm::mat4& view, glm::mat4& proj) {
 	
-	
+	_shader.use();
+
+	_shader.set("view", view);
+	_shader.set("proj", proj);
+	_shader.set("viewPos", cameraPos);
+
 	if (hasLightPorperties) {
-		//std::cout << _dirLight.getDirection().x << std::endl;
 		//DIRLIGHT
-		/*_shader.set("Light.direction", _dirLight.getDirection());
-		_shader.set("Light.ambient", _dirLight.getAmbient());
-		_shader.set("Light.diffuse", _dirLight.getDiffuse());
-		_shader.set("Light.specular", _dirLight.getSpecular());*/
 		_dirLight.setShader(_shader);
 		_shader.set("material.shininess", 32);
 		//SPOTLIGHTS
@@ -47,8 +47,9 @@ void Material::setMaterialLights() {
 		for (int i = 0; i < _pointLights.size(); ++i) {
 			_pointLights[i].setShader(_shader, i);
 		}
-
 	}
+
+	_shadow.setDepthMap(_shader);
 	
 }
 

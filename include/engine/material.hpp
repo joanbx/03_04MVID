@@ -49,7 +49,7 @@ class Material {
 
 		//void setMaterial() ;
 		void setMaterialTextures(const Texture& albedo, const Texture& specular, const Texture& normal) ;
-		void setMaterialLights() ;
+		void setMaterialProperties(glm::vec3& cameraPos, glm::mat4& view, glm::mat4& proj) ;
 
 		std::string getName() {
 			return _name;

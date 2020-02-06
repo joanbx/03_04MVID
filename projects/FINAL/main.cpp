@@ -35,6 +35,10 @@ glm::vec3 rotShip(0.0f, 0.0f, 0.0f);
 float angleShip = 0.0f;
 uint8_t nPointLight = 3;
 uint8_t nSpotLight = 3;
+const uint32_t k_shadow_height = 1024;
+const uint32_t k_shadow_width = 1024;
+const float k_shadow_near = 1.0f;
+const float k_shadow_far = 7.5f;
 
 bool enemyAlive = true;
 
@@ -228,8 +232,71 @@ GLboolean CheckCollisionXZ(EasyGO& go1, EasyGO& go2) // AABB - AABB collision
 	return collisionX && collisionZ;
 }
 
+std::pair<uint32_t, uint32_t>  createFBO() {
+	uint32_t fbo;
+	glGenFramebuffers(1, &fbo);
+	glBindFramebuffer(GL_FRAMEBUFFER, fbo);
 
-void render(const Geometry& floor, const Model& object, const Model& enemy, const Geometry& sphere, const Shader& s_phong, const Shader& s_normal, const Shader& s_light, const Texture& t_albedo, const Texture& t_specular, const Texture& t_normal) {
+	uint32_t depthMap;
+	glGenTextures(1, &depthMap);
+	glBindTexture(GL_TEXTURE_2D, depthMap);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, k_shadow_width, k_shadow_height, 0, GL_DEPTH_COMPONENT, GL_FLOAT, nullptr);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
+	float borderColor[]{ 1.0f, 1.0f, 1.0f, 1.0f };
+	glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, borderColor);
+	glBindTexture(GL_TEXTURE_2D, 0);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, depthMap, 0);
+	glDrawBuffer(GL_NONE);
+	glReadBuffer(GL_NONE);
+
+	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
+		std::cout << "Framebuffer Incomplete" << std::endl;
+	}
+
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+	return std::make_pair(fbo, depthMap);
+
+}
+
+
+void render(const Geometry& floor, const Model& object, const Model& enemy, const Geometry& sphere, const Shader& s_phong, const Shader& s_normal, const Shader& s_depth, const Shader& s_light, const Texture& t_albedo, const Texture& t_specular, const Texture& t_normal, const uint32_t fbo, const uint32_t fbo_texture) {
+	
+	
+	//FIRST PASS
+	glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+	glViewport(0, 0, k_shadow_width, k_shadow_height);
+	glClear(GL_DEPTH_BUFFER_BIT);
+	glEnable(GL_DEPTH_TEST);
+
+	const glm::mat4 lightProjection = glm::ortho(-10.0f, 10.0f, -10.0f, 10.0f, k_shadow_near, k_shadow_far);
+	const glm::mat4 lightView = glm::lookAt(dirLight_.getDirection(), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+	const glm::mat4 lightSpaceMatrix = lightProjection * lightView;
+
+	s_depth.use();
+	s_depth.set("lightSpaceMatrix", lightSpaceMatrix);
+	//glCullFace(GL_FRONT);
+	//Plane/Floor
+
+	//EasyGO GOfloor(glm::vec3(0.0f, -0.5f, 0.0f));
+	//GOfloor.Rotate(-90.0f, glm::vec3(1.0f, 0.0f, 0.0f));
+	//GOfloor.Scale(glm::vec3(15.0f, 15.0f, 15.0f));
+
+	//GOfloor.Draw(s_normal, floor, lightView, lightProjection, t_albedo, t_specular, t_normal);
+
+	////OBJECT IMPORTED - SHIP
+
+	//EasyGO ship(posShip);
+	//ship.Rotate(-90.0f, glm::vec3(1.0f, 0.0f, 0.0f));
+	//ship.Rotate(180.0f, glm::vec3(0.0f, 0.0f, 1.0f));
+	//if (angleShip != 0.0f) ship.Rotate(angleShip, rotShip);
+	//ship.Scale(glm::vec3(0.001f, 0.001f, 0.001f));
+	//ship.Draw(s_normal, object, lightProjection, lightProjection, true);
+	////glCullFace(GL_BACK);
+	
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glm::vec3 cameraPos = glm::vec3(0.0f, 3.0f, 0.0f);
 	glm::vec3 cameraFront = glm::vec3(0.0f, -1.0f, 0.0f);
@@ -242,7 +309,7 @@ void render(const Geometry& floor, const Model& object, const Model& enemy, cons
 
 	glm::mat4 model = glm::mat4(1.0f);
 	glm::mat3 normalMat = glm::mat3(1.0f);
-
+/*
 	//LIGHT POSITIONS
 	s_light.use();
 	//POINTLIGHTS
@@ -269,7 +336,7 @@ void render(const Geometry& floor, const Model& object, const Model& enemy, cons
 
 		//sphere.render();
 	}
-
+	*/
 
 	s_normal.use();
 
@@ -321,6 +388,8 @@ void render(const Geometry& floor, const Model& object, const Model& enemy, cons
 	//if (angleShip != 0.0f) ship.Rotate(angleShip, rotShip);
 	enemyUFO.Scale(glm::vec3(0.01f, 0.01f, 0.01f));
 	enemyUFO.setSize(glm::vec3(0.34f));
+
+
 
 	if(enemyAlive)
 		enemyUFO.Draw(s_normal, enemy, view, proj, true);
@@ -471,6 +540,7 @@ void render(Assets& assets, EasyGO GOFloor, const Geometry& floor, const Shader&
 }
 
 
+
 void render(SceneGraph& sceneGraph, float dt, Ship& ship, GameObject& floor, std::vector<GameObject>& enemies) {
 
 	//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -495,13 +565,15 @@ void render(SceneGraph& sceneGraph, float dt, Ship& ship, GameObject& floor, std
 	ship.Scale(glm::vec3(0.001f, 0.001f, 0.001f));
 	ship.readyToDraw();*/
 
-
+	/*
 	enemies[0].Init();
 	enemies[0].Translate(glm::vec3(0.0f, 1.0f, 0.0f));
 	enemies[0].Rotate(-10.0f, glm::vec3(1.0f, 0.0f, 0.0f));
 	enemies[0].Scale(glm::vec3(0.01f, 0.01f, 0.01f));
 	enemies[0].setSize(glm::vec3(0.34f));
 	enemies[0].readyToDraw();
+	*/
+	
 
 	sceneGraph.updateNodes(camera);
 
@@ -537,27 +609,27 @@ int main(int, char* []) {
 	const Sphere sphere(0.1f, 50, 50);
 	const Cube cube(1000.0f);
 	const Quad quad(1.0f);
-	const Quad quadTest(1.0f);
+	const Quad quadTest(2.0f);
 
 	//std::cout << object.directory_ << std::endl;
 
 	//Lights
-	DirLight dirLight(glm::vec3(1.2f, 4.0f, 2.0f), glm::vec3(0.4f, 0.4f, 0.4f), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(1.0f, 1.0f, 1.0f));
+	DirLight dirLight(glm::vec3(1.2f, 5.0f, 4.0f), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(1.0f, 1.0f, 1.0f));
 	//DirLight dirLight;
 
 	std::vector<PointLight> pointLights = {
-		{ glm::vec3(0.0f, 2.0f, 0.0f), glm::vec3(0.2f, 0.2f, 0.2f), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(1.0f, 1.0f, 1.0f), 1.0f, 0.09f, 0.032f, glm::vec3(1.0f, 1.0f, 1.0f) },
-		{ glm::vec3(3.0f, 2.0f, 2.0f), glm::vec3(0.2f, 0.2f, 0.2f), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(1.0f, 1.0f, 1.0f), 1.0f, 0.09f, 0.032f, glm::vec3(1.0f, 1.0f, 1.0f) },
-		{ glm::vec3(-3.0f, 2.0f, -2.0f), glm::vec3(0.2f, 0.2f, 0.2f), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(1.0f, 1.0f, 1.0f), 1.0f, 0.09f, 0.032f, glm::vec3(1.0f, 1.0f, 1.0f) }
+		{ glm::vec3(20.0f, 2.0f, 0.0f), glm::vec3(0.2f, 0.2f, 0.2f), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(1.0f, 1.0f, 1.0f), 1.0f, 0.09f, 0.032f, glm::vec3(1.0f, 1.0f, 1.0f) },
+		//{ glm::vec3(3.0f, 2.0f, 2.0f), glm::vec3(0.2f, 0.2f, 0.2f), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(1.0f, 1.0f, 1.0f), 1.0f, 0.09f, 0.032f, glm::vec3(1.0f, 1.0f, 1.0f) },
+		//{ glm::vec3(-3.0f, 2.0f, -2.0f), glm::vec3(0.2f, 0.2f, 0.2f), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(1.0f, 1.0f, 1.0f), 1.0f, 0.09f, 0.032f, glm::vec3(1.0f, 1.0f, 1.0f) }
 	};
 	std::vector<SpotLight> spotLights = {
-		{ glm::vec3(0.0f, 0.25f, 0.0f), glm::vec3(0.0f, -1.0f, 0.0f), glm::vec3(0.2f, 0.2f, 0.2f), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(1.0f, 1.0f, 1.0f), 1.0f, 0.2f, 0.32f, 30.0, 40.0, glm::vec3(1.0f, 1.0f, 1.0f) },
-		{ glm::vec3(1.0f, 0.25f, 0.0f), glm::vec3(0.0f, -1.0f, 0.0f), glm::vec3(0.2f, 0.2f, 0.2f), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(1.0f, 1.0f, 1.0f), 1.0f, 0.2f, 0.32f, 30.0, 40.0, glm::vec3(1.0f, 1.0f, 1.0f) },
-		{ glm::vec3(0.0f, 0.25f, 0.0f), glm::vec3(0.0f, -1.0f, 0.0f), glm::vec3(0.2f, 0.2f, 0.2f), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(1.0f, 1.0f, 1.0f), 1.0f, 0.2f, 0.32f, 30.0, 40.0, glm::vec3(1.0f, 1.0f, 1.0f) }
+		{ glm::vec3(20.0f, 0.25f, 0.0f), glm::vec3(0.0f, -1.0f, 0.0f), glm::vec3(0.2f, 0.2f, 0.2f), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(1.0f, 1.0f, 1.0f), 1.0f, 0.2f, 0.32f, 30.0, 40.0, glm::vec3(1.0f, 1.0f, 1.0f) },
+		//{ glm::vec3(1.0f, 0.25f, 0.0f), glm::vec3(0.0f, -1.0f, 0.0f), glm::vec3(0.2f, 0.2f, 0.2f), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(1.0f, 1.0f, 1.0f), 1.0f, 0.2f, 0.32f, 30.0, 40.0, glm::vec3(1.0f, 1.0f, 1.0f) },
+		//{ glm::vec3(0.0f, 0.25f, 0.0f), glm::vec3(0.0f, -1.0f, 0.0f), glm::vec3(0.2f, 0.2f, 0.2f), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(1.0f, 1.0f, 1.0f), 1.0f, 0.2f, 0.32f, 30.0, 40.0, glm::vec3(1.0f, 1.0f, 1.0f) }
 	};
 
 
-	Shadow shadow(s_depth, dirLight);
+	Shadow shadow(s_depth, s_debug, quadTest, dirLight.getDirection());
 	
 	//Load Assets
 	Assets assets;
@@ -591,11 +663,13 @@ int main(int, char* []) {
 
 	//EasyGO GoFloor(glm::vec3(0.0,0.0,0.0));
 
+	
+
 	glEnable(GL_CULL_FACE);
 	glCullFace(GL_BACK);
 
-	glEnable(GL_DEPTH_TEST);
-	glDepthFunc(GL_LESS);
+	//glEnable(GL_DEPTH_TEST);
+	//glDepthFunc(GL_LESS);
 
 	Input::instance()->setKeyPressedCallback(onKeyPress);
 	Input::instance()->setMouseMoveCallback(onMouseMoved);
@@ -609,7 +683,7 @@ int main(int, char* []) {
 		lastFrame = currentFrame;
 
 		handleInput(deltaTime);
-		//render(quad, object, enemy_, sphere, s_phong, s_normal, s_light, t_albedoLava, t_specularLava, t_normalLava);
+		//render(quad, object, enemy_, sphere, s_phong, s_normal, s_light, t_albedoLava, t_specularLava, t_normalLava,fbo.first, fbo.second);
 		render(sceneGraph, deltaTime, ship, floor, enemies);
 		//render(assets, GoFloor, quad, s_normal, t_albedo, t_specular, t_normal);
 		window->frame();

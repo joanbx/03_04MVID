@@ -163,7 +163,7 @@ void main() {
     vec3 normal2 = normalize(simpleNormal);
     
 
-    vec3 finalColor = calcDirectionalLight(dirLight,normal2,viewDir,albedo);
+    vec3 finalColor = calcDirectionalLight(dirLight,normal,viewDir,albedo);
     /*
    for (int i = 0; i < NUMBER_POINT_LIGHTS; ++i) {
         finalColor += calcPointLight(pointLight[i], normal, viewDir, albedo);

@@ -38,6 +38,7 @@ void Node::drawNode(Assets& asset, bool isDepth)
 		}
 	}
 
+	//std::cout << isDepth << std::endl;
 	
 	if (_type == Type::isModel) {	
 		if(isDepth)

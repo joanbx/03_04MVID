@@ -90,18 +90,10 @@ void SceneGraph::updateNodes(Camera& camera) {
 	for (auto& s : shadersToUse) {
 		bool initialized = false;
 		for (auto& node : _nodes) {
-			//std::cout << node.node.dirtyFlag() << std::endl;
 			if (node.node.dirtyFlag()) {
 				if (!initialized) {
-					//std::cout << "SECOND PASS " << std::endl;
-					node.node.getMaterial()._shader.use();
-
-					node.node.getMaterial().setMaterialLights();
-
-					node.node.getMaterial()._shader.set("viewPos", camera.getPosition());
-					node.node.getMaterial()._shader.set("view", view);
-					node.node.getMaterial()._shader.set("proj", proj);
-					node.node.getMaterial()._shadow.setDepthMap(node.node.getMaterial()._shader);
+					//std::cout << "SECOND PASS " << std::endl;			
+					node.node.getMaterial().setMaterialProperties(camera.getPosition(), view, proj);
 
 					initialized = true;
 				}
@@ -112,6 +104,8 @@ void SceneGraph::updateNodes(Camera& camera) {
 			}
 
 		}
+		//TEST DEPTH
+		//_nodes[0].node.getMaterial()._shadow.setTestDepth();
 
 	}
 
