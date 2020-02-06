@@ -35,6 +35,7 @@ public:
 	//void setViewProj(glm::mat4& view, glm::mat4& proj, Camera& camera);
 	void updateNodes(Camera& camera);
 	void nodeReady(int id, Transform t);
+	Node getNode(int node) { return _nodes[node].node; }
 
 };
 

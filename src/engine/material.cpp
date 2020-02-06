@@ -31,14 +31,19 @@ void Material::setMaterialProperties(glm::vec3& cameraPos, glm::mat4& view, glm:
 	
 	_shader.use();
 
+
 	_shader.set("view", view);
 	_shader.set("proj", proj);
 	_shader.set("viewPos", cameraPos);
 
 	if (hasLightPorperties) {
+
+		_shader.set("material.shininess", 32);
+
 		//DIRLIGHT
 		_dirLight.setShader(_shader);
-		_shader.set("material.shininess", 32);
+		
+		/**/
 		//SPOTLIGHTS
 		for (int i = 0; i < _spotLights.size(); ++i) {
 			_spotLights[i].setShader(_shader, i);
@@ -52,22 +57,3 @@ void Material::setMaterialProperties(glm::vec3& cameraPos, glm::mat4& view, glm:
 	_shadow.setDepthMap(_shader);
 	
 }
-
-/*void Material::setShader(Shader shader) {
-	_shader = shader;
-}
-void Material::setAmbient(glm::vec3 ambient) {
-	_ambient = ambient;
-}
-void Material::setDiffuse(glm::vec3 diffuse) {
-	_diffuse = diffuse;
-}
-void Material::setSpecular(glm::vec3 specular) {
-	_specular = specular;
-}
-void Material::setShininess(float shininess) {
-	_shininess = shininess;
-}
-void Material::setName(std::string name) {
-	_name = name;
-}*/

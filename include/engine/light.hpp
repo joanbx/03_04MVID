@@ -19,14 +19,14 @@ const float K_outerCutOff = 40.0f;
 
 class DirLight {
 private:
-	glm::vec3 _direction;
-	glm::vec3 _ambient;
-	glm::vec3 _diffuse;
-	glm::vec3 _specular;
+	const glm::vec3& _direction;
+	const glm::vec3& _ambient;
+	const glm::vec3& _diffuse;
+	const glm::vec3& _specular;
 	
 
 public:
-	DirLight(const glm::vec3 direction = K_direction, const glm::vec3 ambient = K_ambient, const glm::vec3 diffuse = K_diffuse, const glm::vec3 specular = K_specular);
+	DirLight(const glm::vec3 direction = K_direction, const  glm::vec3 ambient = K_ambient, const  glm::vec3 diffuse = K_diffuse,const  glm::vec3 specular = K_specular);
 
 	glm::vec3 getDirection() { return _direction; }
 	glm::vec3 getAmbient() { return _ambient; }

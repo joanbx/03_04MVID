@@ -43,7 +43,7 @@ public:
 	void drawNode(Assets& asset, bool isDepth);
 
 	void DrawModel(const glm::mat4& transform, const Shader& shader, const Model& model, bool isNormal);
-	void DrawGeometry(const glm::mat4& transform, const Shader& shader, const Geometry& geometry, bool isNormal);
+	void DrawGeometry(glm::mat4& transform, const Shader& shader, const Geometry& geometry, bool isNormal);
 
 
 	void setTrans(Transform& trans);

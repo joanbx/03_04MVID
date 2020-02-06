@@ -66,11 +66,10 @@ void SceneGraph::updateNodes(Camera& camera) {
 	for (auto& s : shadersToUse) {	
 		bool initializedDepth = false;
 		for (auto& node : _nodes) {
-			//std::cout << node.node.dirtyFlag() << std::endl;
 			if (node.node.dirtyFlag()) {
 				if (!initializedDepth) {
 					//std::cout << "FIRST PASS "  << std::endl;
-					node.node.getMaterial()._shadow.FirstPass();
+					node.node.getMaterial().getShadow().FirstPass();
 					initializedDepth = true;
 					
 				}
@@ -81,6 +80,7 @@ void SceneGraph::updateNodes(Camera& camera) {
 	}
 
 	//SECOND PASS
+	//_nodes[0].node.getMaterial()._shadow.unBindFrameBuffer();
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	glViewport(0, 0, Window::instance()->getWidth(), Window::instance()->getHeight());
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -92,7 +92,8 @@ void SceneGraph::updateNodes(Camera& camera) {
 		for (auto& node : _nodes) {
 			if (node.node.dirtyFlag()) {
 				if (!initialized) {
-					//std::cout << "SECOND PASS " << std::endl;			
+					//std::cout << "SECOND PASS " << std::endl;		
+
 					node.node.getMaterial().setMaterialProperties(camera.getPosition(), view, proj);
 
 					initialized = true;

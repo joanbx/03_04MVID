@@ -86,5 +86,4 @@ void Ship::shipDraw() {
 	if (angleShip != 0.0f) _go.Rotate(angleShip, rotShip);
 	_go.Scale(glm::vec3(0.001f, 0.001f, 0.001f));
 	_go.readyToDraw();
-
 }

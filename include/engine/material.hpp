@@ -11,11 +11,6 @@
 #include <vector>
 #include <string>
 
-//const glm::vec3 K_ambient = glm::vec3(0.02f, 0.02f, 0.02f);
-//const glm::vec3 K_diffuse = glm::vec3(0.2f, 0.2f, 0.2f);
-//const glm::vec3 K_specular = glm::vec3(1.0f, 1.0f, 1.0f);
-//const float K_shininess = 32;
-//const std::string K_name = "standard";
 
 class Material {
 		
@@ -32,12 +27,12 @@ class Material {
 		std::vector<SpotLight> _spotLights;
 		std::vector<PointLight> _pointLights;
 		std::string _name;
-		
+		Shadow& _shadow;
 
 	public:
 
 		const Shader& _shader;
-		Shadow& _shadow;
+		
 
 		Material(const Shader& shader, Shadow& shadow, DirLight dirLight, std::vector<SpotLight> spotLights, std::vector<PointLight> pointLights);
 		//Material(const Shader& shader);
@@ -58,6 +53,7 @@ class Material {
 		DirLight getDirLight() { return _dirLight;  }
 		std::vector<SpotLight> getSpotLights() { return _spotLights;  }
 		std::vector<PointLight> getPointLights() { return _pointLights; }
+		Shadow& getShadow() { return _shadow; }
 
 		//Shader& getShader() { return _shader; }
 

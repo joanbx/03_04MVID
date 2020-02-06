@@ -16,15 +16,15 @@ class Shadow {
 	const uint32_t k_shadow_height = 1024;
 	const uint32_t k_shadow_width = 1024;
 	const float k_shadow_near = 1.0f;
-	const float k_shadow_far = 10.5f;
+	const float k_shadow_far = 7.5f;
 
 
 private:
 
-	const glm::mat4 lightSpaceMatrix;
+	glm::mat4 lightSpaceMatrix;
 	glm::vec3& _direction;
-	//uint32_t _fbo;
-	//uint32_t _depth_map;
+	//uint32_t fbo;
+	//uint32_t depthMap;
 	std::pair<uint32_t, uint32_t> fbo;
 	const Geometry& _quadDebug;
 public:
@@ -37,15 +37,16 @@ public:
 	Shadow() = delete;
 	~Shadow();
 
-	Shadow(const Shadow&) = default;
-	Shadow(Shadow&&) = default;
-	Shadow& operator=(const Shadow&) = default;
-	Shadow& operator=(Shadow&&) = default;
+	//Shadow(const Shadow&) = default;
+	//Shadow(Shadow&&) = default;
+	//Shadow& operator=(const Shadow&) = default;
+	//Shadow& operator=(Shadow&&) = default;
 
 	void FirstPass();
 	std::pair<uint32_t, uint32_t>  createFBO();
 	void setDepthMap(const Shader& shader);
 	void setTestDepth();
+	void unBindFrameBuffer();
 };
 
 #endif

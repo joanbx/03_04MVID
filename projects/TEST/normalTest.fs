@@ -3,8 +3,10 @@
 out vec4 FragColor;
 
 in vec3 simpleNormal;
-in mat3 TBN;
-in vec3 fragPos;
+in vec3 tangentLightPos;
+in vec3 tangentViewPos;
+in vec3 tangentFragPos;
+//in vec3 fragPos;
 in vec2 uv;
 in vec4 fragPosLighSpace;
 
@@ -25,7 +27,8 @@ struct DirLight {
 };
 uniform DirLight dirLight;
 
-/*
+
+
 struct PointLight {
     vec3 position;
 
@@ -52,14 +55,14 @@ struct SpotLight {
 
     float cutOff;
     float outerCutOff;
-};*/
+};
 
-//#define NUMBER_POINT_LIGHTS 1
-//#define NUMBER_SPOT_LIGHTS 1
-//uniform PointLight pointLight[NUMBER_POINT_LIGHTS];
-//uniform SpotLight spotLight[NUMBER_SPOT_LIGHTS];
+#define NUMBER_POINT_LIGHTS 1
+#define NUMBER_SPOT_LIGHTS 1
+uniform PointLight pointLight[NUMBER_POINT_LIGHTS];
+uniform SpotLight spotLight[NUMBER_SPOT_LIGHTS];
 
-uniform vec3 viewPos;
+
 
 uniform sampler2D depthMap;
 
@@ -86,11 +89,10 @@ float ShadowCalculation(vec4 fragPosLighSpace, float bias) {
     return shadow;
 }
 
-vec3 calcDirectionalLight(DirLight light, vec3 normal, vec3 viewDir, vec3 albedoMap) {
-    
+vec3 calcDirectionalLight(DirLight light, vec3 lightDir, vec3 normal, vec3 viewDir, vec3 albedoMap) {
+
     vec3 ambient = albedoMap * light.ambient;
 
-    vec3 lightDir = normalize(light.direction);
     float diff = max(dot(normal, lightDir), 0.0);
     vec3 diffuse = diff * albedoMap * light.diffuse;
 
@@ -103,17 +105,17 @@ vec3 calcDirectionalLight(DirLight light, vec3 normal, vec3 viewDir, vec3 albedo
 
     return ambient + ((1.0 - shadow) * (diffuse + specular));
 }
-/*
-vec3 calcPointLight(PointLight light, vec3 normal, vec3 viewDir, vec3 albedoMap) {
-    
-    float distance = length(light.position - fragPos);
+
+vec3 calcPointLight(PointLight light, vec3 lightDir, vec3 normal, vec3 viewDir, vec3 albedoMap) {
+
+    float distance = length(light.position - tangentFragPos);
     float attenuation = 1.0 / (light.constant +
         light.linear * distance +
         light.quadratic * distance * distance);
 
     vec3 ambient = albedoMap * light.ambient;
 
-    vec3 lightDir = normalize(light.position - fragPos);
+    //vec3 lightDir = normalize(light.position - fragPos);
     float diff = max(dot(normal, lightDir), 0.0);
     vec3 diffuse = diff * albedoMap * light.diffuse;
 
@@ -124,15 +126,15 @@ vec3 calcPointLight(PointLight light, vec3 normal, vec3 viewDir, vec3 albedoMap)
     return (ambient + diffuse + specular) * attenuation;
 }
 
-vec3 CalcSpotLight(SpotLight light, vec3 normal, vec3 viewDir, vec3 albedoMap) {
-    float distance = length(light.position - fragPos);
+vec3 CalcSpotLight(SpotLight light,vec3 lightDir, vec3 normal, vec3 viewDir, vec3 albedoMap) {
+    float distance = length(light.position - tangentFragPos);
     float attenuation = 1.0 / (light.constant +
         light.linear * distance +
         light.quadratic * distance * distance);
 
     vec3 ambient = albedoMap * light.ambient;
 
-    vec3 lightDir = normalize(light.position - fragPos);
+    //vec3 lightDir = normalize(light.position - fragPos);
     float diff = max(dot(normal, lightDir), 0.0);
     vec3 diffuse = diff * albedoMap * light.diffuse;
 
@@ -149,30 +151,31 @@ vec3 CalcSpotLight(SpotLight light, vec3 normal, vec3 viewDir, vec3 albedoMap) {
 
 }
 
-*/
 
 void main() {
-    vec3 albedo = vec3(texture(material.diffuse, uv));
 
     vec3 normal = vec3(texture(material.normal, uv));
     normal = normalize(normal * 2.0 - 1.0);
-    normal = normalize(TBN * normal); 
 
-    vec3 viewDir = normalize(viewPos - fragPos);
+    vec3 albedo = vec3(texture(material.diffuse, uv));
 
-    vec3 normal2 = normalize(simpleNormal);
-    
+    vec3 lightDir = normalize(tangentLightPos - tangentFragPos);
+    vec3 viewDir = normalize(tangentViewPos - tangentFragPos);
 
-    vec3 finalColor = calcDirectionalLight(dirLight,normal2,viewDir,albedo);
-    /*
+
+    vec3 _simpleNormal = normalize(simpleNormal);
+
+
+    vec3 finalColor = calcDirectionalLight(dirLight,lightDir,normal,viewDir,albedo);
+/*
    for (int i = 0; i < NUMBER_POINT_LIGHTS; ++i) {
-        finalColor += calcPointLight(pointLight[i], normal, viewDir, albedo);
+        finalColor += calcPointLight(pointLight[i],lightDir, normal, viewDir, albedo);
 	}
 
     for (int i = 0; i < NUMBER_SPOT_LIGHTS; ++i) {
-        finalColor += CalcSpotLight(spotLight[i], normal, viewDir, albedo);
+        finalColor += CalcSpotLight(spotLight[i],lightDir, normal, viewDir, albedo);
 	}
-   */
+*/
     FragColor = vec4(finalColor, 1.0);
 
 }

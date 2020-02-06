@@ -557,22 +557,15 @@ void render(SceneGraph& sceneGraph, float dt, Ship& ship, GameObject& floor, std
 	
 	ship.Update(dt);
 
-	/*ship.Init();
-	ship.Translate(posShip);
-	ship.Rotate(-90.0f, glm::vec3(1.0f, 0.0f, 0.0f));
-	ship.Rotate(180.0f, glm::vec3(0.0f, 0.0f, 1.0f));
-	if (angleShip != 0.0f) ship.Rotate(angleShip, rotShip);
-	ship.Scale(glm::vec3(0.001f, 0.001f, 0.001f));
-	ship.readyToDraw();*/
 
-	/*
+	
 	enemies[0].Init();
 	enemies[0].Translate(glm::vec3(0.0f, 1.0f, 0.0f));
 	enemies[0].Rotate(-10.0f, glm::vec3(1.0f, 0.0f, 0.0f));
 	enemies[0].Scale(glm::vec3(0.01f, 0.01f, 0.01f));
 	enemies[0].setSize(glm::vec3(0.34f));
 	enemies[0].readyToDraw();
-	*/
+	
 	
 
 	sceneGraph.updateNodes(camera);
@@ -590,7 +583,7 @@ int main(int, char* []) {
 
 
 	//const Shader s_phong("../projects/FINAL/phong.vs", "../projects/FINAL/blinn.fs");
-	const Shader s_normal("../projects/FINAL/normalAll.vs", "../projects/FINAL/normalAll.fs");
+	const Shader s_normal("../projects/TEST/normalTest.vs", "../projects/TEST/normalTest.fs"); //"../projects/FINAL/normalAll.vs", "../projects/FINAL/normalAll.fs"
 	const Shader s_depth("../projects/FINAL/depth.vs", "../projects/FINAL/depth.fs");
 	const Shader s_debug("../projects/FINAL/debug.vs", "../projects/FINAL/debug.fs");
 
@@ -614,16 +607,16 @@ int main(int, char* []) {
 	//std::cout << object.directory_ << std::endl;
 
 	//Lights
-	DirLight dirLight(glm::vec3(1.2f, 5.0f, 4.0f), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(1.0f, 1.0f, 1.0f));
+	DirLight dirLight(glm::vec3(1.2f, 5.0f, -1.0f), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(1.0f, 1.0f, 1.0f));
 	//DirLight dirLight;
 
 	std::vector<PointLight> pointLights = {
-		{ glm::vec3(20.0f, 2.0f, 0.0f), glm::vec3(0.2f, 0.2f, 0.2f), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(1.0f, 1.0f, 1.0f), 1.0f, 0.09f, 0.032f, glm::vec3(1.0f, 1.0f, 1.0f) },
+		{ glm::vec3(0.0f, 3.0f, 0.0f), glm::vec3(0.2f, 0.2f, 0.2f), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(1.0f, 1.0f, 1.0f), 1.0f, 0.09f, 0.032f, glm::vec3(1.0f, 1.0f, 1.0f) },
 		//{ glm::vec3(3.0f, 2.0f, 2.0f), glm::vec3(0.2f, 0.2f, 0.2f), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(1.0f, 1.0f, 1.0f), 1.0f, 0.09f, 0.032f, glm::vec3(1.0f, 1.0f, 1.0f) },
 		//{ glm::vec3(-3.0f, 2.0f, -2.0f), glm::vec3(0.2f, 0.2f, 0.2f), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(1.0f, 1.0f, 1.0f), 1.0f, 0.09f, 0.032f, glm::vec3(1.0f, 1.0f, 1.0f) }
 	};
 	std::vector<SpotLight> spotLights = {
-		{ glm::vec3(20.0f, 0.25f, 0.0f), glm::vec3(0.0f, -1.0f, 0.0f), glm::vec3(0.2f, 0.2f, 0.2f), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(1.0f, 1.0f, 1.0f), 1.0f, 0.2f, 0.32f, 30.0, 40.0, glm::vec3(1.0f, 1.0f, 1.0f) },
+		{ glm::vec3(0.0f, 3.0f, 0.0f), glm::vec3(0.0f, -1.0f, 0.0f), glm::vec3(0.2f, 0.2f, 0.2f), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(1.0f, 1.0f, 1.0f), 1.0f, 0.2f, 0.32f, 30.0, 40.0, glm::vec3(1.0f, 1.0f, 1.0f) },
 		//{ glm::vec3(1.0f, 0.25f, 0.0f), glm::vec3(0.0f, -1.0f, 0.0f), glm::vec3(0.2f, 0.2f, 0.2f), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(1.0f, 1.0f, 1.0f), 1.0f, 0.2f, 0.32f, 30.0, 40.0, glm::vec3(1.0f, 1.0f, 1.0f) },
 		//{ glm::vec3(0.0f, 0.25f, 0.0f), glm::vec3(0.0f, -1.0f, 0.0f), glm::vec3(0.2f, 0.2f, 0.2f), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(1.0f, 1.0f, 1.0f), 1.0f, 0.2f, 0.32f, 30.0, 40.0, glm::vec3(1.0f, 1.0f, 1.0f) }
 	};
@@ -633,23 +626,21 @@ int main(int, char* []) {
 	
 	//Load Assets
 	Assets assets;
-	int assetFloor = assets.addNewGeometry(quad, t_albedo, t_specular, t_normal);
+	int assetFloor = assets.addNewGeometry(quad, t_albedoLava, t_specularLava, t_normalLava);
 	//assets.addNewGeometry(AssetsGeometry::sphere, 0.1f,1);
-	int assetShip = assets.addNewGeometry(cube, t_albedoLava, t_specularLava, t_normalLava);  //assets.addNewModel(object);
+	int assetShip = assets.addNewModel(object);  //assets.addNewModel(object); //assets.addNewGeometry(cube, t_albedo, t_specular, t_normal); 
 	int assetEnemy = assets.addNewModel(enemy_);
 
 
 	Material mainMaterial(s_normal, shadow, dirLight, spotLights, pointLights);
 
-	
-	
 
 	SceneGraph sceneGraph(assets);
 
 	
 	//Add GameObjects
 	//const GameObject shipgo(sceneGraph, Node(assetShip, mainMaterial, Node::Type::isModel));
-	Ship ship(sceneGraph, Node(assetShip, mainMaterial, Node::Type::isGeometry));
+	Ship ship(sceneGraph, Node(assetShip, mainMaterial, Node::Type::isModel));
 
 	GameObject floor(sceneGraph, Node(assetFloor, mainMaterial, Node::Type::isGeometry));
 	

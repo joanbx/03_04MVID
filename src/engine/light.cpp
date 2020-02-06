@@ -5,7 +5,7 @@ const std::string prefixPoints = "pointLight[";
 const std::string prefixSpots = "spotLight[";
 
 
-DirLight::DirLight(glm::vec3 direction, const glm::vec3 ambient, glm::vec3 diffuse, glm::vec3 specular)
+DirLight::DirLight(const glm::vec3 direction,const glm::vec3 ambient,const glm::vec3 diffuse,const glm::vec3 specular)
 	: _direction(direction), _ambient(ambient), _diffuse(diffuse), _specular(specular)
 { }
 
