@@ -1,7 +1,8 @@
 #include <gameplay\ship.hpp>
 
 
-Ship::Ship(SceneGraph& sg, Node& node) : _go(sg, node){
+
+Ship::Ship(SceneGraph& sg, Node& node, std::vector<Bullet>& bullets, std::vector<Enemy>& enemies) : _go(sg, node), _bullets(bullets), _enemies(enemies){
 
 }
 
@@ -41,6 +42,12 @@ void Ship::handleInput(float dt) {
 	}
 }
 
+void Ship::shipShoot() {
+
+	//Instance new bullet
+
+
+}
 
 void Ship::shipMovement(MovementShip direction, float dt) {
 		const float velocityM = 1 * dt;

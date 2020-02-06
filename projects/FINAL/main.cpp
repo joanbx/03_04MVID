@@ -28,6 +28,8 @@ Ejercicio basado en: AG10
 #include <engine\sceneGraph.hpp>
 #include <engine\shadow.hpp>
 #include <gameplay\ship.hpp>
+#include <gameplay\bullet.hpp>
+#include <gameplay\enemy.hpp>
 
 Camera camera(glm::vec3(0.0f, 10.0f, 0.0f));
 glm::vec3 posShip(0.0f, 2.0f, 0.0f);
@@ -630,7 +632,7 @@ int main(int, char* []) {
 	//assets.addNewGeometry(AssetsGeometry::sphere, 0.1f,1);
 	int assetShip = assets.addNewModel(object);  //assets.addNewModel(object); //assets.addNewGeometry(cube, t_albedo, t_specular, t_normal); 
 	int assetEnemy = assets.addNewModel(enemy_);
-
+	int assetBulletType01 = assets.addNewGeometry(cube, t_albedo, t_specular, t_normal);
 
 	Material mainMaterial(s_normal, shadow, dirLight, spotLights, pointLights);
 
@@ -640,21 +642,38 @@ int main(int, char* []) {
 	
 	//Add GameObjects
 	//const GameObject shipgo(sceneGraph, Node(assetShip, mainMaterial, Node::Type::isModel));
-	Ship ship(sceneGraph, Node(assetShip, mainMaterial, Node::Type::isModel));
+	
 
 	GameObject floor(sceneGraph, Node(assetFloor, mainMaterial, Node::Type::isGeometry));
 	
+	//Bullet Player Pool
+	std::vector<Bullet> bullets01Enemy = {
+		Bullet(sceneGraph, Node(assetEnemy, mainMaterial, Node::Type::isModel),Bullet::Bullettypes::Enemy),
+		Bullet(sceneGraph, Node(assetEnemy, mainMaterial, Node::Type::isModel),Bullet::Bullettypes::Enemy),
+		Bullet(sceneGraph, Node(assetEnemy, mainMaterial, Node::Type::isModel),Bullet::Bullettypes::Enemy),
+		Bullet(sceneGraph, Node(assetEnemy, mainMaterial, Node::Type::isModel),Bullet::Bullettypes::Enemy)
+	};
+
 	//Enemy Pool
-	std::vector<GameObject> enemies = {
-		GameObject(sceneGraph, Node(assetEnemy, mainMaterial, Node::Type::isModel)),
-		GameObject(sceneGraph, Node(assetEnemy, mainMaterial, Node::Type::isModel)),
-		GameObject(sceneGraph, Node(assetEnemy, mainMaterial, Node::Type::isModel)),
-		GameObject(sceneGraph, Node(assetEnemy, mainMaterial, Node::Type::isModel))
+	std::vector<Enemy> enemies = {
+		Enemy(sceneGraph, Node(assetEnemy, mainMaterial, Node::Type::isModel), bullets01Enemy),
+		Enemy(sceneGraph, Node(assetEnemy, mainMaterial, Node::Type::isModel), bullets01Enemy),
+		Enemy(sceneGraph, Node(assetEnemy, mainMaterial, Node::Type::isModel), bullets01Enemy),
+		Enemy(sceneGraph, Node(assetEnemy, mainMaterial, Node::Type::isModel), bullets01Enemy)
+	};
+
+	//Bullet Player Pool
+	std::vector<Bullet> bullets01Player = {
+		Bullet(sceneGraph, Node(assetEnemy, mainMaterial, Node::Type::isModel),Bullet::Bullettypes::Player),
+		Bullet(sceneGraph, Node(assetEnemy, mainMaterial, Node::Type::isModel),Bullet::Bullettypes::Player),
+		Bullet(sceneGraph, Node(assetEnemy, mainMaterial, Node::Type::isModel),Bullet::Bullettypes::Player),
+		Bullet(sceneGraph, Node(assetEnemy, mainMaterial, Node::Type::isModel),Bullet::Bullettypes::Player)
 	};
 
 	//EasyGO GoFloor(glm::vec3(0.0,0.0,0.0));
 
-	
+	//Ship = Player
+	Ship ship(sceneGraph, Node(assetShip, mainMaterial, Node::Type::isModel), bullets01Player, enemies);
 
 	glEnable(GL_CULL_FACE);
 	glCullFace(GL_BACK);
