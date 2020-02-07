@@ -13,6 +13,10 @@ void Ship::Start() {
 void Ship::Update(float dt) {
 	handleInput(dt);
 	shipDraw();
+
+	for (auto& b : _bullets) {
+		b.Update(dt);
+	}
 }
 
 void Ship::handleInput(float dt) {
@@ -36,6 +40,8 @@ void Ship::handleInput(float dt) {
 		_shoot = true;
 		//posBullets.push_back(posShip);
 		std::cout << "SHOOT" << std::endl;
+		shipShoot();
+		
 	}
 	else if (input->isKeyReleased(GLFW_KEY_SPACE) && _shoot == true) {
 		_shoot = false;
@@ -46,6 +52,14 @@ void Ship::shipShoot() {
 
 	//Instance new bullet
 
+	for (int i = 0; i < _bullets.size(); ++i) {
+		if (_bullets[i].getUsed() == false) {
+			std::cout <<"BULLET No " << i << std::endl;
+			_bullets[i].setUse(true);
+			_bullets[i].setPosition(posShip);
+			break;
+		}
+	}
 
 }
 

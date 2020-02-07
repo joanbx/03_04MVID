@@ -1,6 +1,7 @@
 #include "engine/camera.hpp"
 
 #include <glm/gtc/matrix_transform.hpp>
+#include <engine\window.hpp>
 
 Camera::Camera(const glm::vec3& position, const glm::vec3& up, float yaw, float pitch)
  : _position(position), _worldUp(up), _yaw(yaw), _pitch(pitch), _fov(k_FOV) {
@@ -16,6 +17,11 @@ Camera::Camera(float posX, float posY, float posZ, float upX, float upY, float u
 glm::mat4 Camera::getViewMatrix() const {
     return glm::lookAt(_position, _position + _front, _up);
 }
+
+glm::mat4 Camera::getProj() const {
+	return glm::perspective(glm::radians(_fov), static_cast<float>(Window::instance()->getWidth()) / Window::instance()->getHeight(), _near, _far);
+}
+
 
 glm::mat4 Camera::getViewMatrixCustom() const {
 	//Integrar de forma manual la función lookAt

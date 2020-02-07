@@ -17,7 +17,7 @@ private:
 
 	GameObject _go;
 	std::vector<Bullet>& _bullets;
-	glm::vec3 posEnemy = glm::vec3(0, 1, 0);
+	glm::vec3 posEnemy = glm::vec3(1, 1, -5.65f);
 	glm::vec3 rotEnemy = glm::vec3(0, 0, 0);
 	float angleEnemy = 0.0f;
 	bool _shoot = false;
@@ -29,7 +29,7 @@ public:
 
 	void Start();
 
-	void Update(float dt);
+	void Update();
 
 
 	void enemyDraw();

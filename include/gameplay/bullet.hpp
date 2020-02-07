@@ -23,15 +23,34 @@ public:
 
 	void bulletDraw();
 
-private:
 
+
+	void setUse(bool use);
+
+	void setPosition(glm::vec3& posBullet);
+
+	
+
+	
+
+	bool getUsed() { return _used; }
+
+	GameObject& getGO() { return _go; }
+
+private:
 
 	GameObject _go;
 	Bullet::Bullettypes& _type;
-	glm::vec3 posBullet = glm::vec3(0, 1, 0);
-	glm::vec3 rotBullet = glm::vec3(0, 0, 0);
-	float angleBullet = 0.0f;
+	float _speed = 0.025f;
+	glm::vec3 _posBullet = glm::vec3(0, 1, 0);
+	glm::vec3 _rotBullet = glm::vec3(0, 0, 0);
+	float _angleBullet = 0.0f;
+	bool _used = false;
 	bool _shoot = false;
+
+
+	void pushForward();
+	void checkDestroy();
 
 };
 

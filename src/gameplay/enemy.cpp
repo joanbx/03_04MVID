@@ -9,16 +9,15 @@ void Enemy::Start() {
 
 }
 
-void Enemy::Update(float dt) {
+void Enemy::Update() {
 	enemyDraw();
 }
 
 void Enemy::enemyDraw() {
 	_go.Init();
 	_go.Translate(posEnemy);
-	_go.Rotate(-90.0f, glm::vec3(1.0f, 0.0f, 0.0f));
-	_go.Rotate(180.0f, glm::vec3(0.0f, 0.0f, 1.0f));
-	if (angleEnemy != 0.0f) _go.Rotate(angleEnemy, rotEnemy);
-	_go.Scale(glm::vec3(0.001f, 0.001f, 0.001f));
+	_go.Rotate(-10.0f, glm::vec3(1.0f, 0.0f, 0.0f));
+	_go.Scale(glm::vec3(0.01f, 0.01f, 0.01f));
+	_go.setSize(glm::vec3(0.34f));
 	_go.readyToDraw();
 }

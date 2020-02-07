@@ -24,7 +24,7 @@ GameObject::GameObject(SceneGraph& sG, Node& node) : _sceneGraph(sG) {
 }
 
 void GameObject::Init() {
-	go = glm::mat4(1.0f);
+	//go = glm::mat4(1.0f);
 	_transform.Init();
 }
 
@@ -33,7 +33,7 @@ void GameObject::Translate(glm::vec3& position) {
 	_transform.Translate(position);
 
 	_position = position;
-	go = glm::translate(go, position);
+	//go = glm::translate(go, position);
 }
 
 void GameObject::Rotate(float angle, glm::vec3& rotation) {
@@ -41,7 +41,7 @@ void GameObject::Rotate(float angle, glm::vec3& rotation) {
 	_transform.Rotate(angle, rotation);
 
 	_rotation = rotation;
-	go = glm::rotate(go, glm::radians(angle), rotation);
+	//go = glm::rotate(go, glm::radians(angle), rotation);
 }
 
 void GameObject::Scale(glm::vec3& scale) {
@@ -49,11 +49,21 @@ void GameObject::Scale(glm::vec3& scale) {
 	_transform.Scale(scale);
 
 	_scale = scale;
-	go = glm::scale(go, scale);
+	//go = glm::scale(go, scale);
 }
 
 void GameObject::setSize(glm::vec3& size) {
 	_size = size;
+}
+
+bool GameObject::in_frustum(glm::vec3 offset) {
+	//std::cout << _position.x <<","<<_position.y<<","<< _position.z << std::endl;
+	//Pclip is the model-view-projection matrix to the object
+	glm::vec4 Pclip =  _sceneGraph.getCamera().getProj() * _sceneGraph.getCamera().getViewMatrix() * glm::vec4(_position+offset, 1.);
+	return abs(Pclip.x) < Pclip.w &&
+		abs(Pclip.y) < Pclip.w &&
+		0 < Pclip.z &&
+		Pclip.z < Pclip.w;
 }
 
 void GameObject::readyToDraw() {
@@ -63,6 +73,8 @@ void GameObject::readyToDraw() {
 	_sceneGraph.nodeReady(_idNode, _transform);
 }
 
+
+/*
 void GameObject::Draw(const Shader& shader, const Geometry& geometry, const glm::mat4& view, const glm::mat4& proj, const Texture& t_albedo, const Texture& t_specular, const Texture& t_normal) {
 	//shader.use();
 	shader.set("model", go);
@@ -106,3 +118,4 @@ void GameObject::Draw(const Shader& shader, const Model& model, const glm::mat4&
 	}
 	model.render(shader);
 }
+*/

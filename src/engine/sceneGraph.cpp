@@ -1,6 +1,6 @@
 #include <engine\sceneGraph.hpp>
 
-SceneGraph::SceneGraph(Assets& assets) : _assets(assets){ }
+SceneGraph::SceneGraph(Assets& assets, Camera& camera) : _assets(assets), _camera(camera){ }
 
 int SceneGraph::addNewNode(Node& node) {
 	int idNode = nodesCount;
@@ -32,7 +32,7 @@ void SceneGraph::nodeReady(int id, Transform t ) {
 	}
 }
 
-void SceneGraph::updateNodes(Camera& camera) {
+void SceneGraph::updateNodes() {
 
 	//First Pass
 
@@ -84,8 +84,8 @@ void SceneGraph::updateNodes(Camera& camera) {
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	glViewport(0, 0, Window::instance()->getWidth(), Window::instance()->getHeight());
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	glm::mat4 view = glm::lookAt(glm::vec3(0, 15.0f, 0), glm::vec3(0, 0, 0), glm::vec3(0, 0, -1.0f)); //camera.getViewMatrix();
-	glm::mat4 proj = glm::perspective(glm::radians(camera.getFOV()), static_cast<float>(Window::instance()->getWidth()) / Window::instance()->getHeight(), 0.1f, 100.0f);
+	glm::mat4 view = _camera.getViewMatrix(); //glm::lookAt(glm::vec3(0, 15.0f, 0), glm::vec3(0, 0, 0), glm::vec3(0, 0, -1.0f)); //camera.getViewMatrix();
+	glm::mat4 proj = _camera.getProj();//glm::perspective(glm::radians(camera.getFOV()), static_cast<float>(Window::instance()->getWidth()) / Window::instance()->getHeight(), 0.1f, 100.0f);
 	
 	for (auto& s : shadersToUse) {
 		bool initialized = false;
@@ -94,7 +94,7 @@ void SceneGraph::updateNodes(Camera& camera) {
 				if (!initialized) {
 					//std::cout << "SECOND PASS " << std::endl;		
 
-					node.node.getMaterial().setMaterialProperties(camera.getPosition(), view, proj);
+					node.node.getMaterial().setMaterialProperties(_camera.getPosition(), view, proj);
 
 					initialized = true;
 				}

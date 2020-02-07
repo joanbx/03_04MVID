@@ -25,18 +25,20 @@ private:
 	std::vector<nodes> _nodes;
 	
 	Assets& _assets;
+	Camera& _camera;
 	//glm::mat4 _view;
 	//glm::mat4 _proj;
 	///Camera _camera;
 
 public:
-	SceneGraph(Assets& assets);
+	SceneGraph(Assets& assets, Camera& camera);
 	int addNewNode(Node& node);
 	//void setViewProj(glm::mat4& view, glm::mat4& proj, Camera& camera);
-	void updateNodes(Camera& camera);
+	void updateNodes();
 	void nodeReady(int id, Transform t);
 	Node getNode(int node) { return _nodes[node].node; }
 
+	Camera& getCamera() { return _camera; }
 };
 
 #endif

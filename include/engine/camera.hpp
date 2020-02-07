@@ -25,8 +25,8 @@ class Camera {
         float getFOV() const;
         glm::vec3 getPosition() const;
 		glm::vec3 getFront() const;
-
-		void setFPS(bool fps);
+        glm::mat4 getProj() const;
+        void setFPS(bool fps);
         void handleKeyboard(Movement direction, float dt);
         void handleMouseMovement(float xoffset, float yoffset, bool constrainPitch = true);
         void handleMouseScroll(float yoffset);
@@ -37,6 +37,8 @@ class Camera {
         glm::vec3 _position, _front, _up, _right, _worldUp;
         float _yaw, _pitch;
         float _fov;
+        float _near = 0.1f;
+        float _far = 100.0f;
 		bool _fps;
 };
 
