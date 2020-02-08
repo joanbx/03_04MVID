@@ -56,10 +56,18 @@ void GameObject::setSize(glm::vec3& size) {
 	_size = size;
 }
 
+glm::vec2 GameObject::camBounds() {
+	float top = (_sceneGraph.getCamera().getPosition().y - _position.y) * tan((_sceneGraph.getCamera().getFOV() * 0.5f) * 3.14f / 180.0f);
+	float right = top * static_cast<float>(Window::instance()->getWidth()) / Window::instance()->getHeight();
+	return glm::vec2(right,top);
+}
+
 bool GameObject::in_frustum(glm::vec3 offset) {
 	//std::cout << _position.x <<","<<_position.y<<","<< _position.z << std::endl;
+	
 	//Pclip is the model-view-projection matrix to the object
 	glm::vec4 Pclip =  _sceneGraph.getCamera().getProj() * _sceneGraph.getCamera().getViewMatrix() * glm::vec4(_position+offset, 1.);
+	std::cout << "infrustum " << Pclip.x<< " " << Pclip.y << " " <<Pclip.z << " " << Pclip.w << std::endl;
 	return abs(Pclip.x) < Pclip.w &&
 		abs(Pclip.y) < Pclip.w &&
 		0 < Pclip.z &&

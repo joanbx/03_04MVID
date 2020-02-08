@@ -30,6 +30,7 @@ Ejercicio basado en: AG10
 #include <gameplay\ship.hpp>
 #include <gameplay\bullet.hpp>
 #include <gameplay\enemy.hpp>
+#include <time.h>
 
 Camera camera(glm::vec3(0.0f, 15.0f, 0.0f), glm::vec3(0.0f, 0.0f, -1.0f), 0, -90);
 glm::vec3 posShip(0.0f, 2.0f, 0.0f);
@@ -560,7 +561,8 @@ void render(SceneGraph& sceneGraph, float dt, Ship& ship, GameObject& floor, std
 	
 	ship.Update(dt);
 
-	enemies[0].Update();
+	
+	enemies[0].Update(dt);
 	/*
 	enemies[0].Init();
 	enemies[0].Translate(glm::vec3(0.0f, 1.0f, 0.0f));
@@ -585,6 +587,13 @@ int main(int, char* []) {
 	window->setWidth(600);
 	window->setHeight(800);
 
+	float top = 12.0f * tan((camera.getFOV() * 0.5f) * 3.14f / 180.0f);
+	float r = top * (float)600 / (float)800;
+
+	std::cout << top << " " << r << std::endl;
+
+	srand(time(NULL));
+
 	glClearColor(0.0f, 0.3f, 0.6f, 1.0f);
 
 
@@ -594,7 +603,7 @@ int main(int, char* []) {
 	const Shader s_debug("../projects/FINAL/debug.vs", "../projects/FINAL/debug.fs");
 
 	//const Shader s_light("../projects/EJ10_01/light.vs", "../projects/EJ10_01/light.fs");
-	const Model object("../assets/models/Sci_Fi_Fighter_Ship_v1/13897_Sci-Fi_Fighter_Ship_v1_l1.obj");
+	const Model object("../assets/models/Freighter/Freigther_BI_Export.obj"); //Sci_Fi_Fighter_Ship_v1/13897_Sci-Fi_Fighter_Ship_v1_l1.obj //Freighter/Freigther_BI_Export.obj
 	const Model enemy_("../assets/models/UFO/Low_poly_UFO.obj");
 
 	const Texture t_albedoLava("../assets/textures/Lavabrick/Lavabrick_ILL.png", Texture::Format::RGB);
@@ -613,7 +622,7 @@ int main(int, char* []) {
 	//std::cout << object.directory_ << std::endl;
 
 	//Lights
-	DirLight dirLight(glm::vec3(1.2f, 5.0f, -1.0f), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(1.0f, 1.0f, 1.0f));
+	DirLight dirLight(glm::vec3(1.2f, 5.0f, -1.0f), glm::vec3(0.2f, 0.2f, 0.2f), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(1.0f, 1.0f, 1.0f));
 	//DirLight dirLight;
 
 	std::vector<PointLight> pointLights = {
@@ -665,7 +674,7 @@ int main(int, char* []) {
 		Enemy(sceneGraph, Node(assetEnemy, mainMaterial, Node::Type::isModel), bullets01Enemy),
 		Enemy(sceneGraph, Node(assetEnemy, mainMaterial, Node::Type::isModel), bullets01Enemy)
 	};
-
+	enemies[0].setInScene(true);
 	//Bullet Player Pool
 	std::vector<Bullet> bullets01Player = {
 		Bullet(sceneGraph, Node(assetBulletType01, mainMaterial, Node::Type::isGeometry),Bullet::Bullettypes::Player),

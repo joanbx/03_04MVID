@@ -167,7 +167,7 @@ void main() {
 
 
     vec3 finalColor = calcDirectionalLight(dirLight,lightDir,normal,viewDir,albedo);
-/*
+
    for (int i = 0; i < NUMBER_POINT_LIGHTS; ++i) {
         finalColor += calcPointLight(pointLight[i],lightDir, normal, viewDir, albedo);
 	}
@@ -175,7 +175,7 @@ void main() {
     for (int i = 0; i < NUMBER_SPOT_LIGHTS; ++i) {
         finalColor += CalcSpotLight(spotLight[i],lightDir, normal, viewDir, albedo);
 	}
-*/
+
     FragColor = vec4(finalColor, 1.0);
 
 }

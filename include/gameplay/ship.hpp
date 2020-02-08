@@ -24,6 +24,14 @@ private:
 	glm::vec3 rotShip = glm::vec3(0, 0, 0);
 	float angleShip = 0.0f;
 	bool _shoot = false;
+
+	void handleInput(float dt);
+
+	void shipMovement(MovementShip direction, float dt);
+
+	void shipShoot();
+
+	void checkCollisionBullet();
 	
 
 public:
@@ -35,11 +43,7 @@ public:
 
 	void Update(float dt);
 
-	void handleInput(float dt);
-
-	void shipMovement(MovementShip direction, float dt);
-
-	void shipShoot();
+	
 
 	void shipDraw();
 

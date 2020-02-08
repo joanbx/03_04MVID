@@ -55,6 +55,7 @@ public:
 	glm::vec3 getSize() { return _size; }
 
 	bool in_frustum(glm::vec3 offset=glm::vec3(0.0f));
+	glm::vec2 camBounds();
 };
 
 #endif

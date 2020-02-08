@@ -17,6 +17,8 @@ void Ship::Update(float dt) {
 	for (auto& b : _bullets) {
 		b.Update(dt);
 	}
+
+	checkCollisionBullet();
 }
 
 void Ship::handleInput(float dt) {
@@ -56,6 +58,7 @@ void Ship::shipShoot() {
 		if (_bullets[i].getUsed() == false) {
 			std::cout <<"BULLET No " << i << std::endl;
 			_bullets[i].setUse(true);
+			_bullets[i].setDirection(glm::vec3(0.0f, 0.0f, -1.0f));
 			_bullets[i].setPosition(posShip);
 			break;
 		}
@@ -99,12 +102,30 @@ void Ship::shipMovement(MovementShip direction, float dt) {
 
 }
 
+void Ship::checkCollisionBullet() {
+	for (auto& b : _bullets) {
+		if (b.getUsed()) {
+			for (auto& enemy : _enemies) {
+				if (enemy.getInScene()) {
+					if (b.CheckCollisionXZ(enemy.getGO()) == true) {
+						b.setUse(false);
+						enemy.setInScene(false);
+					}
+				}
+			}
+		}
+	}
+
+}
+
 void Ship::shipDraw() {
 	_go.Init();
 	_go.Translate(posShip);
-	_go.Rotate(-90.0f, glm::vec3(1.0f, 0.0f, 0.0f));
-	_go.Rotate(180.0f, glm::vec3(0.0f, 0.0f, 1.0f));
+	//_go.Rotate(-90.0f, glm::vec3(1.0f, 0.0f, 0.0f));
+	//_go.Rotate(180.0f, glm::vec3(0.0f, 0.0f, 1.0f));
+	_go.Rotate(180.0f, glm::vec3(0.0f, 1.0f, 0.0f));
 	if (angleShip != 0.0f) _go.Rotate(angleShip, rotShip);
-	_go.Scale(glm::vec3(0.001f, 0.001f, 0.001f));
+	//_go.Scale(glm::vec3(0.001f, 0.001f, 0.001f));
+	_go.Scale(glm::vec3(0.1f, 0.1f, 0.1f));
 	_go.readyToDraw();
 }
