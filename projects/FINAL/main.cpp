@@ -31,6 +31,7 @@ Ejercicio basado en: AG10
 #include <gameplay\bullet.hpp>
 #include <gameplay\enemy.hpp>
 #include <time.h>
+#include <gameplay\enemyManager.hpp>
 
 Camera camera(glm::vec3(0.0f, 15.0f, 0.0f), glm::vec3(0.0f, 0.0f, -1.0f), 0, -90);
 glm::vec3 posShip(0.0f, 2.0f, 0.0f);
@@ -544,7 +545,7 @@ void render(Assets& assets, EasyGO GOFloor, const Geometry& floor, const Shader&
 
 
 
-void render(SceneGraph& sceneGraph, float dt, Ship& ship, GameObject& floor, std::vector<Enemy>& enemies) {
+void render(SceneGraph& sceneGraph, float dt, Ship& ship, GameObject& floor, EnemyManager enemyMng) {
 
 	//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -560,9 +561,9 @@ void render(SceneGraph& sceneGraph, float dt, Ship& ship, GameObject& floor, std
 
 	
 	ship.Update(dt);
-
+	enemyMng.Update(dt);
 	
-	enemies[0].Update(dt);
+	//enemies[0].Update(dt);
 	/*
 	enemies[0].Init();
 	enemies[0].Translate(glm::vec3(0.0f, 1.0f, 0.0f));
@@ -661,32 +662,34 @@ int main(int, char* []) {
 	
 	//Bullet Player Pool
 	std::vector<Bullet> bullets01Enemy = {
-		Bullet(sceneGraph, Node(assetBulletType01, mainMaterial, Node::Type::isGeometry),Bullet::Bullettypes::Enemy),
-		Bullet(sceneGraph, Node(assetBulletType01, mainMaterial, Node::Type::isGeometry),Bullet::Bullettypes::Enemy),
-		Bullet(sceneGraph, Node(assetBulletType01, mainMaterial, Node::Type::isGeometry),Bullet::Bullettypes::Enemy),
-		Bullet(sceneGraph, Node(assetBulletType01, mainMaterial, Node::Type::isGeometry),Bullet::Bullettypes::Enemy)
+		Bullet(sceneGraph, Node(assetBulletType01, mainMaterial, Node::Type::isGeometry),Bullet::Bullettypes::isEnemy),
+		Bullet(sceneGraph, Node(assetBulletType01, mainMaterial, Node::Type::isGeometry),Bullet::Bullettypes::isEnemy),
+		Bullet(sceneGraph, Node(assetBulletType01, mainMaterial, Node::Type::isGeometry),Bullet::Bullettypes::isEnemy),
+		Bullet(sceneGraph, Node(assetBulletType01, mainMaterial, Node::Type::isGeometry),Bullet::Bullettypes::isEnemy)
 	};
 
 	//Enemy Pool
 	std::vector<Enemy> enemies = {
 		Enemy(sceneGraph, Node(assetEnemy, mainMaterial, Node::Type::isModel), bullets01Enemy),
-		Enemy(sceneGraph, Node(assetEnemy, mainMaterial, Node::Type::isModel), bullets01Enemy),
-		Enemy(sceneGraph, Node(assetEnemy, mainMaterial, Node::Type::isModel), bullets01Enemy),
-		Enemy(sceneGraph, Node(assetEnemy, mainMaterial, Node::Type::isModel), bullets01Enemy)
+		//Enemy(sceneGraph, Node(assetEnemy, mainMaterial, Node::Type::isModel), bullets01Enemy),
+		//Enemy(sceneGraph, Node(assetEnemy, mainMaterial, Node::Type::isModel), bullets01Enemy),
+		//Enemy(sceneGraph, Node(assetEnemy, mainMaterial, Node::Type::isModel), bullets01Enemy)
 	};
 	enemies[0].setInScene(true);
 	//Bullet Player Pool
 	std::vector<Bullet> bullets01Player = {
-		Bullet(sceneGraph, Node(assetBulletType01, mainMaterial, Node::Type::isGeometry),Bullet::Bullettypes::Player),
-		Bullet(sceneGraph, Node(assetBulletType01, mainMaterial, Node::Type::isGeometry),Bullet::Bullettypes::Player),
-		Bullet(sceneGraph, Node(assetBulletType01, mainMaterial, Node::Type::isGeometry),Bullet::Bullettypes::Player),
-		Bullet(sceneGraph, Node(assetBulletType01, mainMaterial, Node::Type::isGeometry),Bullet::Bullettypes::Player)
+		Bullet(sceneGraph, Node(assetBulletType01, mainMaterial, Node::Type::isGeometry),Bullet::Bullettypes::isPlayer),
+		Bullet(sceneGraph, Node(assetBulletType01, mainMaterial, Node::Type::isGeometry),Bullet::Bullettypes::isPlayer),
+		Bullet(sceneGraph, Node(assetBulletType01, mainMaterial, Node::Type::isGeometry),Bullet::Bullettypes::isPlayer),
+		Bullet(sceneGraph, Node(assetBulletType01, mainMaterial, Node::Type::isGeometry),Bullet::Bullettypes::isPlayer)
 	};
 
 	//EasyGO GoFloor(glm::vec3(0.0,0.0,0.0));
 
 	//Ship = Player
 	Ship ship(sceneGraph, Node(assetShip, mainMaterial, Node::Type::isModel), bullets01Player, enemies);
+
+	EnemyManager enemyMng(enemies, bullets01Enemy, ship);
 
 	glEnable(GL_CULL_FACE);
 	glCullFace(GL_BACK);
@@ -707,7 +710,7 @@ int main(int, char* []) {
 
 		handleInput(deltaTime);
 		//render(quad, object, enemy_, sphere, s_phong, s_normal, s_light, t_albedoLava, t_specularLava, t_normalLava,fbo.first, fbo.second);
-		render(sceneGraph, deltaTime, ship, floor, enemies);
+		render(sceneGraph, deltaTime, ship, floor, enemyMng);
 		//render(assets, GoFloor, quad, s_normal, t_albedo, t_specular, t_normal);
 		window->frame();
 	}

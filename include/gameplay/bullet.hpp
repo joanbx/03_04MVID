@@ -11,8 +11,8 @@ class Bullet {
 public:
 	
 	enum class Bullettypes {
-		Player,
-		Enemy
+		isPlayer,
+		isEnemy
 	};
 
 	Bullet(SceneGraph& sg, Node& node, Bullet::Bullettypes types);

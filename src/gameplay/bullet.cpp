@@ -34,7 +34,7 @@ void Bullet::pushDirection() {
 }
 
 void Bullet::checkAutoDestroy() {
-	std::cout << "bullet " << _go.Position().z << std::endl;
+	//std::cout << "bullet " << _go.Position().z << std::endl;
 	if (_go.in_frustum(glm::vec3(0,0,0)) == false) {	
 		_used = false;
 	}

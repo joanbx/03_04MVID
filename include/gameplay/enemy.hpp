@@ -20,7 +20,7 @@ public:
 
 	void Start();
 
-	void Update(float dt);
+	void Update(float dt, glm::vec3& playerPos);
 
 	
 
@@ -54,7 +54,7 @@ private:
 	std::uint32_t thresholdTimeShoot = 1000; //In ms
 
 	void doDirection();
-	void shoot();
+	void shoot(glm::vec3& playerPos);
 
 
 

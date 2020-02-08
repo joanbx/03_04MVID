@@ -43,7 +43,7 @@ public:
 
 	void Update(float dt);
 
-	
+	glm::vec3 getPosition() { return posShip;  }
 
 	void shipDraw();
 

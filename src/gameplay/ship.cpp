@@ -56,7 +56,7 @@ void Ship::shipShoot() {
 
 	for (int i = 0; i < _bullets.size(); ++i) {
 		if (_bullets[i].getUsed() == false) {
-			std::cout <<"BULLET No " << i << std::endl;
+			//std::cout <<"BULLET No " << i << std::endl;
 			_bullets[i].setUse(true);
 			_bullets[i].setDirection(glm::vec3(0.0f, 0.0f, -1.0f));
 			_bullets[i].setPosition(posShip);

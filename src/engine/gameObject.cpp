@@ -67,7 +67,7 @@ bool GameObject::in_frustum(glm::vec3 offset) {
 	
 	//Pclip is the model-view-projection matrix to the object
 	glm::vec4 Pclip =  _sceneGraph.getCamera().getProj() * _sceneGraph.getCamera().getViewMatrix() * glm::vec4(_position+offset, 1.);
-	std::cout << "infrustum " << Pclip.x<< " " << Pclip.y << " " <<Pclip.z << " " << Pclip.w << std::endl;
+	//std::cout << "infrustum " << Pclip.x<< " " << Pclip.y << " " <<Pclip.z << " " << Pclip.w << std::endl;
 	return abs(Pclip.x) < Pclip.w &&
 		abs(Pclip.y) < Pclip.w &&
 		0 < Pclip.z &&

@@ -30,13 +30,13 @@ void Enemy::Start() {
 		modPos = glm::vec3(-0.5, 0, 1);
 	}
 	posEnemy = glm::vec3(x, _go.Position().y, -cambounds.y-size.y);
-	std::cout << "RandomX " <<posEnemy.x << std::endl;
+	//std::cout << "RandomX " <<posEnemy.x << std::endl;
 }
 
-void Enemy::Update(float dt) {
+void Enemy::Update(float dt, glm::vec3& playerPos) {
 	if (_inScene) {
 		doDirection();				
-		shoot();
+		shoot(playerPos);
 		//std::cout << posEnemy.x << " " << posEnemy.y << " " << posEnemy.z << std::endl;
 		
 		enemyDraw();
@@ -52,25 +52,24 @@ void Enemy::setInScene(bool isInScene) {
 }
 
 void Enemy::doDirection() {
-
 	posEnemy += modPos * _speed;
 }
 
-void Enemy::shoot() {
+void Enemy::shoot(glm::vec3& playerPos) {
 	if (_prevInScene == false) {
-		std::cout << _prevInScene << std::endl;
+		//std::cout << _prevInScene << std::endl;
 		time_start = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch());
 	}
 	time_elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()) - time_start;
-	std::cout << time_elapsed.count() << std::endl;
+	//std::cout << time_elapsed.count() << std::endl;
 
 	if (time_elapsed.count() > thresholdTimeShoot) {	
 		for (int i = 0; i < _bullets.size(); ++i) {
 			if (_bullets[i].getUsed() == false) {
 				_bullets[i].setUse(true);
-				_bullets[i].setDirection(glm::vec3(0, 0, 1));//(_go.Position()-glm::vec3(0,0,0));
+				_bullets[i].setDirection(glm::vec3(playerPos.x - posEnemy.x, posEnemy.y, playerPos.z - posEnemy.z));//(_go.Position()-glm::vec3(0,0,0));
 				_bullets[i].setPosition(posEnemy);
-				std::cout << "shoot" << std::endl;
+				//std::cout << "shoot" << std::endl;
 				time_start = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch());
 				break;
 			}
