@@ -33,6 +33,7 @@ set(ENGINE_SRC_FILES
     ${CMAKE_CURRENT_LIST_DIR}/src/engine/sceneGraph.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/engine/gameObject.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/engine/easyGO.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/src/engine/textRenderer.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/engine/geometry/cube.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/engine/geometry/extcube.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/engine/geometry/geometry.cpp
@@ -58,6 +59,7 @@ set(ENGINE_HEADER_FILES
     ${CMAKE_CURRENT_LIST_DIR}/include/engine/sceneGraph.hpp
     ${CMAKE_CURRENT_LIST_DIR}/include/engine/gameObject.hpp
     ${CMAKE_CURRENT_LIST_DIR}/include/engine/easyGO.hpp
+    ${CMAKE_CURRENT_LIST_DIR}/include/engine/textRenderer.hpp  
     ${CMAKE_CURRENT_LIST_DIR}/include/engine/geometry/cube.hpp
     ${CMAKE_CURRENT_LIST_DIR}/include/engine/geometry/extcube.hpp
     ${CMAKE_CURRENT_LIST_DIR}/include/engine/geometry/geometry.hpp
@@ -70,20 +72,25 @@ source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR}/src/engine/ PREFIX "Source Files" 
 source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR}/include/engine PREFIX "Header Files" FILES ${ENGINE_HEADER_FILES})
 
 add_library(EngineLib STATIC ${ENGINE_SRC_FILES} ${ENGINE_HEADER_FILES} ${DEPS_SRC_FILES_COMMON})
-
 target_include_directories(EngineLib PRIVATE ${INCLUDE_PATHS})
+
 target_link_libraries(EngineLib PRIVATE
-    debug ${CMAKE_CURRENT_LIST_DIR}/libs/Debug/assimp-vc142-mt.lib
-    optimized ${CMAKE_CURRENT_LIST_DIR}/libs/Release/assimp-vc142-mt.lib)
+    debug 
+        ${CMAKE_CURRENT_LIST_DIR}/libs/Debug/assimp-vc142-mt.lib
+		${CMAKE_CURRENT_LIST_DIR}/libs/Debug/freetype.lib 
+    optimized 
+        ${CMAKE_CURRENT_LIST_DIR}/libs/Release/assimp-vc142-mt.lib
+        ${CMAKE_CURRENT_LIST_DIR}/libs/Release/freetype.lib      
+)
 target_compile_definitions(EngineLib PRIVATE -D_GLFW_USE_OPENGL=1)
 target_compile_features(EngineLib PRIVATE cxx_std_14)
-
 configure_platform(EngineLib)
 configure_compiler(EngineLib)
 
 add_custom_command(TARGET EngineLib POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy_if_different
     "${CMAKE_CURRENT_LIST_DIR}/libs/$<CONFIGURATION>/assimp-vc142-mt.dll"
+    "${CMAKE_CURRENT_LIST_DIR}/libs/$<CONFIGURATION>/freetype.dll"
     $<TARGET_FILE_DIR:EngineLib>)
 
 	

@@ -32,6 +32,7 @@ Ejercicio basado en: AG10
 #include <gameplay\enemy.hpp>
 #include <time.h>
 #include <gameplay\enemyManager.hpp>
+#include <engine\textRenderer.hpp>
 
 Camera camera(glm::vec3(0.0f, 15.0f, 0.0f), glm::vec3(0.0f, 0.0f, -1.0f), 0, -90);
 glm::vec3 posShip(0.0f, 2.0f, 0.0f);
@@ -77,65 +78,6 @@ SpotLight* spotLights_ = new SpotLight[nSpotLight]{
 //SpotLight* spotLights;
 
 
-enum class Movement {
-	Forward = 0,
-	Backward = 1,
-	Left = 2,
-	Right = 3,
-};
-
-//void ShipMovement(Movement direction, float dt) {
-//	const float velocity = 1 * dt;
-//	glm::vec3 front = glm::vec3(0, 0, -1);
-//	glm::vec3 right = glm::vec3(1, 0, 0);
-//
-//	switch (direction) {
-//		case Movement::Forward: posShip += front * velocity; break;
-//		case Movement::Backward: posShip -= front * velocity; break;
-//		case Movement::Left: posShip -= right * velocity; break;
-//		case Movement::Right: posShip += right * velocity; break;
-//		default:;
-//	}
-//}
-//
-//
-//
-//void ShipDirection(Movement direction, float dt) {
-//	const float velocity = 10 * dt;
-//	glm::vec3 front = glm::vec3(0, 0, -1);
-//	glm::vec3 right = glm::vec3(1, 0, 0);
-//
-//	float angleMAX = 30.0f;
-//	float _angleShip = 1.0f;
-//
-//	switch (direction) {
-//		/*case Movement::Forward:
-//		rotShip = glm::vec3(1, 0, 0);
-//		angleShip += _angleShip * velocity;
-//		if (angleShip > angleMAX) angleShip = angleMAX;
-//		break;
-//	case Movement::Backward:
-//		rotShip = glm::vec3(1, 0, 0);
-//		angleShip -= _angleShip * velocity;
-//		if (angleShip < -angleMAX) angleShip = -angleMAX;
-//		break;*/
-//	case Movement::Left:
-//		rotShip = glm::vec3(0, 1, 0);
-//		angleShip += _angleShip * velocity;
-//		if (angleShip > angleMAX) angleShip = angleMAX;
-//		break;
-//	case Movement::Right:
-//		rotShip = glm::vec3(0, 1, 0);
-//		angleShip -= _angleShip * velocity;
-//		if (angleShip < -angleMAX) angleShip = -angleMAX;
-//		break;
-//	default:;
-//	}
-//
-//
-//	std::cout << angleShip << " " << rotShip.x << " " << rotShip.y << " " << rotShip.z << std::endl;
-//
-//}
 
 
 float lastFrame = 0.0f;
@@ -206,346 +148,10 @@ void onScrollMoved(float x, float y) {
 	camera.handleMouseScroll(y);
 }
 
-bool in_frustum(glm::mat4 M, glm::vec3 p) {
-	glm::vec4 Pclip = M * glm::vec4(p, 1.);
-	return abs(Pclip.x) < Pclip.w &&
-		abs(Pclip.y) < Pclip.w &&
-		0 < Pclip.z &&
-		Pclip.z < Pclip.w;
-}
 
-GLboolean CheckCollisionXZ(EasyGO& go1, EasyGO& go2) // AABB - AABB collision
-{
-	
-	// Collision x-axis?
-	bool collisionX = (go1.Position().x + go1.getSize().x >= go2.Position().x &&
-		go2.Position().x + go2.getSize().x >= go1.Position().x) ||
-		(go1.Position().x - go1.getSize().x <= go2.Position().x &&
-			go2.Position().x - go2.getSize().x <= go1.Position().x);
-	// Collision y-axis?
-	bool collisionZ = (go1.Position().z + go1.getSize().z >= go2.Position().z &&
-		go2.Position().z + go2.getSize().z>= go1.Position().z) || 
-		(go1.Position().z - go1.getSize().z <= go2.Position().z &&
-			go2.Position().z - go2.getSize().z <= go1.Position().z);
-	// Collision only if on both axes
-	
 
-	//std::cout << collisionX << " " << collisionZ << std::endl;
-	//std::cout << collisionX << " " << go1.Transform().getPosition().x << " " << go2.Transform().getPosition().x << std::endl;
 
-	return collisionX && collisionZ;
-}
-
-std::pair<uint32_t, uint32_t>  createFBO() {
-	uint32_t fbo;
-	glGenFramebuffers(1, &fbo);
-	glBindFramebuffer(GL_FRAMEBUFFER, fbo);
-
-	uint32_t depthMap;
-	glGenTextures(1, &depthMap);
-	glBindTexture(GL_TEXTURE_2D, depthMap);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, k_shadow_width, k_shadow_height, 0, GL_DEPTH_COMPONENT, GL_FLOAT, nullptr);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
-	float borderColor[]{ 1.0f, 1.0f, 1.0f, 1.0f };
-	glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, borderColor);
-	glBindTexture(GL_TEXTURE_2D, 0);
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, depthMap, 0);
-	glDrawBuffer(GL_NONE);
-	glReadBuffer(GL_NONE);
-
-	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
-		std::cout << "Framebuffer Incomplete" << std::endl;
-	}
-
-	glBindFramebuffer(GL_FRAMEBUFFER, 0);
-
-	return std::make_pair(fbo, depthMap);
-
-}
-
-
-void render(const Geometry& floor, const Model& object, const Model& enemy, const Geometry& sphere, const Shader& s_phong, const Shader& s_normal, const Shader& s_depth, const Shader& s_light, const Texture& t_albedo, const Texture& t_specular, const Texture& t_normal, const uint32_t fbo, const uint32_t fbo_texture) {
-	
-	
-	//FIRST PASS
-	glBindFramebuffer(GL_FRAMEBUFFER, fbo);
-	glViewport(0, 0, k_shadow_width, k_shadow_height);
-	glClear(GL_DEPTH_BUFFER_BIT);
-	glEnable(GL_DEPTH_TEST);
-
-	const glm::mat4 lightProjection = glm::ortho(-10.0f, 10.0f, -10.0f, 10.0f, k_shadow_near, k_shadow_far);
-	const glm::mat4 lightView = glm::lookAt(dirLight_.getDirection(), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-	const glm::mat4 lightSpaceMatrix = lightProjection * lightView;
-
-	s_depth.use();
-	s_depth.set("lightSpaceMatrix", lightSpaceMatrix);
-	//glCullFace(GL_FRONT);
-	//Plane/Floor
-
-	//EasyGO GOfloor(glm::vec3(0.0f, -0.5f, 0.0f));
-	//GOfloor.Rotate(-90.0f, glm::vec3(1.0f, 0.0f, 0.0f));
-	//GOfloor.Scale(glm::vec3(15.0f, 15.0f, 15.0f));
-
-	//GOfloor.Draw(s_normal, floor, lightView, lightProjection, t_albedo, t_specular, t_normal);
-
-	////OBJECT IMPORTED - SHIP
-
-	//EasyGO ship(posShip);
-	//ship.Rotate(-90.0f, glm::vec3(1.0f, 0.0f, 0.0f));
-	//ship.Rotate(180.0f, glm::vec3(0.0f, 0.0f, 1.0f));
-	//if (angleShip != 0.0f) ship.Rotate(angleShip, rotShip);
-	//ship.Scale(glm::vec3(0.001f, 0.001f, 0.001f));
-	//ship.Draw(s_normal, object, lightProjection, lightProjection, true);
-	////glCullFace(GL_BACK);
-	
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	glm::vec3 cameraPos = glm::vec3(0.0f, 3.0f, 0.0f);
-	glm::vec3 cameraFront = glm::vec3(0.0f, -1.0f, 0.0f);
-	glm::vec3 cameraUp = glm::vec3(0.0f, 1.0f, 0.0f);
-
-	glm::mat4 view = glm::lookAt(glm::vec3(0, 15.0f, 0), glm::vec3(0, 0, 0), glm::vec3(0, 0, -1.0f)); //camera.getViewMatrix();
-	glm::mat4 proj = glm::perspective(glm::radians(camera.getFOV()), static_cast<float>(Window::instance()->getWidth()) / Window::instance()->getHeight(), 0.1f, 100.0f);
-
-	//std::cout << proj << std::endl;
-
-	glm::mat4 model = glm::mat4(1.0f);
-	glm::mat3 normalMat = glm::mat3(1.0f);
-/*
-	//LIGHT POSITIONS
-	s_light.use();
-	//POINTLIGHTS
-	for (uint32_t i = 0; i < nPointLight; i++) {
-		glm::mat4 model = glm::mat4(1.0f);
-		model = glm::translate(model, pointLights_[i].getPosition());
-		model = glm::scale(model, glm::vec3(0.25f));
-		s_light.set("model", model);
-		s_light.set("view", view);
-		s_light.set("proj", proj);
-		s_light.set("lightColor", pointLights_[i].getColorSphere());
-
-		//sphere.render();
-	}
-	//SPOTLIGHTS
-	for (uint32_t i = 0; i < nSpotLight; i++) {
-		glm::mat4 model = glm::mat4(1.0f);
-		model = glm::translate(model, spotLights_[i].getPosition());
-		model = glm::scale(model, glm::vec3(0.25f));
-		s_light.set("model", model);
-		s_light.set("view", view);
-		s_light.set("proj", proj);
-		s_light.set("lightColor", spotLights_[i].getColorSphere());
-
-		//sphere.render();
-	}
-	*/
-
-	s_normal.use();
-
-	s_normal.set("viewPos",camera.getPosition());
-
-	//DIRLIGHT
-	s_normal.set("Light.direction", dirLight_.getDirection());
-	s_normal.set("Light.ambient", dirLight_.getAmbient());
-	s_normal.set("Light.diffuse", dirLight_.getDiffuse());
-	s_normal.set("Light.specular", dirLight_.getSpecular());
-	s_normal.set("material.shininess", 128);
-
-	//POINTLIGHT
-	for (uint32_t i = 0; i < nPointLight; ++i) {
-		pointLights_[i].setShader(s_normal, i);
-	}
-
-	//SPOTLIGHT
-	for (uint32_t i = 0; i < nSpotLight; ++i) {
-		spotLights_[i].setShader(s_normal, i);
-	}
-
-	//Plane/Floor
-
-	EasyGO GOfloor(glm::vec3(0.0f, -0.5f, 0.0f));
-	GOfloor.Rotate(-90.0f, glm::vec3(1.0f, 0.0f, 0.0f));
-	GOfloor.Scale(glm::vec3(15.0f, 15.0f, 15.0f));
-
-	GOfloor.Draw(s_normal, floor, view, proj, t_albedo, t_specular, t_normal);
-
-	//OBJECT IMPORTED - SHIP
-
-	EasyGO ship(posShip);
-	ship.Rotate(-90.0f, glm::vec3(1.0f, 0.0f, 0.0f));
-	ship.Rotate(180.0f, glm::vec3(0.0f, 0.0f, 1.0f));
-	if (angleShip != 0.0f) ship.Rotate(angleShip, rotShip);
-	ship.Scale(glm::vec3(0.001f, 0.001f, 0.001f));
-	ship.Draw(s_normal,object,view,proj,true);
-	
-	//glm::vec3 size = ship.Transform().getPosition()* view;
-
-	//std::cout << size.x << std::endl;
-
-	//OBJECT IMPORTED - SHIP
-
-	EasyGO enemyUFO(glm::vec3(1.0f, 2.0f, -2.0f));
-	enemyUFO.Rotate(-10.0f, glm::vec3(1.0f, 0.0f, 0.0f));
-	//enemyUFO.Rotate(180.0f, glm::vec3(0.0f, 0.0f, 1.0f));
-	//if (angleShip != 0.0f) ship.Rotate(angleShip, rotShip);
-	enemyUFO.Scale(glm::vec3(0.01f, 0.01f, 0.01f));
-	enemyUFO.setSize(glm::vec3(0.34f));
-
-
-
-	if(enemyAlive)
-		enemyUFO.Draw(s_normal, enemy, view, proj, true);
-	
-
-	//BULLET
-	if (posBullets.size()>0) {
-		s_light.use();
-		for (int i = 0; i < posBullets.size(); i++) {
-			
-			EasyGO bullet(posBullets[i]);
-			bullet.Scale(glm::vec3(0.25f));
-			s_light.set("lightColor", glm::vec3(1.0f, 1.0f, 1.0f));
-			bullet.Draw(s_light, sphere, view, proj, false);
-			bullet.setSize(glm::vec3(0.1f));
-			posBullets[i] += forwardBullet * 0.025f;
-
-			bool Collision = CheckCollisionXZ(bullet, enemyUFO);
-
-			if (Collision) enemyAlive = false;
-			
-			if(in_frustum(proj,posBullets[i]) || Collision){
-				posBullets.erase(posBullets.begin() + i);
-			}
-		}
-	}
-
-
-}
-
-void render(Assets& assets, EasyGO GOFloor, const Geometry& floor, const Shader& s_normal, const Texture& t_albedo, const Texture& t_specular, const Texture& t_normal) {
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-
-	glm::mat4 view = glm::lookAt(glm::vec3(0, 15.0f, 0), glm::vec3(0, 0, 0), glm::vec3(0, 0, -1.0f)); //camera.getViewMatrix();
-	glm::mat4 proj = glm::perspective(glm::radians(camera.getFOV()), static_cast<float>(Window::instance()->getWidth()) / Window::instance()->getHeight(), 0.1f, 100.0f);
-
-	//std::cout << proj << std::endl;
-
-
-	
-	s_normal.use();
-
-	s_normal.set("viewPos", camera.getPosition());
-
-	//DIRLIGHT
-	s_normal.set("Light.direction", dirLight_.getDirection());
-	s_normal.set("Light.ambient", dirLight_.getAmbient());
-	s_normal.set("Light.diffuse", dirLight_.getDiffuse());
-	s_normal.set("Light.specular", dirLight_.getSpecular());
-	s_normal.set("material.shininess", 128);
-
-	//POINTLIGHT
-	for (uint32_t i = 0; i < nPointLight; ++i) {
-		pointLights_[i].setShader(s_normal, i);
-	}
-
-	//SPOTLIGHT
-	for (uint32_t i = 0; i < nSpotLight; ++i) {
-		spotLights_[i].setShader(s_normal, i);
-	}
-
-	//Plane/Floor
-
-	GOFloor.Init();
-	GOFloor.Rotate(-90.0f, glm::vec3(1.0f, 0.0f, 0.0f));
-	GOFloor.Scale(glm::vec3(15.0f, 15.0f, 15.0f));
-
-	//std::cout << assets.getAssetGeometry(0)._textures.size() << std::endl;
-
-
-
-	//std::cout << _textures.size() << std::endl;
-	//GOFloor.Draw(s_normal, assets.getAssetGeometry(0).getGeometry(), view, proj, _textures[0], _textures[1], _textures[2]);
-	GOFloor.Draw(s_normal, assets.getAssetGeometry(0).getGeometry(), view, proj, assets.getAssetGeometry(0).getAlbedo(), assets.getAssetGeometry(0).getSpecular(), assets.getAssetGeometry(0).getNormal());
-
-
-	
-
-	//material.setMaterialLights();
-
-
-	//OBJECT IMPORTED - SHIP
-	//EasyGO ship(posShip);
-
-	//glm::mat4 model = glm::mat4(1.0f);
-	//model = glm::translate(model, posShip);
-	//model = glm::rotate(model, -90.0f, glm::vec3(1.0f, 0.0f, 0.0f));
-	//model = glm::rotate(ship.go, 180.0f, glm::vec3(0.0f, 0.0f, 1.0f));
-	//if (angleShip != 0.0f) glm::rotate(model, angleShip, rotShip);
-	//model = glm::scale(ship.go, glm::vec3(0.001f, 0.001f, 0.001f));
-
-	//ship.Init();
-	//ship.Translate(posShip);
-	//ship.Rotate(-90.0f, glm::vec3(1.0f, 0.0f, 0.0f));
-	//ship.Rotate(180.0f, glm::vec3(0.0f, 0.0f, 1.0f));
-	//if (angleShip != 0.0f) ship.Rotate(angleShip, rotShip);
-	//ship.Scale(glm::vec3(0.001f, 0.001f, 0.001f));
-	////ship.Draw(s_normal, object, view, proj, true);
-	//
-	////const Model& m = assets.getModel(0);
-	//ship.Draw(s_normal, assets.getModel(0), view, proj, true);
-
-	//FLOOR
-
-	/*floor.Init();
-	floor.Translate(glm::vec3(10.0f, 0.0f, 0.0f));
-	floor.Rotate(-90.0f, glm::vec3(1.0f, 0.0f, 0.0f));
-	floor.Scale(glm::vec3(5.0f, 5.0f, 5.0f));*/
-
-	/*EasyGO GOfloor(glm::vec3(0.0f, -0.5f, 0.0f));
-	GOfloor.Rotate(-90.0f, glm::vec3(1.0f, 0.0f, 0.0f));
-	GOfloor.Scale(glm::vec3(15.0f, 15.0f, 15.0f));
-
-	GOfloor.Draw(s_normal, quadfloor, view, proj, t_albedo, t_specular, t_normal);*/
-
-
-	//quadfloor.render();
-
-	//GOfloor.Draw(s_normal, quadfloor, view, proj, t_albedo, t_specular, t_normal);
-
-	//floor.Draw(s_normal, quadfloor, view, proj, t_albedo, t_specular, t_normal);
-
-	//floor.Draw(s_normal, assets.getGeometry(0), view, proj, assets.getAssetGeometry(0)._textures[0], assets.getAssetGeometry(0)._textures[1], assets.getAssetGeometry(0)._textures[2]);
-	//ship.Draw(s_normal, assets.getGeometry(0), view, proj, false);
-
-	//Draw(model, s_normal, assets.getModel(0), view, proj, true);
-	//assets.getModel(0).render(s_normal);
-	
-	//material._shader.use();
-
-	//material._shader.set("viewPos", camera.getPosition());
-
-	//material.setMaterialLights();
-
-
-	////OBJECT IMPORTED - SHIP
-	/*EasyGO ship(posShip);
-	ship.Translate(posShip);
-	ship.Rotate(-90.0f, glm::vec3(1.0f, 0.0f, 0.0f));
-	ship.Rotate(180.0f, glm::vec3(0.0f, 0.0f, 1.0f));
-	if (angleShip != 0.0f) ship.Rotate(angleShip, rotShip);
-	ship.Scale(glm::vec3(0.001f, 0.001f, 0.001f));
-	ship.Draw(material._shader, object, view, proj, true);*/
-
-
-
-}
-
-
-
-void render(SceneGraph& sceneGraph, float dt, Ship& ship, GameObject& floor, EnemyManager enemyMng) {
+void render(SceneGraph& sceneGraph, float dt, Ship& ship, GameObject& floor, EnemyManager enemyMng, TextRenderer textRenderer) {
 
 	//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -563,21 +169,13 @@ void render(SceneGraph& sceneGraph, float dt, Ship& ship, GameObject& floor, Ene
 	ship.Update(dt);
 	enemyMng.Update(dt);
 	
-	//enemies[0].Update(dt);
-	/*
-	enemies[0].Init();
-	enemies[0].Translate(glm::vec3(0.0f, 1.0f, 0.0f));
-	enemies[0].Rotate(-10.0f, glm::vec3(1.0f, 0.0f, 0.0f));
-	enemies[0].Scale(glm::vec3(0.01f, 0.01f, 0.01f));
-	enemies[0].setSize(glm::vec3(0.34f));
-	enemies[0].readyToDraw();
-	*/
-	
-	//glm::mat4 proj = glm::perspective(glm::radians(camera.getFOV()), static_cast<float>(Window::instance()->getWidth()) / Window::instance()->getHeight(), 0.1f, 100.0f);
-	//std::cout << in_frustum(proj, glm::vec3(0,3,-6.44f)) << std::endl;
-	
+
 
 	sceneGraph.updateNodes();
+
+	textRenderer.RenderText(
+	"You WON!!!", 300.0, 800 / 2 - 20.0, 2.0, glm::vec3(0.0, 0.0, 1.0)
+	);
 
 }
 
@@ -602,6 +200,7 @@ int main(int, char* []) {
 	const Shader s_normal("../projects/TEST/normalTest.vs", "../projects/TEST/normalTest.fs"); //"../projects/FINAL/normalAll.vs", "../projects/FINAL/normalAll.fs"
 	const Shader s_depth("../projects/FINAL/depth.vs", "../projects/FINAL/depth.fs");
 	const Shader s_debug("../projects/FINAL/debug.vs", "../projects/FINAL/debug.fs");
+	const Shader s_text("../projects/FINAL/text.vs", "../projects/FINAL/text.fs");
 
 	//const Shader s_light("../projects/EJ10_01/light.vs", "../projects/EJ10_01/light.fs");
 	const Model object("../assets/models/Freighter/Freigther_BI_Export.obj"); //Sci_Fi_Fighter_Ship_v1/13897_Sci-Fi_Fighter_Ship_v1_l1.obj //Freighter/Freigther_BI_Export.obj
@@ -622,6 +221,9 @@ int main(int, char* []) {
 
 	//std::cout << object.directory_ << std::endl;
 
+	TextRenderer textRenderer(s_text,600,800);
+	textRenderer.Load("../assets/fonts/Blanka-Regular.ttf",12);
+	
 	//Lights
 	DirLight dirLight(glm::vec3(1.2f, 5.0f, -1.0f), glm::vec3(0.2f, 0.2f, 0.2f), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(1.0f, 1.0f, 1.0f));
 	//DirLight dirLight;
@@ -710,7 +312,7 @@ int main(int, char* []) {
 
 		handleInput(deltaTime);
 		//render(quad, object, enemy_, sphere, s_phong, s_normal, s_light, t_albedoLava, t_specularLava, t_normalLava,fbo.first, fbo.second);
-		render(sceneGraph, deltaTime, ship, floor, enemyMng);
+		render(sceneGraph, deltaTime, ship, floor, enemyMng, textRenderer);
 		//render(assets, GoFloor, quad, s_normal, t_albedo, t_specular, t_normal);
 		window->frame();
 	}
