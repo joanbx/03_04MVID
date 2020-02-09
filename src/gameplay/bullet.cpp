@@ -67,6 +67,8 @@ void Bullet::bulletDraw() {
 	//std::cout << "Bullet Draw" << std::endl;
 	_go.Init();
 	_go.Translate(_posBullet);
-	_go.Scale(glm::vec3(0.25f));
+	_go.Rotate(-90.0f, glm::vec3(1.0f, 0.0f, 0.0f));
+	//_go.Rotate(180.0f, glm::vec3(0.0f, 1.0f, 0.0f));
+	_go.Scale(glm::vec3(0.0075f));
 	_go.readyToDraw();
 }

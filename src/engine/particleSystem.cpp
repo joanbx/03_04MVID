@@ -3,17 +3,18 @@
 ParticleSystem::ParticleSystem(const Shader& shader, const Texture& texture, const Geometry& geometry, uint32_t amount)
 	: _shader(shader), _texture(texture), _geometry(geometry), amount(amount)
 {
-	Init();
+
 }
 
-void ParticleSystem::Init()
+void ParticleSystem::Start()
 {
-	std::cout << "INIT PS" << std::endl;
+	//std::cout << "INIT PS" << std::endl;
 	loop = 0;
 	_scalemulti = 1.0f;
 	_finish = false;
 	expansionDirection = true;
 	// Create amount default particle instances
+	particles.clear();
 	for (uint32_t i = 0; i < amount; ++i)
 		particles.push_back(Particle());
 }
@@ -43,21 +44,25 @@ void ParticleSystem::Update(float dt, uint32_t newParticles, GameObject& go, glm
 			}
 		}
 		if (_scalemulti > 10 && expansionDirection) { expansionDirection = false; }
-		else if (_scalemulti == 0.2 && !expansionDirection) { expansionDirection = true; loop++; }
+		else if (_scalemulti <= 0.2 && !expansionDirection) { expansionDirection = true; loop++; }
 
 		//std::cout << _scalemulti << std::endl;
-		if (expansionDirection) _scalemulti *= 1.05f;
-		else _scalemulti /= 1.95f;
+		if (expansionDirection) _scalemulti *= 1.01f;
+		else _scalemulti /= 1.99f;
 		Draw(go.getProj(), go.getView());
 	}
 	else {
+		//std::cout << "FINISH" << std::endl;
 		_finish = true;
-		Init();
 	}
 	
 
 	
 	//std::cout << _scalemulti << std::endl;
+}
+
+void ParticleSystem::setFinished(bool finish) {
+	_finish = finish;
 }
 
 // Render all particles

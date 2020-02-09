@@ -30,12 +30,14 @@ public:
 	
 	// Constructor
 	ParticleSystem(const Shader& shader, const Texture& texture,  const Geometry& geometry, uint32_t amount);
+	void Start();
 	// Update all particles
-	void Update(GLfloat dt,GLuint newParticles, GameObject& go,glm::vec3 offset = glm::vec3(0.0f, 0.0f,0.0f));
+	void Update(float dt,GLuint newParticles, GameObject& go,glm::vec3 offset = glm::vec3(0.0f, 0.0f,0.0f));
 	// Render all particles
 	void Draw(glm::mat4& proj, glm::mat4& view);
 
-	bool getFinihed() { return _finish; }
+	bool getFinished() { return _finish; }
+	void setFinished(bool finish);
 private:
 	// State
 	std::vector<Particle> particles;
@@ -49,7 +51,7 @@ private:
 	bool _finish = false;
 	glm::vec3 _position = glm::vec3(0.0f, 0.0f, 0.0f);
 	// Initializes buffer and vertex attributes
-	void Init();
+	
 	// Returns the first Particle index that's currently unused e.g. Life <= 0.0f or 0 if no particle is currently inactive
 	GLuint firstUnusedParticle();
 	// Respawns particle

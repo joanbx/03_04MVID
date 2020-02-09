@@ -52,7 +52,7 @@ private:
 	bool _shoot = false;
 	bool _inScene = false;
 	bool _prevInScene = false;
-	float _speed = 0.1f;
+	float _speed = 0.3f;
 	bool _destroy = false;
 	bool _inFrustum = false;
 	std::chrono::milliseconds  time_start;

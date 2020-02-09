@@ -3,15 +3,9 @@
 
 Enemy::Enemy(SceneGraph& sg, Node& node, std::vector<Bullet>& bullets, ParticleSystem& ps) : _go(sg, node), _bullets(bullets), _ps(ps) {
 	
-	Start();
+	//Start();
 }
 
-float RandomFloat(float a, float b) {
-	float random = ((float)rand()) / (float)RAND_MAX;
-	float diff = b - a;
-	float r = random * diff;
-	return a + r;
-}
 
 void Enemy::Start() {
 	glm::vec3 size = glm::vec3(0.5f);
@@ -29,26 +23,32 @@ void Enemy::Start() {
 		_mt = MovementType::simpleToLeft;
 		modPos = glm::vec3(-0.5, 0, 1);
 	}
+
+	_inFrustum = false;
 	posEnemy = glm::vec3(x, _go.Position().y, -cambounds.y-size.y);
+	_inScene = true;
+	_destroy = false;
+	_ps.setFinished(false);
+	_ps.Start();
+	_go.Translate(posEnemy);
 	std::cout << "RandomX " <<posEnemy.x << std::endl;
 }
 
 void Enemy::Update(float dt, glm::vec3& playerPos) {
 	if (_inScene) {
 		doDirection(dt);				
-			
-		if (_go.in_frustum(glm::vec3(0, 0, 0)) == false && _inFrustum) {
-			_inScene = false;
+		//std::cout << posEnemy.x << "," << posEnemy.y << " " << posEnemy.z << " " << _go.in_frustum() <<std :: endl;
+		if (_go.in_frustum() == false && _inFrustum) {
+			//_inScene = false;
 			Start();
 		}
-		else if (!_inFrustum && _go.in_frustum(glm::vec3(0, 0, 0))) {
+		else if (!_inFrustum && _go.in_frustum()==true) {
 			_inFrustum = true;
 		}
 
-		if (_inFrustum) {
-			shoot(playerPos);
-			enemyDraw();
-		}
+		shoot(playerPos);
+		enemyDraw();
+
 	}
 	else if (_destroy) {
 		//Start();

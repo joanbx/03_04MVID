@@ -209,8 +209,8 @@ int main(int, char* []) {
 	//const Shader s_light("../projects/EJ10_01/light.vs", "../projects/EJ10_01/light.fs");
 	const Model object("../assets/models/Freighter/Freigther_BI_Export.obj"); //Sci_Fi_Fighter_Ship_v1/13897_Sci-Fi_Fighter_Ship_v1_l1.obj //Freighter/Freigther_BI_Export.obj
 	const Model enemy_("../assets/models/UFO/Low_poly_UFO.obj");
+	const Model msphere("../assets/models/geometries/Sphere01/sphere.fbx");
 	//const Model enemy2_("../assets/models/UFO/Low_poly_UFO.obj");
-
 	const Texture t_albedoLava("../assets/textures/Lavabrick/Lavabrick_ILL.png", Texture::Format::RGB);
 	const Texture t_specularLava("../assets/textures/Lavabrick/lavabrick_TEX_DISP.jpg", Texture::Format::RGB);
 	const Texture t_normalLava("../assets/textures/Lavabrick/lavabrick_TEX_NRM.jpg", Texture::Format::RGB);
@@ -226,12 +226,12 @@ int main(int, char* []) {
 	const Quad quad(1.0f);
 	const Quad quadTest(1.0f);
 
-	//std::cout << object.directory_ << std::endl;
+	//std::cout << msphere.directory_ << std::endl;
 
 	s_particle.set("proj", camera.getProj());
 	s_particle.set("view", camera.getViewMatrix());
 	
-	ParticleSystem ps(s_particle,t_particle,quadTest,3);
+	ParticleSystem ps(s_particle,t_particle,quadTest,30);
 	//s_particle.set("sprite", 0);
 	
 
@@ -258,13 +258,13 @@ int main(int, char* []) {
 	
 	//Load Assets
 	Assets assets;
-	int assetFloor = assets.addNewGeometry(quad, t_albedoLava, t_specularLava, t_normalLava);
+	int assetFloor = assets.addNewGeometry(quad, t_albedo, t_specular, t_normal);
 	//assets.addNewGeometry(AssetsGeometry::sphere, 0.1f,1);
 	int assetShip = assets.addNewModel(object);  //assets.addNewModel(object); //assets.addNewGeometry(cube, t_albedo, t_specular, t_normal); 
 	int assetEnemy = assets.addNewModel(enemy_);
 	//int assetEnemy2 = assets.addNewModel(enemy2_);
 	int assetBulletType01 = assets.addNewGeometry(cube, t_albedo, t_specular, t_normal);
-
+	int assetBulletType02 = assets.addNewModel(msphere);
 	Material mainMaterial(s_normal, shadow, dirLight, spotLights, pointLights);
 
 
@@ -279,10 +279,10 @@ int main(int, char* []) {
 	
 	//Bullet Player Pool
 	std::vector<Bullet> bullets01Enemy = {
-		Bullet(sceneGraph, Node(assetBulletType01, mainMaterial, Node::Type::isGeometry),Bullet::Bullettypes::isEnemy),
-		Bullet(sceneGraph, Node(assetBulletType01, mainMaterial, Node::Type::isGeometry),Bullet::Bullettypes::isEnemy),
-		Bullet(sceneGraph, Node(assetBulletType01, mainMaterial, Node::Type::isGeometry),Bullet::Bullettypes::isEnemy),
-		Bullet(sceneGraph, Node(assetBulletType01, mainMaterial, Node::Type::isGeometry),Bullet::Bullettypes::isEnemy)
+		Bullet(sceneGraph, Node(assetBulletType02, mainMaterial, Node::Type::isModel),Bullet::Bullettypes::isEnemy),
+		Bullet(sceneGraph, Node(assetBulletType02, mainMaterial, Node::Type::isModel),Bullet::Bullettypes::isEnemy),
+		Bullet(sceneGraph, Node(assetBulletType02, mainMaterial, Node::Type::isModel),Bullet::Bullettypes::isEnemy),
+		Bullet(sceneGraph, Node(assetBulletType02, mainMaterial, Node::Type::isModel),Bullet::Bullettypes::isEnemy)
 	};
 
 	//Enemy Pool

@@ -54,7 +54,7 @@ public:
 	glm::vec3 tScale() { return _scale; }
 	glm::vec3 getSize() { return _size; }
 
-	bool in_frustum(glm::vec3 offset=glm::vec3(0.0f));
+	bool in_frustum(glm::vec3 offset = glm::vec3(0.0f, 0.0f, 0.0f));
 	glm::vec2 camBounds();
 	glm::mat4 getProj() { return _sceneGraph.getCamera().getProj(); }
 	glm::mat4 getView() { return _sceneGraph.getCamera().getViewMatrix(); }
