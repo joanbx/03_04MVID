@@ -45,6 +45,8 @@ public:
 
 	glm::vec3 getPosition() { return posShip;  }
 
+	GameObject getGO() { return _go; }
+
 	void shipDraw();
 
 };

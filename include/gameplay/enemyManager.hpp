@@ -7,12 +7,11 @@
 #include <chrono>
 #include <gameplay\ship.hpp>
 #include <gameplay\enemy.hpp>
+#include <engine\particleSystem.hpp>
 
 class EnemyManager {
 
 public:
-
-
 
 	EnemyManager(std::vector<Enemy>& enemies, std::vector<Bullet>& bullets, Ship& player);
 
@@ -20,7 +19,7 @@ public:
 
 	void Update(float dt);
 
-
+	void UpdatePS(float dt);
 
 
 private:

@@ -33,6 +33,7 @@ Ejercicio basado en: AG10
 #include <time.h>
 #include <gameplay\enemyManager.hpp>
 #include <engine\textRenderer.hpp>
+#include <engine\particleSystem.hpp>
 
 Camera camera(glm::vec3(0.0f, 15.0f, 0.0f), glm::vec3(0.0f, 0.0f, -1.0f), 0, -90);
 glm::vec3 posShip(0.0f, 2.0f, 0.0f);
@@ -151,7 +152,7 @@ void onScrollMoved(float x, float y) {
 
 
 
-void render(SceneGraph& sceneGraph, float dt, Ship& ship, GameObject& floor, EnemyManager enemyMng, TextRenderer textRenderer) {
+void render(SceneGraph& sceneGraph, float dt, Ship& ship, GameObject& floor, EnemyManager& enemyMng, TextRenderer& textRenderer, ParticleSystem& ps) {
 
 	//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -169,13 +170,15 @@ void render(SceneGraph& sceneGraph, float dt, Ship& ship, GameObject& floor, Ene
 	ship.Update(dt);
 	enemyMng.Update(dt);
 	
-
-
 	sceneGraph.updateNodes();
 
-	textRenderer.RenderText(
-	"You WON!!!", 300.0, 800 / 2 - 20.0, 2.0, glm::vec3(0.0, 0.0, 1.0)
-	);
+	enemyMng.UpdatePS(dt);
+
+	//ps.Update(dt, 2, glm::vec2(0.25f,0));
+
+	//ps.Draw();
+
+	//textRenderer.RenderText("TEST!!!", 300.0, 800 / 2 - 20.0, 2.0, glm::vec3(0.0, 0.0, 1.0));
 
 }
 
@@ -201,10 +204,12 @@ int main(int, char* []) {
 	const Shader s_depth("../projects/FINAL/depth.vs", "../projects/FINAL/depth.fs");
 	const Shader s_debug("../projects/FINAL/debug.vs", "../projects/FINAL/debug.fs");
 	const Shader s_text("../projects/FINAL/text.vs", "../projects/FINAL/text.fs");
+	const Shader s_particle("../projects/FINAL/particle.vs", "../projects/FINAL/particle.fs");
 
 	//const Shader s_light("../projects/EJ10_01/light.vs", "../projects/EJ10_01/light.fs");
 	const Model object("../assets/models/Freighter/Freigther_BI_Export.obj"); //Sci_Fi_Fighter_Ship_v1/13897_Sci-Fi_Fighter_Ship_v1_l1.obj //Freighter/Freigther_BI_Export.obj
 	const Model enemy_("../assets/models/UFO/Low_poly_UFO.obj");
+	//const Model enemy2_("../assets/models/UFO/Low_poly_UFO.obj");
 
 	const Texture t_albedoLava("../assets/textures/Lavabrick/Lavabrick_ILL.png", Texture::Format::RGB);
 	const Texture t_specularLava("../assets/textures/Lavabrick/lavabrick_TEX_DISP.jpg", Texture::Format::RGB);
@@ -214,12 +219,21 @@ int main(int, char* []) {
 	const Texture t_specular("../assets/textures/bricks_specular.png", Texture::Format::RGB);
 	const Texture t_normal("../assets/textures/bricks_normal.png", Texture::Format::RGB);
 
+	const Texture t_particle("../assets/textures/explosion.png", Texture::Format::RGBA);
+
 	const Sphere sphere(0.1f, 50, 50);
 	const Cube cube(1.0f);
 	const Quad quad(1.0f);
-	const Quad quadTest(2.0f);
+	const Quad quadTest(1.0f);
 
 	//std::cout << object.directory_ << std::endl;
+
+	s_particle.set("proj", camera.getProj());
+	s_particle.set("view", camera.getViewMatrix());
+	
+	ParticleSystem ps(s_particle,t_particle,quadTest,3);
+	//s_particle.set("sprite", 0);
+	
 
 	TextRenderer textRenderer(s_text,600,800);
 	textRenderer.Load("../assets/fonts/Blanka-Regular.ttf",12);
@@ -248,6 +262,7 @@ int main(int, char* []) {
 	//assets.addNewGeometry(AssetsGeometry::sphere, 0.1f,1);
 	int assetShip = assets.addNewModel(object);  //assets.addNewModel(object); //assets.addNewGeometry(cube, t_albedo, t_specular, t_normal); 
 	int assetEnemy = assets.addNewModel(enemy_);
+	//int assetEnemy2 = assets.addNewModel(enemy2_);
 	int assetBulletType01 = assets.addNewGeometry(cube, t_albedo, t_specular, t_normal);
 
 	Material mainMaterial(s_normal, shadow, dirLight, spotLights, pointLights);
@@ -272,14 +287,18 @@ int main(int, char* []) {
 
 	//Enemy Pool
 	std::vector<Enemy> enemies = {
-		Enemy(sceneGraph, Node(assetEnemy, mainMaterial, Node::Type::isModel), bullets01Enemy),
-		//Enemy(sceneGraph, Node(assetEnemy, mainMaterial, Node::Type::isModel), bullets01Enemy),
+		Enemy(sceneGraph, Node(assetEnemy, mainMaterial, Node::Type::isModel), bullets01Enemy, ps),
+		Enemy(sceneGraph, Node(assetEnemy, mainMaterial, Node::Type::isModel), bullets01Enemy, ps)
 		//Enemy(sceneGraph, Node(assetEnemy, mainMaterial, Node::Type::isModel), bullets01Enemy),
 		//Enemy(sceneGraph, Node(assetEnemy, mainMaterial, Node::Type::isModel), bullets01Enemy)
 	};
 	enemies[0].setInScene(true);
 	//Bullet Player Pool
 	std::vector<Bullet> bullets01Player = {
+		Bullet(sceneGraph, Node(assetBulletType01, mainMaterial, Node::Type::isGeometry),Bullet::Bullettypes::isPlayer),
+		Bullet(sceneGraph, Node(assetBulletType01, mainMaterial, Node::Type::isGeometry),Bullet::Bullettypes::isPlayer),
+		Bullet(sceneGraph, Node(assetBulletType01, mainMaterial, Node::Type::isGeometry),Bullet::Bullettypes::isPlayer),
+		Bullet(sceneGraph, Node(assetBulletType01, mainMaterial, Node::Type::isGeometry),Bullet::Bullettypes::isPlayer),
 		Bullet(sceneGraph, Node(assetBulletType01, mainMaterial, Node::Type::isGeometry),Bullet::Bullettypes::isPlayer),
 		Bullet(sceneGraph, Node(assetBulletType01, mainMaterial, Node::Type::isGeometry),Bullet::Bullettypes::isPlayer),
 		Bullet(sceneGraph, Node(assetBulletType01, mainMaterial, Node::Type::isGeometry),Bullet::Bullettypes::isPlayer),
@@ -312,7 +331,7 @@ int main(int, char* []) {
 
 		handleInput(deltaTime);
 		//render(quad, object, enemy_, sphere, s_phong, s_normal, s_light, t_albedoLava, t_specularLava, t_normalLava,fbo.first, fbo.second);
-		render(sceneGraph, deltaTime, ship, floor, enemyMng, textRenderer);
+		render(sceneGraph, deltaTime, ship, floor, enemyMng, textRenderer, ps);
 		//render(assets, GoFloor, quad, s_normal, t_albedo, t_specular, t_normal);
 		window->frame();
 	}

@@ -1,5 +1,5 @@
-#ifndef TEXTRENDERER_H
-#define TEXTRENDERER_H
+#ifndef __TEXTRENDERER_H
+#define __TEXTRENDERER_H
 
 #include <engine\shader.hpp>
 #include <map>

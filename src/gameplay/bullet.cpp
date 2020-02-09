@@ -13,7 +13,7 @@ void Bullet::Start() {
 
 void Bullet::Update(float dt) {
 	if (_used) {
-		pushDirection();
+		pushDirection(dt);
 		bulletDraw();
 		checkAutoDestroy();
 	}
@@ -28,9 +28,9 @@ void Bullet::setPosition(glm::vec3& posBullet) {
 	_posBullet = posBullet;
 }
 
-void Bullet::pushDirection() {
+void Bullet::pushDirection(float dt) {
 	//glm::vec3 forwardBullet(0.0f, 0.0f, -1.0f);
-	_posBullet += _direction * _speed;
+	_posBullet += _direction * _speed * dt;
 }
 
 void Bullet::checkAutoDestroy() {
@@ -40,7 +40,7 @@ void Bullet::checkAutoDestroy() {
 	}
 }
 
-GLboolean Bullet::CheckCollisionXZ(GameObject go) // AABB - AABB collision
+bool Bullet::CheckCollisionXZ(GameObject go) // AABB - AABB collision
 {
 	// Collision x-axis?
 	bool collisionX = (_go.Position().x + _go.getSize().x >= go.Position().x &&

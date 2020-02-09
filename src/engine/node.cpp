@@ -87,6 +87,4 @@ void Node::DrawGeometry(glm::mat4& transform, const Shader& shader, const Geomet
 
 	geometry.render();
 
-
-
 }

@@ -109,6 +109,7 @@ void Ship::checkCollisionBullet() {
 				if (enemy.getInScene()) {
 					if (b.CheckCollisionXZ(enemy.getGO()) == true) {
 						b.setUse(false);
+						enemy.setDestroy(true);
 						enemy.setInScene(false);
 					}
 				}

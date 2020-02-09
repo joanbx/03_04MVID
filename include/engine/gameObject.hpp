@@ -56,6 +56,8 @@ public:
 
 	bool in_frustum(glm::vec3 offset=glm::vec3(0.0f));
 	glm::vec2 camBounds();
+	glm::mat4 getProj() { return _sceneGraph.getCamera().getProj(); }
+	glm::mat4 getView() { return _sceneGraph.getCamera().getViewMatrix(); }
 };
 
 #endif

@@ -30,7 +30,7 @@ public:
 	void setPosition(glm::vec3& posBullet);
 
 	
-	GLboolean CheckCollisionXZ(GameObject go);
+	bool CheckCollisionXZ(GameObject go);
 	
 
 	bool getUsed() { return _used; }
@@ -42,7 +42,7 @@ private:
 
 	GameObject _go;
 	Bullet::Bullettypes& _type;
-	float _speed = 0.0025f;
+	float _speed = 2.25f;
 	glm::vec3 _posBullet = glm::vec3(0, 1, 0);
 	glm::vec3 _rotBullet = glm::vec3(0, 0, 0);
 	float _angleBullet = 0.0f;
@@ -51,7 +51,7 @@ private:
 	bool _shoot = false;
 
 
-	void pushDirection();
+	void pushDirection(float dt);
 	void checkAutoDestroy();
 
 };

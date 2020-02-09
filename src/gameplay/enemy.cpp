@@ -1,7 +1,7 @@
 #include <gameplay\enemy.hpp>
 
 
-Enemy::Enemy(SceneGraph& sg, Node& node, std::vector<Bullet>& bullets) : _go(sg, node), _bullets(bullets) {
+Enemy::Enemy(SceneGraph& sg, Node& node, std::vector<Bullet>& bullets, ParticleSystem& ps) : _go(sg, node), _bullets(bullets), _ps(ps) {
 	
 	Start();
 }
@@ -30,29 +30,43 @@ void Enemy::Start() {
 		modPos = glm::vec3(-0.5, 0, 1);
 	}
 	posEnemy = glm::vec3(x, _go.Position().y, -cambounds.y-size.y);
-	//std::cout << "RandomX " <<posEnemy.x << std::endl;
+	std::cout << "RandomX " <<posEnemy.x << std::endl;
 }
 
 void Enemy::Update(float dt, glm::vec3& playerPos) {
 	if (_inScene) {
-		doDirection();				
-		shoot(playerPos);
-		//std::cout << posEnemy.x << " " << posEnemy.y << " " << posEnemy.z << std::endl;
-		
-		enemyDraw();
-	}
+		doDirection(dt);				
+			
+		if (_go.in_frustum(glm::vec3(0, 0, 0)) == false && _inFrustum) {
+			_inScene = false;
+			Start();
+		}
+		else if (!_inFrustum && _go.in_frustum(glm::vec3(0, 0, 0))) {
+			_inFrustum = true;
+		}
 
+		if (_inFrustum) {
+			shoot(playerPos);
+			enemyDraw();
+		}
+	}
+	else if (_destroy) {
+		//Start();
+	}
 	_prevInScene = _inScene;
 		
 }
 
 void Enemy::setInScene(bool isInScene) {
 	_inScene = isInScene;
-
 }
 
-void Enemy::doDirection() {
-	posEnemy += modPos * _speed;
+void Enemy::setDestroy(bool destroy) {
+	_destroy = destroy;
+}
+
+void Enemy::doDirection(float dt) {
+	posEnemy += modPos * _speed * dt;
 }
 
 void Enemy::shoot(glm::vec3& playerPos) {
