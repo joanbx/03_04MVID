@@ -1,6 +1,6 @@
 #include "..\..\include\gameplay\enemyManager.hpp"
 
-EnemyManager::EnemyManager(std::vector<Enemy>& enemies, std::vector<Bullet>& bullets, Ship& player) : _enemies(enemies), _bullets(bullets), _player(player)
+EnemyManager::EnemyManager(std::vector<Enemy>& enemies, std::vector<Bullet>& bullets, std::vector<Asteroid>& asteroids, Ship& player) : _enemies(enemies), _bullets(bullets), _asteroids(asteroids), _player(player)
 {
 	Start();
 }
@@ -20,6 +20,9 @@ void EnemyManager::Update(float dt)
 	}
 	for (auto& bullet : _bullets) {
 		bullet.Update(dt);
+	}
+	for (auto& asteroid : _asteroids) {
+		asteroid.Update(dt);
 	}
 }
 

@@ -122,11 +122,11 @@ void Ship::checkCollisionBullet() {
 void Ship::shipDraw() {
 	_go.Init();
 	_go.Translate(posShip);
-	//_go.Rotate(-90.0f, glm::vec3(1.0f, 0.0f, 0.0f));
+	_go.Rotate(-90.0f, glm::vec3(1.0f, 0.0f, 0.0f));
 	//_go.Rotate(180.0f, glm::vec3(0.0f, 0.0f, 1.0f));
-	_go.Rotate(180.0f, glm::vec3(0.0f, 1.0f, 0.0f));
+	//_go.Rotate(180.0f, glm::vec3(0.0f, 1.0f, 0.0f));
 	if (angleShip != 0.0f) _go.Rotate(angleShip, rotShip);
 	//_go.Scale(glm::vec3(0.001f, 0.001f, 0.001f));
-	_go.Scale(glm::vec3(0.1f, 0.1f, 0.1f));
+	_go.Scale(glm::vec3(0.005f, 0.005f, 0.005f));
 	_go.readyToDraw();
 }

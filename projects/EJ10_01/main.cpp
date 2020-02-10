@@ -28,15 +28,15 @@ uint8_t nSpotLight = 3;
 
 DirLight dirLight;
 PointLight* pointLights = new PointLight[nPointLight]{
-	{glm::vec3(0.0f,6.0f,4.0f), glm::vec3(0.2f,0.2f,0.2f), glm::vec3(0.8f,0.8f,0.8f),glm::vec3(1.0f,1.0f,1.0f), 1.0f, 0.2f, 0.06f, glm::vec3(1.0f,1.0f,1.0f)},
-	{glm::vec3(-2.0f,6.0f,6.0f), glm::vec3(0.2f,0.2f,0.2f), glm::vec3(0.8f,0.8f,0.8f),glm::vec3(1.0f,1.0f,1.0f), 1.0f, 0.2f, 0.06f, glm::vec3(1.0f,1.0f,1.0f)},
-	{glm::vec3(2.0f,6.0f,6.0f), glm::vec3(0.2f,0.2f,0.2f), glm::vec3(0.8f,0.8f,0.8f),glm::vec3(1.0f,1.0f,1.0f), 1.0f, 0.2f, 0.06f, glm::vec3(1.0f,1.0f,1.0f)}
+	{glm::vec3(990.0f,6.0f,4.0f), glm::vec3(0.2f,0.2f,0.2f), glm::vec3(0.8f,0.8f,0.8f),glm::vec3(1.0f,1.0f,1.0f), 1.0f, 0.2f, 0.06f, glm::vec3(1.0f,1.0f,1.0f)},
+	{glm::vec3(-992.0f,6.0f,6.0f), glm::vec3(0.2f,0.2f,0.2f), glm::vec3(0.8f,0.8f,0.8f),glm::vec3(1.0f,1.0f,1.0f), 1.0f, 0.2f, 0.06f, glm::vec3(1.0f,1.0f,1.0f)},
+	{glm::vec3(992.0f,6.0f,6.0f), glm::vec3(0.2f,0.2f,0.2f), glm::vec3(0.8f,0.8f,0.8f),glm::vec3(1.0f,1.0f,1.0f), 1.0f, 0.2f, 0.06f, glm::vec3(1.0f,1.0f,1.0f)}
 };
 
 SpotLight* spotLights = new SpotLight[nSpotLight]{
-	{glm::vec3(-1.58f,2.3f,8.15f), glm::vec3(0.0f, 0.0f,1.0f), glm::vec3(0.0f,0.2f,0.2f), glm::vec3(0.0f,0.8f,0.8f),glm::vec3(1.0f,1.0f,1.0f), 1.0f, 0.2f, 0.32f, 10.0, 20.0, glm::vec3(0.0f,1.0f,1.0f)},
-	{glm::vec3(1.58f,2.3f,8.15f),glm::vec3(0.0f, 0.0f, 1.0f), glm::vec3(0.0f,0.2f,0.2f), glm::vec3(0.0f,0.8f,0.8f),glm::vec3(1.0f,1.0f,1.0f), 1.0f, 0.2f, 0.32f, 10.0, 20.0, glm::vec3(0.0f,1.0f,1.0f)},
-	{glm::vec3(0.0f,1.55f,-4.15f),glm::vec3(0.0f, -1.0f, 0.0f), glm::vec3(0.2f,0.0f,0.0f), glm::vec3(0.5f,0.0f,0.0f),glm::vec3(1.0f,1.0f,1.0f), 1.0f, 0.2f, 0.32f, 30.0, 40.0, glm::vec3(1.0f,0.0f,0.0f)}
+	{glm::vec3(-991.58f,2.3f,8.15f), glm::vec3(0.0f, 0.0f,1.0f), glm::vec3(0.0f,0.2f,0.2f), glm::vec3(0.0f,0.8f,0.8f),glm::vec3(1.0f,1.0f,1.0f), 1.0f, 0.2f, 0.32f, 10.0, 20.0, glm::vec3(0.0f,1.0f,1.0f)},
+	{glm::vec3(991.58f,2.3f,8.15f),glm::vec3(0.0f, 0.0f, 1.0f), glm::vec3(0.0f,0.2f,0.2f), glm::vec3(0.0f,0.8f,0.8f),glm::vec3(1.0f,1.0f,1.0f), 1.0f, 0.2f, 0.32f, 10.0, 20.0, glm::vec3(0.0f,1.0f,1.0f)},
+	{glm::vec3(990.0f,1.55f,-4.15f),glm::vec3(0.0f, -1.0f, 0.0f), glm::vec3(0.2f,0.0f,0.0f), glm::vec3(0.5f,0.0f,0.0f),glm::vec3(1.0f,1.0f,1.0f), 1.0f, 0.2f, 0.32f, 30.0, 40.0, glm::vec3(1.0f,0.0f,0.0f)}
 };
 
 

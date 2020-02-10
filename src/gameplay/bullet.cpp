@@ -69,6 +69,6 @@ void Bullet::bulletDraw() {
 	_go.Translate(_posBullet);
 	_go.Rotate(-90.0f, glm::vec3(1.0f, 0.0f, 0.0f));
 	//_go.Rotate(180.0f, glm::vec3(0.0f, 1.0f, 0.0f));
-	_go.Scale(glm::vec3(0.0075f));
+	_go.Scale(glm::vec3(0.0025f));
 	_go.readyToDraw();
 }

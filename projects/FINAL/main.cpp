@@ -34,6 +34,7 @@ Ejercicio basado en: AG10
 #include <gameplay\enemyManager.hpp>
 #include <engine\textRenderer.hpp>
 #include <engine\particleSystem.hpp>
+#include <gameplay\floor.hpp>
 
 Camera camera(glm::vec3(0.0f, 15.0f, 0.0f), glm::vec3(0.0f, 0.0f, -1.0f), 0, -90);
 glm::vec3 posShip(0.0f, 2.0f, 0.0f);
@@ -58,25 +59,7 @@ glm::vec3 forwardBullet(0.0f, 0.0f, -1.0f);
 
 
 
-//Create Lights
-DirLight dirLight_(glm::vec3(-0.2f, -1.0f, -0.3f), glm::vec3(0.2f, 0.2f, 0.2f), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(1.0f, 1.0f, 1.0f));
 
-
-PointLight* pointLights_ = new PointLight[nPointLight]{
-	{glm::vec3(0.0f,2.0f,0.0f), glm::vec3(0.2f,0.2f,0.2f), glm::vec3(0.5f,0.5f,0.5f),glm::vec3(1.0f,1.0f,1.0f), 1.0f, 0.09f, 0.032f, glm::vec3(1.0f,1.0f,1.0f)},
-	{glm::vec3(3.0f,2.0f,2.0f), glm::vec3(0.2f,0.2f,0.2f), glm::vec3(0.5f,0.5f,0.5f),glm::vec3(1.0f,1.0f,1.0f), 1.0f, 0.09f, 0.032f, glm::vec3(1.0f,1.0f,1.0f)},
-	{glm::vec3(-3.0f,2.0f,-2.0f), glm::vec3(0.2f,0.2f,0.2f), glm::vec3(0.5f,0.5f,0.5f),glm::vec3(1.0f,1.0f,1.0f), 1.0f, 0.09f, 0.032f, glm::vec3(1.0f,1.0f,1.0f)}
-
-};
-
-SpotLight* spotLights_ = new SpotLight[nSpotLight]{
-	{glm::vec3(-1.0f,0.25f,0.0f), glm::vec3(0.0f, -1.0f,0.0f), glm::vec3(0.2f,0.2f,0.2f), glm::vec3(0.5f,0.5f,0.5f),glm::vec3(1.0f,1.0f,1.0f), 1.0f, 0.2f, 0.32f, 30.0, 40.0, glm::vec3(1.0f,1.0f,1.0f)},
-	{glm::vec3(1.0f,0.25f,0.0f),glm::vec3(0.0f, -1.0f, 0.0f), glm::vec3(0.2f,0.2f,0.2f), glm::vec3(0.5f,0.5f,0.5f),glm::vec3(1.0f,1.0f,1.0f), 1.0f, 0.2f, 0.32f, 30.0, 40.0, glm::vec3(1.0f,1.0f,1.0f)},
-	{glm::vec3(0.0f,4.25f,0.0f),glm::vec3(0.0f, -1.0f, 0.0f), glm::vec3(0.2f,0.2f,0.2f), glm::vec3(0.5f,0.5f,0.5f),glm::vec3(1.0f,1.0f,1.0f), 1.0f, 0.2f, 0.32f, 30.0, 40.0, glm::vec3(1.0f,1.0f,1.0f)}
-};
-
-
-//SpotLight* spotLights;
 
 
 
@@ -84,40 +67,6 @@ SpotLight* spotLights_ = new SpotLight[nSpotLight]{
 float lastFrame = 0.0f;
 float lastX, lastY;
 bool firstMouse = true;
-
-void handleInput(float dt) {
-	Input* input = Input::instance();
-
-	if (input->isKeyPressed(GLFW_KEY_W)) {
-		//camera.handleKeyboard(Camera::Movement::Forward, dt);
-		//ShipMovement(Movement::Forward, dt);
-		//ShipDirection(Movement::Forward, dt);
-	}
-	if (input->isKeyPressed(GLFW_KEY_S)) {
-		//camera.handleKeyboard(Camera::Movement::Backward, dt);
-		//ShipMovement(Movement::Backward, dt);
-		///ShipDirection(Movement::Backward, dt);
-	}
-	if (input->isKeyPressed(GLFW_KEY_A)) {
-		//camera.handleKeyboard(Camera::Movement::Left, dt);
-		//ShipMovement(Movement::Left, dt);
-		//ShipDirection(Movement::Left, dt);
-	}
-	if (input->isKeyPressed(GLFW_KEY_D)) {
-		//camera.handleKeyboard(Camera::Movement::Right, dt);
-		//ShipMovement(Movement::Right, dt);
-		//ShipDirection(Movement::Right, dt);
-	}
-	
-	//if (input->isKeyPressed(GLFW_KEY_SPACE) && shoot==false) {
-		//shoot = true;
-		//posBullets.push_back(posShip);
-		//std::cout << "SHOOT" << posBullets.size() << std::endl;
-	//}
-	//else if (input->isKeyReleased(GLFW_KEY_SPACE) && shoot == true) {
-		//shoot = false;
-	//}
-}
 
 void onKeyPress(int key, int action) {
 	if (key == GLFW_KEY_Q && action == GLFW_PRESS) {
@@ -152,19 +101,19 @@ void onScrollMoved(float x, float y) {
 
 
 
-void render(SceneGraph& sceneGraph, float dt, Ship& ship, GameObject& floor, EnemyManager& enemyMng, TextRenderer& textRenderer, ParticleSystem& ps) {
+void render(SceneGraph& sceneGraph, float dt, Ship& ship, Floor& floors, EnemyManager& enemyMng, TextRenderer& textRenderer, ParticleSystem& ps) {
 
 	//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	//glm::mat4 view = glm::lookAt(glm::vec3(0, 15.0f, 0), glm::vec3(0, 0, 0), glm::vec3(0, 0, -1.0f)); //camera.getViewMatrix();
 	//glm::mat4 proj = glm::perspective(glm::radians(camera.getFOV()), static_cast<float>(Window::instance()->getWidth()) / Window::instance()->getHeight(), 0.1f, 100.0f);
 	
-	floor.Init();
-	floor.Translate(glm::vec3(0.0f, -0.5f, 0.0f));
-	floor.Rotate(-90.0f, glm::vec3(1.0f, 0.0f, 0.0f));
-	floor.Scale(glm::vec3(15.0f, 15.0f, 15.0f));
-	floor.readyToDraw();
-
+	//floor.Init();
+	//floor.Translate(glm::vec3(0.0f, -0.5f, 0.0f));
+	//floor.Rotate(-90.0f, glm::vec3(1.0f, 0.0f, 0.0f));
+	//floor.Scale(glm::vec3(15.0f, 15.0f, 15.0f));
+	//floor.readyToDraw();
+	floors.Update(dt);
 
 	
 	ship.Update(dt);
@@ -189,10 +138,10 @@ int main(int, char* []) {
 	window->setWidth(600);
 	window->setHeight(800);
 
-	float top = 12.0f * tan((camera.getFOV() * 0.5f) * 3.14f / 180.0f);
-	float r = top * (float)600 / (float)800;
+	//float top = 12.0f * tan((camera.getFOV() * 0.5f) * 3.14f / 180.0f);
+	//float r = top * (float)600 / (float)800;
 
-	std::cout << top << " " << r << std::endl;
+	//std::cout << top << " " << r << std::endl;
 
 	srand(time(NULL));
 
@@ -207,10 +156,11 @@ int main(int, char* []) {
 	const Shader s_particle("../projects/FINAL/particle.vs", "../projects/FINAL/particle.fs");
 
 	//const Shader s_light("../projects/EJ10_01/light.vs", "../projects/EJ10_01/light.fs");
-	const Model object("../assets/models/Freighter/Freigther_BI_Export.obj"); //Sci_Fi_Fighter_Ship_v1/13897_Sci-Fi_Fighter_Ship_v1_l1.obj //Freighter/Freigther_BI_Export.obj
+	const Model object("../assets/models/ships/FBX/titaniun-fighter.fbx"); //Sci_Fi_Fighter_Ship_v1/13897_Sci-Fi_Fighter_Ship_v1_l1.obj //Freighter/Freigther_BI_Export.obj
 	const Model enemy_("../assets/models/UFO/Low_poly_UFO.obj");
 	const Model msphere("../assets/models/geometries/Sphere01/sphere.fbx");
-	//const Model enemy2_("../assets/models/UFO/Low_poly_UFO.obj");
+	const Model asteroid01("../assets/models/asteroid/Asteroid 1.fbx");
+	
 	const Texture t_albedoLava("../assets/textures/Lavabrick/Lavabrick_ILL.png", Texture::Format::RGB);
 	const Texture t_specularLava("../assets/textures/Lavabrick/lavabrick_TEX_DISP.jpg", Texture::Format::RGB);
 	const Texture t_normalLava("../assets/textures/Lavabrick/lavabrick_TEX_NRM.jpg", Texture::Format::RGB);
@@ -259,9 +209,11 @@ int main(int, char* []) {
 	//Load Assets
 	Assets assets;
 	int assetFloor = assets.addNewGeometry(quad, t_albedo, t_specular, t_normal);
+	int assetFloor2 = assets.addNewGeometry(quad, t_albedoLava, t_specularLava, t_normalLava);
 	//assets.addNewGeometry(AssetsGeometry::sphere, 0.1f,1);
 	int assetShip = assets.addNewModel(object);  //assets.addNewModel(object); //assets.addNewGeometry(cube, t_albedo, t_specular, t_normal); 
 	int assetEnemy = assets.addNewModel(enemy_);
+	int assetAsteroid01 = assets.addNewModel(asteroid01);
 	//int assetEnemy2 = assets.addNewModel(enemy2_);
 	int assetBulletType01 = assets.addNewGeometry(cube, t_albedo, t_specular, t_normal);
 	int assetBulletType02 = assets.addNewModel(msphere);
@@ -270,13 +222,14 @@ int main(int, char* []) {
 
 	SceneGraph sceneGraph(assets, camera);
 
-	
-	//Add GameObjects
-	//const GameObject shipgo(sceneGraph, Node(assetShip, mainMaterial, Node::Type::isModel));
-	
+	std::vector<GameObject> floors = {
+		{sceneGraph, Node(assetFloor, mainMaterial, Node::Type::isGeometry)},
+		{sceneGraph, Node(assetFloor, mainMaterial, Node::Type::isGeometry)},
+		{ sceneGraph, Node(assetFloor, mainMaterial, Node::Type::isGeometry) }
+	};
+	//GameObject floor(sceneGraph, Node(assetFloor, mainMaterial, Node::Type::isGeometry));
+	Floor floorMng(floors);
 
-	GameObject floor(sceneGraph, Node(assetFloor, mainMaterial, Node::Type::isGeometry));
-	
 	//Bullet Player Pool
 	std::vector<Bullet> bullets01Enemy = {
 		Bullet(sceneGraph, Node(assetBulletType02, mainMaterial, Node::Type::isModel),Bullet::Bullettypes::isEnemy),
@@ -292,7 +245,7 @@ int main(int, char* []) {
 		//Enemy(sceneGraph, Node(assetEnemy, mainMaterial, Node::Type::isModel), bullets01Enemy),
 		//Enemy(sceneGraph, Node(assetEnemy, mainMaterial, Node::Type::isModel), bullets01Enemy)
 	};
-	enemies[0].setInScene(true);
+	//enemies[0].setInScene(true);
 	//Bullet Player Pool
 	std::vector<Bullet> bullets01Player = {
 		Bullet(sceneGraph, Node(assetBulletType01, mainMaterial, Node::Type::isGeometry),Bullet::Bullettypes::isPlayer),
@@ -305,12 +258,16 @@ int main(int, char* []) {
 		Bullet(sceneGraph, Node(assetBulletType01, mainMaterial, Node::Type::isGeometry),Bullet::Bullettypes::isPlayer)
 	};
 
-	//EasyGO GoFloor(glm::vec3(0.0,0.0,0.0));
+	//Asteroids Pool
+	std::vector<Asteroid> asteroids = {
+		{sceneGraph, Node(assetAsteroid01, mainMaterial, Node::Type::isModel)},
+		{sceneGraph, Node(assetAsteroid01, mainMaterial, Node::Type::isModel)}
+	};
 
 	//Ship = Player
 	Ship ship(sceneGraph, Node(assetShip, mainMaterial, Node::Type::isModel), bullets01Player, enemies);
 
-	EnemyManager enemyMng(enemies, bullets01Enemy, ship);
+	EnemyManager enemyMng(enemies, bullets01Enemy, asteroids, ship);
 
 	glEnable(GL_CULL_FACE);
 	glCullFace(GL_BACK);
@@ -329,9 +286,8 @@ int main(int, char* []) {
 		const float deltaTime = currentFrame - lastFrame;
 		lastFrame = currentFrame;
 
-		handleInput(deltaTime);
 		//render(quad, object, enemy_, sphere, s_phong, s_normal, s_light, t_albedoLava, t_specularLava, t_normalLava,fbo.first, fbo.second);
-		render(sceneGraph, deltaTime, ship, floor, enemyMng, textRenderer, ps);
+		render(sceneGraph, deltaTime, ship, floorMng, enemyMng, textRenderer, ps);
 		//render(assets, GoFloor, quad, s_normal, t_albedo, t_specular, t_normal);
 		window->frame();
 	}

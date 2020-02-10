@@ -8,12 +8,13 @@
 #include <gameplay\ship.hpp>
 #include <gameplay\enemy.hpp>
 #include <engine\particleSystem.hpp>
+#include <gameplay\asteroid.hpp>
 
 class EnemyManager {
 
 public:
 
-	EnemyManager(std::vector<Enemy>& enemies, std::vector<Bullet>& bullets, Ship& player);
+	EnemyManager(std::vector<Enemy>& enemies, std::vector<Bullet>& bullets, std::vector<Asteroid>& asteroids, Ship& player);
 
 	void Start();
 
@@ -28,6 +29,7 @@ private:
 	Ship& _player;
 	std::vector<Bullet>& _bullets;
 	std::vector<Enemy>& _enemies;
+	std::vector<Asteroid>& _asteroids;
 	bool _prevInScene = false;
 	float _speed = 0.0025f;
 	std::chrono::milliseconds  time_start;
