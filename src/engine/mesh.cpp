@@ -55,13 +55,13 @@ void Mesh::render(const Shader& shader) const {
     // retrieve texture number (the N in diffuse_textureN)
     std::string number;
     std::string name = textures_[i].type;
-    if (name == "material.diffuse" || name == "texture_diffuse")
+    if (name == "texture_diffuse")
       number = std::to_string(diffuseNr++);
-    else if (name == "material.specular" || name == "texture_specular")
+    else if ( name == "texture_specular")
       number = std::to_string(specularNr++); // transfer unsigned int to stream
-    else if (name == "material.normal" || name == "texture_normal")
+    else if (name == "texture_normal")
       number = std::to_string(normalNr++); // transfer unsigned int to stream
-    else if (name == "material.height" || name == "texture_height")
+    else if (name == "texture_height")
       number = std::to_string(heightNr++); // transfer unsigned int to stream
 
                        // now set the sampler to the correct texture unit
