@@ -109,6 +109,8 @@ Mesh Model::processMesh(aiMesh *mesh, const aiScene *scene) {
   textures.insert(textures.end(), specularMaps.begin(), specularMaps.end());
   std::vector<Texture2> specularMaps2 = loadMaterialTextures(material, aiTextureType_DIFFUSE_ROUGHNESS, "texture_specular");
   textures.insert(textures.end(), specularMaps2.begin(), specularMaps2.end());
+  std::vector<Texture2> specularMaps3 = loadMaterialTextures(material, aiTextureType_METALNESS, "texture_specular");
+  textures.insert(textures.end(), specularMaps3.begin(), specularMaps3.end());
   // 3. normal maps
   std::vector<Texture2> normalMaps = loadMaterialTextures(material, aiTextureType_HEIGHT, "texture_normal");
   textures.insert(textures.end(), normalMaps.begin(), normalMaps.end());
@@ -152,7 +154,7 @@ static unsigned int TextureFromFile(const char *path, const std::string &directo
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
     stbi_image_free(data);
-	std::cout << filename << std::endl;
+	//std::cout << filename << std::endl;
   }
   else
   {
