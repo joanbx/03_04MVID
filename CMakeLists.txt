@@ -104,13 +104,17 @@ set(GAMEPLAY_SRC_FILES
 	${CMAKE_CURRENT_LIST_DIR}/src/gameplay/ship.cpp
 	${CMAKE_CURRENT_LIST_DIR}/src/gameplay/bullet.cpp
 	${CMAKE_CURRENT_LIST_DIR}/src/gameplay/enemy.cpp
-        ${CMAKE_CURRENT_LIST_DIR}/src/gameplay/enemyManager.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/src/gameplay/enemyManager.cpp
+	${CMAKE_CURRENT_LIST_DIR}/src/gameplay/floor.cpp
+	${CMAKE_CURRENT_LIST_DIR}/src/gameplay/asteroid.cpp
 	)
 set(GAMEPLAY_HEADER_FILES
     ${CMAKE_CURRENT_LIST_DIR}/include/gameplay/ship.hpp
 	${CMAKE_CURRENT_LIST_DIR}/include/gameplay/bullet.hpp
 	${CMAKE_CURRENT_LIST_DIR}/include/gameplay/enemy.hpp
-        ${CMAKE_CURRENT_LIST_DIR}/include/gameplay/enemyManager.hpp
+    ${CMAKE_CURRENT_LIST_DIR}/include/gameplay/enemyManager.hpp
+	${CMAKE_CURRENT_LIST_DIR}/include/gameplay/floor.hpp
+	${CMAKE_CURRENT_LIST_DIR}/include/gameplay/asteroid.hpp
 	)
 
 source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR}/src/gameplay/ PREFIX "Source Files" FILES ${GAMEPLAY_SRC_FILES})
