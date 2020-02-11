@@ -48,7 +48,7 @@ void Ship::handleInput(float dt) {
 			angleShip -= _angleShipStep * (speedR*0.75) * dt;
 			angleShip = std::max(angleShip, 0.0f);
 		}
-		std::cout << angleShip << std::endl;
+		//std::cout << angleShip << std::endl;
 	}
 
 	if (input->isKeyPressed(GLFW_KEY_SPACE) && _shoot == false) {

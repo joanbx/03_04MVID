@@ -114,8 +114,8 @@ Mesh Model::processMesh(aiMesh *mesh, const aiScene *scene) {
   // 3. normal maps
   std::vector<Texture2> normalMaps = loadMaterialTextures(material, aiTextureType_HEIGHT, "texture_normal");
   textures.insert(textures.end(), normalMaps.begin(), normalMaps.end());
-  //std::vector<Texture2> normalMaps2 = loadMaterialTextures(material, aiTextureType_NORMALS, "texture_normal");
-  //textures.insert(textures.end(), normalMaps2.begin(), normalMaps2.end());
+  std::vector<Texture2> normalMaps2 = loadMaterialTextures(material, aiTextureType_NORMALS, "texture_normal");
+  textures.insert(textures.end(), normalMaps2.begin(), normalMaps2.end());
   // 4. height maps
   std::vector<Texture2> heightMaps = loadMaterialTextures(material, aiTextureType_AMBIENT, "texture_height");
   textures.insert(textures.end(), heightMaps.begin(), heightMaps.end());

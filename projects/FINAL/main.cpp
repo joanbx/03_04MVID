@@ -158,7 +158,7 @@ int main(int, char* []) {
 	//const Shader s_light("../projects/EJ10_01/light.vs", "../projects/EJ10_01/light.fs");
 	const Model object("../assets/models/ships/SF_Fighter/SciFi_Fighter.obj"); //Sci_Fi_Fighter_Ship_v1/13897_Sci-Fi_Fighter_Ship_v1_l1.obj //Freighter/Freigther_BI_Export.obj
 	const Model enemy_("../assets/models/UFO/Low_poly_UFO.obj");
-	const Model msphere("../assets/models/geometries/Sphere01/sphere.fbx");
+	const Model msphere("../assets/models/bullets/sphere.obj");
 	const Model asteroid01("../assets/models/asteroid/asteroid.obj");
 	
 	const Texture t_albedoLava("../assets/textures/Lavabrick/Lavabrick_ILL.png", Texture::Format::RGB);
