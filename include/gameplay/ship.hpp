@@ -20,10 +20,14 @@ private:
 	GameObject _go;
 	std::vector<Bullet>& _bullets;
 	std::vector<Enemy>& _enemies;
-	glm::vec3 posShip = glm::vec3(0, 3, 0);
+	glm::vec3 posShip = glm::vec3(0, 1, 0);
 	glm::vec3 rotShip = glm::vec3(0, 0, 0);
 	float angleShip = 0.0f;
 	bool _shoot = false;
+	float _angleMAX = 30.0f;
+	float _angleShipStep = 1.0f;
+	float speedM = 1.0;
+	float speedR = 10.0;
 
 	void handleInput(float dt);
 

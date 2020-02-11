@@ -1,0 +1,19 @@
+# 3ds Max Wavefront OBJ Exporter v0.97b - (c)2007 guruware
+# File Created: 30.11.2018 10:48:04
+
+newmtl SciFi_Fighter_AK5
+	Ns 9.999999
+	Ni 1.500000
+	d 1.000000
+	Tr 0.000000
+	Tf 1.000000 1.000000 1.000000 
+	illum 2
+	Ka 0.588235 0.588235 0.588235
+	Kd 0.588235 0.588235 0.588235
+	Ks 1.000000 1.000000 1.000000
+	Ke 0.000000 0.000000 0.000000
+	map_Kd SF_Fighter-Albedo.jpg
+	map_Ks SF_Fighter-Specular.jpg
+	map_bump  Map__6_Normal_Bump.tga
+	
+	

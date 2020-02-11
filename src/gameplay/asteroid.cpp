@@ -57,6 +57,6 @@ void Asteroid::asteroidDraw()
 	_go.Init();
 	_go.Translate(_posAsteroid);
 	_go.Rotate(_angleAsteroid, glm::vec3(0.0f, 1.0f, 0.0f));
-	_go.Scale(glm::vec3(0.005f));
+	_go.Scale(glm::vec3(0.25f));
 	_go.readyToDraw();
 }

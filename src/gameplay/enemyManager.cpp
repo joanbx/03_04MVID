@@ -30,7 +30,7 @@ void EnemyManager::UpdatePS(float dt)
 {
 	for (auto& enemy : _enemies) {
 		if (enemy.getDestroy() == true && !enemy.getPS().getFinished()) {
-			enemy.getPS().Update(dt, 3, enemy.getGO(), glm::vec3(0.0f, 0.0f, 0.5f));
+			enemy.getPS().Update(dt, 12, enemy.getGO(), glm::vec3(0.0f, 0.0f, 0.5f));
 		}
 		else if (enemy.getDestroy() == true && enemy.getPS().getFinished()) {
 			std::cout << "START ENEMY " << std::endl;

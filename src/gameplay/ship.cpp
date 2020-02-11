@@ -1,7 +1,6 @@
 #include <gameplay\ship.hpp>
 
 
-
 Ship::Ship(SceneGraph& sg, Node& node, std::vector<Bullet>& bullets, std::vector<Enemy>& enemies) : _go(sg, node), _bullets(bullets), _enemies(enemies){
 
 }
@@ -24,7 +23,7 @@ void Ship::Update(float dt) {
 void Ship::handleInput(float dt) {
 
 	Input* input = Input::instance();
-
+	bool isMovingSide = false;
 	if (input->isKeyPressed(GLFW_KEY_W)) {
 		shipMovement(MovementShip::ShipForward, dt);
 	}
@@ -33,9 +32,23 @@ void Ship::handleInput(float dt) {
 	}
 	if (input->isKeyPressed(GLFW_KEY_A)) {
 		shipMovement(MovementShip::ShipLeft, dt);
+		isMovingSide = true;
 	}
 	if (input->isKeyPressed(GLFW_KEY_D)) {
 		shipMovement(MovementShip::ShipRight, dt);
+		isMovingSide = true;
+	}
+
+	if (isMovingSide == false && angleShip!=0) {
+		if (angleShip < 0.1f) {
+			angleShip += _angleShipStep * (speedR *0.75) * dt;
+			angleShip = std::min(angleShip, 0.0f);
+		}
+		else if (angleShip > 0.1f) {
+			angleShip -= _angleShipStep * (speedR*0.75) * dt;
+			angleShip = std::max(angleShip, 0.0f);
+		}
+		std::cout << angleShip << std::endl;
 	}
 
 	if (input->isKeyPressed(GLFW_KEY_SPACE) && _shoot == false) {
@@ -67,15 +80,11 @@ void Ship::shipShoot() {
 }
 
 void Ship::shipMovement(MovementShip direction, float dt) {
-		const float velocityM = 1 * dt;
+		const float velocityM = speedM * dt;
 		glm::vec3 front = glm::vec3(0, 0, -1);
 		glm::vec3 right = glm::vec3(1, 0, 0);
 		//Rotation
-		const float velocityR = 10 * dt;
-
-		float angleMAX = 30.0f;
-		float _angleShip = 1.0f;
-	
+		const float velocityR = speedR * dt;
 
 		switch (direction) {
 			case MovementShip::ShipForward: 
@@ -86,20 +95,18 @@ void Ship::shipMovement(MovementShip direction, float dt) {
 				break;
 			case MovementShip::ShipLeft: 
 				posShip -= right * velocityM; 
-				rotShip = glm::vec3(0, 1, 0);
-				angleShip += _angleShip * velocityR;
-				if (angleShip > angleMAX) angleShip = angleMAX;
+				rotShip = glm::vec3(0, 0, -1);
+				angleShip += _angleShipStep * velocityR;
+				if (angleShip > _angleMAX) angleShip = _angleMAX;
 				break;
 			case MovementShip::ShipRight: 
 				posShip += right * velocityM; 
-				rotShip = glm::vec3(0, 1, 0);
-				angleShip -= _angleShip * velocityR;
-				if (angleShip < -angleMAX) angleShip = -angleMAX;
+				rotShip = glm::vec3(0, 0, -1);
+				angleShip -= _angleShipStep * velocityR;
+				if (angleShip < -_angleMAX) angleShip = -_angleMAX;
 				break;
 			default:;
 		}
-
-
 }
 
 void Ship::checkCollisionBullet() {
@@ -122,11 +129,11 @@ void Ship::checkCollisionBullet() {
 void Ship::shipDraw() {
 	_go.Init();
 	_go.Translate(posShip);
-	_go.Rotate(-90.0f, glm::vec3(1.0f, 0.0f, 0.0f));
+	//_go.Rotate(-90.0f, glm::vec3(1.0f, 0.0f, 0.0f));
 	//_go.Rotate(180.0f, glm::vec3(0.0f, 0.0f, 1.0f));
-	//_go.Rotate(180.0f, glm::vec3(0.0f, 1.0f, 0.0f));
+	_go.Rotate(180.0f, glm::vec3(0.0f, 1.0f, 0.0f));
 	if (angleShip != 0.0f) _go.Rotate(angleShip, rotShip);
 	//_go.Scale(glm::vec3(0.001f, 0.001f, 0.001f));
-	_go.Scale(glm::vec3(0.005f, 0.005f, 0.005f));
+	_go.Scale(glm::vec3(0.1f, 0.1f, 0.1f));
 	_go.readyToDraw();
 }

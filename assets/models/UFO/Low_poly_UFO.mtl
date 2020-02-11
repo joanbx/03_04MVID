@@ -12,10 +12,8 @@ newmtl UFO_texture
 	Kd 0.588235 0.588235 0.588235
 	Ks 0.000000 0.000000 0.000000
 	Ke 0.000000 0.000000 0.000000
-	map_Ka ufo_diffuse.png
 	map_Kd ufo_diffuse.png
-	map_Ke ufo_diffuse_glow.png
-	map_d ufo_diffuse.png
+	map_ks ufo_spec.png
 	map_bump ufo_normal.png
 
 newmtl UFO_texture2

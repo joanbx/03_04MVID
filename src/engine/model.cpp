@@ -15,7 +15,7 @@ void Model::loadModel(std::string const path) {
   // read file via ASSIMP
   Assimp::Importer importer;
   const aiScene* scene = importer.ReadFile(path.c_str(),
-    aiProcess_Triangulate  | aiProcess_CalcTangentSpace);
+    aiProcess_Triangulate  | aiProcess_FlipUVs |aiProcess_CalcTangentSpace);
   // check for errors
   if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) { // if is Not Zero
     std::cout << "ERROR::ASSIMP:: " << importer.GetErrorString() << std::endl;
@@ -114,8 +114,8 @@ Mesh Model::processMesh(aiMesh *mesh, const aiScene *scene) {
   // 3. normal maps
   std::vector<Texture2> normalMaps = loadMaterialTextures(material, aiTextureType_HEIGHT, "texture_normal");
   textures.insert(textures.end(), normalMaps.begin(), normalMaps.end());
-  std::vector<Texture2> normalMaps2 = loadMaterialTextures(material, aiTextureType_NORMALS, "texture_normal");
-  textures.insert(textures.end(), normalMaps2.begin(), normalMaps2.end());
+  //std::vector<Texture2> normalMaps2 = loadMaterialTextures(material, aiTextureType_NORMALS, "texture_normal");
+  //textures.insert(textures.end(), normalMaps2.begin(), normalMaps2.end());
   // 4. height maps
   std::vector<Texture2> heightMaps = loadMaterialTextures(material, aiTextureType_AMBIENT, "texture_height");
   textures.insert(textures.end(), heightMaps.begin(), heightMaps.end());

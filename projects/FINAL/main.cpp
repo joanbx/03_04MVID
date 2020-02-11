@@ -156,10 +156,10 @@ int main(int, char* []) {
 	const Shader s_particle("../projects/FINAL/particle.vs", "../projects/FINAL/particle.fs");
 
 	//const Shader s_light("../projects/EJ10_01/light.vs", "../projects/EJ10_01/light.fs");
-	const Model object("../assets/models/ships/FBX/titaniun-fighter.fbx"); //Sci_Fi_Fighter_Ship_v1/13897_Sci-Fi_Fighter_Ship_v1_l1.obj //Freighter/Freigther_BI_Export.obj
+	const Model object("../assets/models/ships/SF_Fighter/SciFi_Fighter.obj"); //Sci_Fi_Fighter_Ship_v1/13897_Sci-Fi_Fighter_Ship_v1_l1.obj //Freighter/Freigther_BI_Export.obj
 	const Model enemy_("../assets/models/UFO/Low_poly_UFO.obj");
 	const Model msphere("../assets/models/geometries/Sphere01/sphere.fbx");
-	const Model asteroid01("../assets/models/asteroid/Asteroid 1.fbx");
+	const Model asteroid01("../assets/models/asteroid/asteroid.obj");
 	
 	const Texture t_albedoLava("../assets/textures/Lavabrick/Lavabrick_ILL.png", Texture::Format::RGB);
 	const Texture t_specularLava("../assets/textures/Lavabrick/lavabrick_TEX_DISP.jpg", Texture::Format::RGB);
@@ -181,7 +181,7 @@ int main(int, char* []) {
 	s_particle.set("proj", camera.getProj());
 	s_particle.set("view", camera.getViewMatrix());
 	
-	ParticleSystem ps(s_particle,t_particle,quadTest,30);
+	ParticleSystem ps(s_particle,t_particle,quadTest,6);
 	//s_particle.set("sprite", 0);
 	
 
@@ -193,12 +193,12 @@ int main(int, char* []) {
 	//DirLight dirLight;
 
 	std::vector<PointLight> pointLights = {
-		{ glm::vec3(0.0f, 3.0f, 0.0f), glm::vec3(0.2f, 0.2f, 0.2f), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(1.0f, 1.0f, 1.0f), 1.0f, 0.09f, 0.032f, glm::vec3(1.0f, 1.0f, 1.0f) },
+		{ glm::vec3(0.0f, 4.5f, 0.0f), glm::vec3(0.2f, 0.2f, 0.2f), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(1.0f, 1.0f, 1.0f), 1.0f, 0.09f, 0.032f, glm::vec3(1.0f, 1.0f, 1.0f) },
 		//{ glm::vec3(3.0f, 2.0f, 2.0f), glm::vec3(0.2f, 0.2f, 0.2f), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(1.0f, 1.0f, 1.0f), 1.0f, 0.09f, 0.032f, glm::vec3(1.0f, 1.0f, 1.0f) },
 		//{ glm::vec3(-3.0f, 2.0f, -2.0f), glm::vec3(0.2f, 0.2f, 0.2f), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(1.0f, 1.0f, 1.0f), 1.0f, 0.09f, 0.032f, glm::vec3(1.0f, 1.0f, 1.0f) }
 	};
 	std::vector<SpotLight> spotLights = {
-		{ glm::vec3(0.0f, 3.0f, 0.0f), glm::vec3(0.0f, -1.0f, 0.0f), glm::vec3(0.2f, 0.2f, 0.2f), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(1.0f, 1.0f, 1.0f), 1.0f, 0.2f, 0.32f, 30.0, 40.0, glm::vec3(1.0f, 1.0f, 1.0f) },
+		{ glm::vec3(0.0f, 4.5f, 0.0f), glm::vec3(0.0f, -1.0f, 0.0f), glm::vec3(0.2f, 0.2f, 0.2f), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(1.0f, 1.0f, 1.0f), 1.0f, 0.2f, 0.32f, 30.0, 40.0, glm::vec3(1.0f, 1.0f, 1.0f) },
 		//{ glm::vec3(1.0f, 0.25f, 0.0f), glm::vec3(0.0f, -1.0f, 0.0f), glm::vec3(0.2f, 0.2f, 0.2f), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(1.0f, 1.0f, 1.0f), 1.0f, 0.2f, 0.32f, 30.0, 40.0, glm::vec3(1.0f, 1.0f, 1.0f) },
 		//{ glm::vec3(0.0f, 0.25f, 0.0f), glm::vec3(0.0f, -1.0f, 0.0f), glm::vec3(0.2f, 0.2f, 0.2f), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(1.0f, 1.0f, 1.0f), 1.0f, 0.2f, 0.32f, 30.0, 40.0, glm::vec3(1.0f, 1.0f, 1.0f) }
 	};

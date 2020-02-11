@@ -43,12 +43,13 @@ void ParticleSystem::Update(float dt, uint32_t newParticles, GameObject& go, glm
 				p.Color.a -= dt * 2.5;
 			}
 		}
-		if (_scalemulti > 10 && expansionDirection) { expansionDirection = false; }
-		else if (_scalemulti <= 0.2 && !expansionDirection) { expansionDirection = true; loop++; }
+		if (_scalemulti > 5 && expansionDirection) { expansionDirection = false; }
+		else if (_scalemulti <= 1.0 && !expansionDirection) { expansionDirection = true; loop++; }
 
-		//std::cout << _scalemulti << std::endl;
-		if (expansionDirection) _scalemulti *= 1.01f;
-		else _scalemulti /= 1.99f;
+		std::cout << _scalemulti << std::endl;
+		if (expansionDirection) _scalemulti *= (1+(5.0f * dt));
+		else _scalemulti /= (1+(5.0f * dt));
+
 		Draw(go.getProj(), go.getView());
 	}
 	else {
