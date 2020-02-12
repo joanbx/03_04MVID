@@ -34,7 +34,7 @@ set(ENGINE_SRC_FILES
     ${CMAKE_CURRENT_LIST_DIR}/src/engine/gameObject.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/engine/easyGO.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/engine/textRenderer.cpp
-	${CMAKE_CURRENT_LIST_DIR}/src/engine/particleSystem.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/src/engine/particleSystem.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/engine/geometry/cube.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/engine/geometry/extcube.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/engine/geometry/geometry.cpp
@@ -61,7 +61,7 @@ set(ENGINE_HEADER_FILES
     ${CMAKE_CURRENT_LIST_DIR}/include/engine/gameObject.hpp
     ${CMAKE_CURRENT_LIST_DIR}/include/engine/easyGO.hpp
     ${CMAKE_CURRENT_LIST_DIR}/include/engine/textRenderer.hpp
-	${CMAKE_CURRENT_LIST_DIR}/include/engine/particleSystem.hpp
+    ${CMAKE_CURRENT_LIST_DIR}/include/engine/particleSystem.hpp
     ${CMAKE_CURRENT_LIST_DIR}/include/engine/geometry/cube.hpp
     ${CMAKE_CURRENT_LIST_DIR}/include/engine/geometry/extcube.hpp
     ${CMAKE_CURRENT_LIST_DIR}/include/engine/geometry/geometry.hpp
@@ -101,6 +101,7 @@ add_custom_command(TARGET EngineLib POST_BUILD
 #****************************************************
 
 set(GAMEPLAY_SRC_FILES
+	${CMAKE_CURRENT_LIST_DIR}/src/gameplay/game.cpp
 	${CMAKE_CURRENT_LIST_DIR}/src/gameplay/ship.cpp
 	${CMAKE_CURRENT_LIST_DIR}/src/gameplay/bullet.cpp
 	${CMAKE_CURRENT_LIST_DIR}/src/gameplay/enemy.cpp
@@ -109,6 +110,7 @@ set(GAMEPLAY_SRC_FILES
 	${CMAKE_CURRENT_LIST_DIR}/src/gameplay/asteroid.cpp
 	)
 set(GAMEPLAY_HEADER_FILES
+	${CMAKE_CURRENT_LIST_DIR}/include/gameplay/game.hpp
     ${CMAKE_CURRENT_LIST_DIR}/include/gameplay/ship.hpp
 	${CMAKE_CURRENT_LIST_DIR}/include/gameplay/bullet.hpp
 	${CMAKE_CURRENT_LIST_DIR}/include/gameplay/enemy.hpp

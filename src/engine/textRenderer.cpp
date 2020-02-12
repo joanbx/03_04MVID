@@ -24,8 +24,8 @@ TextRenderer::TextRenderer(const Shader& textShader, uint32_t width, uint32_t he
 
 TextRenderer::~TextRenderer()
 {
-	//glDeleteVertexArrays(1, &VAO);
-	//glDeleteBuffers(1, &VBO);
+	glDeleteVertexArrays(1, &VAO);
+	glDeleteBuffers(1, &VBO);
 }
 
 void TextRenderer::Load(std::string font, uint32_t fontSize)
@@ -92,50 +92,68 @@ void TextRenderer::Load(std::string font, uint32_t fontSize)
 	FT_Done_FreeType(ft);
 }
 
-void TextRenderer::RenderText(std::string text, float x, float y, float scale, glm::vec3 color)
+void TextRenderer::RenderText()
 {
 	// Activate corresponding render state	
 	
 	_textShader.use();
 	_textShader.set("projection", glm::ortho(0.0f, static_cast<float>(_width), static_cast<float>(_height), 0.0f));
-	_textShader.set("text", 0);
-	_textShader.set("textColor", color);
-	glActiveTexture(GL_TEXTURE0);
-	glBindVertexArray(VAO);
+
 	//std::cout << "RENDER TEXT: " << color.x  << std::endl;
 	// Iterate through all characters
-	std::string::const_iterator c;
-	for (c = text.begin(); c != text.end(); c++)
-	{
-		Character ch = Characters[*c];
+	for (auto& _rq : _renderQueue) {
+		_textShader.set("text", 0);
+		_textShader.set("textColor", _rq.TextQueue_color);
+		glActiveTexture(GL_TEXTURE0);
+		glBindVertexArray(VAO);
+		std::string::const_iterator c;
+		for (c = _rq.TextQueue_text.begin(); c != _rq.TextQueue_text.end(); c++)
+		{
+			Character ch = Characters[*c];
 
-		float xpos = x + ch.Bearing.x * scale;
-		float ypos = y + (Characters['H'].Bearing.y - ch.Bearing.y) * scale;
+			float xpos = _rq.TextQueue_x + ch.Bearing.x * _rq.TextQueue_scale;
+			float ypos = _rq.TextQueue_y + (Characters['H'].Bearing.y - ch.Bearing.y) * _rq.TextQueue_scale;
 
-		float w = ch.Size.x * scale;
-		float h = ch.Size.y * scale;
-		// Update VBO for each character
-		float vertices[6][4] = {
-			{ xpos,     ypos + h,   0.0, 1.0 },
-			{ xpos + w, ypos,       1.0, 0.0 },
-			{ xpos,     ypos,       0.0, 0.0 },
+			float w = ch.Size.x * _rq.TextQueue_scale;
+			float h = ch.Size.y * _rq.TextQueue_scale;
+			// Update VBO for each character
+			float vertices[6][4] = {
+				{ xpos,     ypos + h,   0.0, 1.0 },
+				{ xpos + w, ypos,       1.0, 0.0 },
+				{ xpos,     ypos,       0.0, 0.0 },
 
-			{ xpos,     ypos + h,   0.0, 1.0 },
-			{ xpos + w, ypos + h,   1.0, 1.0 },
-			{ xpos + w, ypos,       1.0, 0.0 }
-		};
-		// Render glyph texture over quad
-		glBindTexture(GL_TEXTURE_2D, ch.TextureID);
-		// Update content of VBO memory
-		glBindBuffer(GL_ARRAY_BUFFER, VBO);
-		glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vertices), vertices); // Be sure to use glBufferSubData and not glBufferData
+				{ xpos,     ypos + h,   0.0, 1.0 },
+				{ xpos + w, ypos + h,   1.0, 1.0 },
+				{ xpos + w, ypos,       1.0, 0.0 }
+			};
+			// Render glyph texture over quad
+			glBindTexture(GL_TEXTURE_2D, ch.TextureID);
+			// Update content of VBO memory
+			glBindBuffer(GL_ARRAY_BUFFER, VBO);
+			glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vertices), vertices); // Be sure to use glBufferSubData and not glBufferData
 
-		glBindBuffer(GL_ARRAY_BUFFER, 0);
-		// Render quad
-		glDrawArrays(GL_TRIANGLES, 0, 6);
-		// Now advance cursors for next glyph
-		x += (ch.Advance >> 6)* scale; // Bitshift by 6 to get value in pixels (1/64th times 2^6 = 64)
+			glBindBuffer(GL_ARRAY_BUFFER, 0);
+			// Render quad
+			glDrawArrays(GL_TRIANGLES, 0, 6);
+			// Now advance cursors for next glyph
+			_rq.TextQueue_x += (ch.Advance >> 6)* _rq.TextQueue_scale; // Bitshift by 6 to get value in pixels (1/64th times 2^6 = 64)
+		}
+		glBindVertexArray(0);
+		glBindTexture(GL_TEXTURE_2D, 0);
 	}
-	glBindVertexArray(0);
-	glBindTexture(GL_TEXTURE_2D, 0);
+	_renderQueue.clear();
+
+	
+}
+
+void TextRenderer::addTextToRender(std::string text, float x, float y, float scale, glm::vec3 color) {
+
+	TextQueue newTextQueue;
+	newTextQueue.TextQueue_text = text;
+	newTextQueue.TextQueue_x = x;
+	newTextQueue.TextQueue_y = y;
+	newTextQueue.TextQueue_scale = scale;
+	newTextQueue.TextQueue_color = color;
+
+	_renderQueue.push_back(newTextQueue);
 }
