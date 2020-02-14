@@ -8,7 +8,8 @@ Bullet::Bullet(SceneGraph& sg, Node& node, Bullet::Bullettypes type) : _go(sg,no
 }
 
 void Bullet::Start() {
-
+	_used = false;
+	_posBullet = glm::vec3(0, 1, 0);
 }
 
 void Bullet::Update(float dt) {
@@ -62,6 +63,11 @@ bool Bullet::CheckCollisionXZ(GameObject go) // AABB - AABB collision
 }
 
 void Bullet::setDirection(glm::vec3 direction) { _direction = direction; }
+
+void Bullet::setSpeed(float speed)
+{
+	_speed = speed;
+}
 
 void Bullet::bulletDraw() {
 	//std::cout << "Bullet Draw" << std::endl;

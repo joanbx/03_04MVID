@@ -4,7 +4,6 @@
 #include <engine\gameObject.hpp>
 #include <GLFW\glfw3.h>
 #include <gameplay\bullet.hpp>
-#include <chrono>
 #include <gameplay\ship.hpp>
 #include <gameplay\enemy.hpp>
 #include <engine\particleSystem.hpp>
@@ -22,20 +21,24 @@ public:
 
 	void UpdatePS(float dt);
 
+	void setTimeStart(float time);
+
+	float getTimeElapsed() { return _time_elapsed; }
 
 private:
-
 
 	Ship& _player;
 	std::vector<Bullet>& _bullets;
 	std::vector<Enemy>& _enemies;
 	std::vector<Asteroid>& _asteroids;
 	bool _prevInScene = false;
-	float _speed = 0.0025f;
-	std::chrono::milliseconds  time_start;
-	std::chrono::milliseconds  time_elapsed;
-	std::uint32_t thresholdTimeShoot = 1000; //In ms
-
+	float _initialSpeedEnemy = 0.5f;
+	float _initalFrequencyShootEnemy = 3.0f;
+	float _initialEnemyBulletSpeed = 0.5f;
+	float  _time_start;
+	float  _time_elapsed;
+	int _maxEnemies = 1;
+	int _maxAsteroids = 1;
 
 };
 

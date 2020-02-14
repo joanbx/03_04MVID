@@ -24,12 +24,13 @@ void Game::Start()
 
 	//Define models
 	const Model object("../assets/models/ships/SF_Fighter/SciFi_Fighter.obj");
-	const Model enemy_("../assets/models/UFO/Low_poly_UFO.obj");
+	const Model enemy01("../assets/models/UFO/Low_poly_UFO.obj");
+	const Model enemy02("../assets/models/ships/ship03/Spaceship.obj");
 	const Model msphere("../assets/models/bullets/sphere.obj");
 	const Model asteroid01("../assets/models/asteroid/asteroid.obj");
 
 	//Define Geometries
-	const Sphere sphere(0.1f, 50, 50);
+	//const Sphere sphere(0.1f, 50, 50);
 	const Cube cube(1.0f);
 	const Quad quad(1.0f);
 	const Quad quadTest(1.0f);
@@ -56,17 +57,18 @@ void Game::Start()
 	//Define shadow
 	Shadow shadow(s_depth, s_debug, quadTest, dirLight.getDirection());
 
-	//Define Material (main shader with shadow and light properties)
+	//Define Material (main shader with shadow and light properties custumized for our normal shader)
 	Material mainMaterial(s_normal, shadow, dirLight, spotLights, pointLights);
 
-	//Load Assets (container of Models and Geometries along its texture)
+	//Load Assets (container of all Models and Geometries along its textures used in the game)
 	Assets assets;
 	int assetFloor = assets.addNewGeometry(quad, t_albedo, t_specular, t_normal);
 	int assetFloor2 = assets.addNewGeometry(quad, t_albedoLava, t_specularLava, t_normalLava);
 	int assetShip = assets.addNewModel(object); 
-	int assetEnemy = assets.addNewModel(enemy_);
+	int assetEnemy01 = assets.addNewModel(enemy01);
+	int assetEnemy02 = assets.addNewModel(enemy02);
 	int assetAsteroid01 = assets.addNewModel(asteroid01);
-	int assetBulletType01 = assets.addNewGeometry(cube, t_albedo, t_specular, t_normal);
+	int assetBulletType01 = assets.addNewModel(msphere);
 	int assetBulletType02 = assets.addNewModel(msphere);
 	
 	//Camera
@@ -86,9 +88,9 @@ void Game::Start()
 
 	//Pool of GameObjects with the asset of the floor
 	std::vector<GameObject> floors = {
-		{sceneGraph, Node(assetFloor, mainMaterial, Node::Type::isGeometry)},
-		{sceneGraph, Node(assetFloor, mainMaterial, Node::Type::isGeometry)},
-		{ sceneGraph, Node(assetFloor, mainMaterial, Node::Type::isGeometry) }
+		{sceneGraph, Node(assetFloor2, mainMaterial, Node::Type::isGeometry)},
+		{sceneGraph, Node(assetFloor2, mainMaterial, Node::Type::isGeometry)},
+		{ sceneGraph, Node(assetFloor2, mainMaterial, Node::Type::isGeometry) }
 	};
 	//Floor manager 
 	Floor floorMng(floors);
@@ -104,26 +106,32 @@ void Game::Start()
 	};
 	//Bullet Player Pool
 	std::vector<Bullet> bullets01Player = {
-		Bullet(sceneGraph, Node(assetBulletType01, mainMaterial, Node::Type::isGeometry),Bullet::Bullettypes::isPlayer),
-		Bullet(sceneGraph, Node(assetBulletType01, mainMaterial, Node::Type::isGeometry),Bullet::Bullettypes::isPlayer),
-		Bullet(sceneGraph, Node(assetBulletType01, mainMaterial, Node::Type::isGeometry),Bullet::Bullettypes::isPlayer),
-		Bullet(sceneGraph, Node(assetBulletType01, mainMaterial, Node::Type::isGeometry),Bullet::Bullettypes::isPlayer),
-		Bullet(sceneGraph, Node(assetBulletType01, mainMaterial, Node::Type::isGeometry),Bullet::Bullettypes::isPlayer),
-		Bullet(sceneGraph, Node(assetBulletType01, mainMaterial, Node::Type::isGeometry),Bullet::Bullettypes::isPlayer),
-		Bullet(sceneGraph, Node(assetBulletType01, mainMaterial, Node::Type::isGeometry),Bullet::Bullettypes::isPlayer),
-		Bullet(sceneGraph, Node(assetBulletType01, mainMaterial, Node::Type::isGeometry),Bullet::Bullettypes::isPlayer)
+		Bullet(sceneGraph, Node(assetBulletType01, mainMaterial, Node::Type::isModel),Bullet::Bullettypes::isPlayer),
+		Bullet(sceneGraph, Node(assetBulletType01, mainMaterial, Node::Type::isModel),Bullet::Bullettypes::isPlayer),
+		Bullet(sceneGraph, Node(assetBulletType01, mainMaterial, Node::Type::isModel),Bullet::Bullettypes::isPlayer),
+		Bullet(sceneGraph, Node(assetBulletType01, mainMaterial, Node::Type::isModel),Bullet::Bullettypes::isPlayer),
+		Bullet(sceneGraph, Node(assetBulletType01, mainMaterial, Node::Type::isModel),Bullet::Bullettypes::isPlayer),
+		Bullet(sceneGraph, Node(assetBulletType01, mainMaterial, Node::Type::isModel),Bullet::Bullettypes::isPlayer),
+		Bullet(sceneGraph, Node(assetBulletType01, mainMaterial, Node::Type::isModel),Bullet::Bullettypes::isPlayer),
+		Bullet(sceneGraph, Node(assetBulletType01, mainMaterial, Node::Type::isModel),Bullet::Bullettypes::isPlayer)
 	};
 
 	//Enemy pool
 	std::vector<Enemy> enemies = {
-		Enemy(sceneGraph, Node(assetEnemy, mainMaterial, Node::Type::isModel), bullets01Enemy, ps),
-		Enemy(sceneGraph, Node(assetEnemy, mainMaterial, Node::Type::isModel), bullets01Enemy, ps)
-		//Enemy(sceneGraph, Node(assetEnemy, mainMaterial, Node::Type::isModel), bullets01Enemy),
-		//Enemy(sceneGraph, Node(assetEnemy, mainMaterial, Node::Type::isModel), bullets01Enemy)
+		Enemy(sceneGraph, Node(assetEnemy01, mainMaterial, Node::Type::isModel), bullets01Enemy, ps, Enemy::EnemyTpye::EnemyVersion01),
+		Enemy(sceneGraph, Node(assetEnemy01, mainMaterial, Node::Type::isModel), bullets01Enemy, ps, Enemy::EnemyTpye::EnemyVersion01),
+		Enemy(sceneGraph, Node(assetEnemy02, mainMaterial, Node::Type::isModel), bullets01Enemy, ps, Enemy::EnemyTpye::EnemyVersion02),
+		Enemy(sceneGraph, Node(assetEnemy02, mainMaterial, Node::Type::isModel), bullets01Enemy, ps, Enemy::EnemyTpye::EnemyVersion02)
 	};
 
 	//Asteroid pool
 	std::vector<Asteroid> asteroids = {
+		{sceneGraph, Node(assetAsteroid01, mainMaterial, Node::Type::isModel)},
+		{sceneGraph, Node(assetAsteroid01, mainMaterial, Node::Type::isModel)},
+		{sceneGraph, Node(assetAsteroid01, mainMaterial, Node::Type::isModel)},
+		{sceneGraph, Node(assetAsteroid01, mainMaterial, Node::Type::isModel)},
+		{sceneGraph, Node(assetAsteroid01, mainMaterial, Node::Type::isModel)},
+		{sceneGraph, Node(assetAsteroid01, mainMaterial, Node::Type::isModel)},
 		{sceneGraph, Node(assetAsteroid01, mainMaterial, Node::Type::isModel)},
 		{sceneGraph, Node(assetAsteroid01, mainMaterial, Node::Type::isModel)}
 	};
@@ -147,9 +155,23 @@ void Game::Start()
 
 void Game::Update(float dt, SceneGraph& sceneGraph, Ship& ship, Floor& floor, EnemyManager& enemyMng, TextRenderer& textRenderer)
 {
-	sceneGraph.updateNodes();
 	
+	sceneGraph.updateNodes();
+
 	if (_gameStarted) {
+
+		if (_isFirstFrameinGame) {
+			enemyMng.Start();
+			ship.Start();
+			enemyMng.setTimeStart(glfwGetTime());
+			prevLifeShip = ship.getLife();
+			_isFirstFrameinGame = false;
+		}
+		else if (_restartEnemies) {
+			enemyMng.Start();
+			_restartEnemies = false;
+		}
+
 		floor.Update(dt);
 		
 		ship.Update(dt);
@@ -158,22 +180,32 @@ void Game::Update(float dt, SceneGraph& sceneGraph, Ship& ship, Floor& floor, En
 
 		enemyMng.UpdatePS(dt);
 
-	}
+		textRenderer.addTextToRender("Life: "+ std::to_string(ship.getLife()), 5, 5, 1.0, glm::vec3(1.0, 1.0, 1.0)); //Text: life
+		textRenderer.addTextToRender("Points: " + std::to_string(ship.getKills()), _width - 200, 5, 1.0, glm::vec3(1.0, 1.0, 1.0)); //Text: Points
+		textRenderer.addTextToRender("Time: " + std::to_string((int)enemyMng.getTimeElapsed()), 5, _height - 25, 1.0, glm::vec3(1.0, 1.0, 1.0)); //Text: Time
 
+		if (prevLifeShip != ship.getLife()) {
+			_restartEnemies = true;
+		}
+		prevLifeShip = ship.getLife();
+
+		if (ship.getLife() == 0) { 
+			_isFirstFrameinGame = true;
+			_gameStarted = false; 
+		}
+		
+	}
 	
 	else {
 		textRenderer.addTextToRender("Shoot Em Up 03_04MVID", _width / 2 - 130.0, _height / 2 -100, 1.0, glm::vec3(1.0, 1.0, 1.0));
-		bool blinker = (int)glfwGetTime() % 2 == 1;
-		std::string test = blinker ? "true" : "false";
-		std::cout << blinker << std::endl;
 
-		if (!blinker) {
+		if ((int)glfwGetTime() % 2 == 1) {
 			textRenderer.addTextToRender("PRESS X TO START ", _width / 2 - 110.0, _height / 2, 1.0, glm::vec3(1.0, 1.0, 1.0));
 		}
 
 		startButton();
 	}
-
+	
 	textRenderer.RenderText();
 	
 }

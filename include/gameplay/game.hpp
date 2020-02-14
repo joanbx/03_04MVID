@@ -31,7 +31,9 @@ private:
 	uint32_t _width;
 	uint32_t _height;
 	bool _gameStarted = false;
-
+	bool _isFirstFrameinGame = true;
+	uint32_t prevLifeShip;
+	bool _restartEnemies = false;
 };
 
 #endif

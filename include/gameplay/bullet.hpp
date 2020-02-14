@@ -35,6 +35,7 @@ public:
 
 	bool getUsed() { return _used; }
 	void setDirection(glm::vec3 direction);
+	void setSpeed(float speed);
 	glm::vec3 getDirection() { return _direction; }
 	GameObject& getGO() { return _go; }
 
@@ -43,7 +44,7 @@ private:
 	GameObject _go;
 	Bullet::Bullettypes& _type;
 	float _speed = 2.25f;
-	glm::vec3 _posBullet = glm::vec3(0, 1, 0);
+	glm::vec3 _posBullet;
 	glm::vec3 _rotBullet = glm::vec3(0, 0, 0);
 	float _angleBullet = 0.0f;
 	glm::vec3 _direction = glm::vec3(0,0,0);

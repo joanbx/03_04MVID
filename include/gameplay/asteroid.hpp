@@ -20,13 +20,14 @@ public:
 
 	void setUse(bool use);
 
-
+	void setSpeed(float speed);
 
 	bool getUsed() { return _used; }
 	
 	
 	glm::vec3 getDirection() { return _direction; }
 	GameObject& getGO() { return _go; }
+	float getSpeed() { return _speedTranslation; }
 
 private:
 

@@ -23,7 +23,6 @@ private:
 	glm::vec3 _size;
 	SceneGraph& _sceneGraph;
 	int _idNode;
-	glm::mat4 go;
 	Transform _transform;
 	
 
@@ -38,10 +37,11 @@ public:
 
 
 	void Init();
-	void Translate(glm::vec3& position);
-	void Rotate(float radians, glm::vec3& direction);
-	void Scale(glm::vec3& scale);
-	void setSize(glm::vec3& size);
+	void Translate(glm::vec3 position);
+	void Rotate(float radians, glm::vec3 direction);
+	void Scale(glm::vec3 scale);
+	void setSize(glm::vec3 size = glm::vec3(0.5f,0.5f,0.5f));
+	
 	void readyToDraw();
 
 	//void Draw(const Shader& shader, const Geometry& geometry, const glm::mat4& view, const glm::mat4& proj, bool isNormal);
@@ -56,6 +56,7 @@ public:
 
 	bool in_frustum(glm::vec3 offset = glm::vec3(0.0f, 0.0f, 0.0f));
 	glm::vec2 camBounds();
+	bool CheckCollisionXZ(GameObject go, glm::vec3 offset = glm::vec3(0.0f));
 	glm::mat4 getProj() { return _sceneGraph.getCamera().getProj(); }
 	glm::mat4 getView() { return _sceneGraph.getCamera().getViewMatrix(); }
 };

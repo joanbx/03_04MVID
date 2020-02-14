@@ -15,12 +15,12 @@ void Asteroid::Start()
 	//initial pos
 	glm::vec2 cambounds = _go.camBounds();
 	float x = -cambounds.x + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (2 * cambounds.x)));
-	_posAsteroid= glm::vec3(x, _go.Position().y, -cambounds.y - size.y);
+	_posAsteroid = glm::vec3(x, _go.Position().y, -cambounds.y - _go.getSize().z);
 	if (x < 0) {
-		_modPos = glm::vec3(0.4f, 0, 1.0f);
+		_modPos = glm::vec3(static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (0.5f))), 0, 1.0f);
 	}
 	else {
-		_modPos = glm::vec3(-0.4f, 0, 1.0f);
+		_modPos = glm::vec3(-static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (0.5f))), 0, 1.0f);
 	}
 	_go.Translate(_posAsteroid);
 }
@@ -33,6 +33,7 @@ void Asteroid::Update(float dt)
 		_angleAsteroid += _speedRotation * dt;
 		if (_angleAsteroid > 360) _angleAsteroid = 0;
 		//std::cout << _angleAsteroid << std::endl;
+		
 		asteroidDraw();
 		
 		if (_go.in_frustum() == false && _inFrustum) {
@@ -49,6 +50,11 @@ void Asteroid::Update(float dt)
 void Asteroid::setUse(bool use)
 {
 	_used = use;
+}
+
+void Asteroid::setSpeed(float speed)
+{
+	_speedTranslation = speed;
 }
 
 
