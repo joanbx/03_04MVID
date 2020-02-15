@@ -1,6 +1,6 @@
 #ifndef __SHIP_H__
 #define __SHIP_H__
-
+#include <engine\gamebehaviour.hpp>
 #include <engine\gameObject.hpp>
 #include <engine/input.hpp>
 #include <GLFW\glfw3.h>
@@ -8,7 +8,7 @@
 #include <gameplay\enemy.hpp>
 
 //Player class (controls the player ship)
-class Ship {
+class Ship : public GameBehaviour {
 
 private:
 	//Movement of the ship combinations
@@ -51,10 +51,11 @@ private:
 public:
 
 	Ship(SceneGraph& sg, Node& node, std::vector<Bullet>& bullets, std::vector<Enemy>& enemies);
-	//Start ship 
-	void Start();
-	//Update ship
-	void Update(float dt);
+	~Ship();
+
+	void Start() final;
+
+	void Update(const float dt) final;
 
 	//Get GameObject
 	GameObject getGO() { return _go; }

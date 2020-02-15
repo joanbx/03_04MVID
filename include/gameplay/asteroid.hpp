@@ -1,20 +1,21 @@
 #ifndef __ASTEROID_H__
 #define __ASTEROID_H__
-
+#include <engine\gamebehaviour.hpp>
 #include <engine\gameObject.hpp>
 #include <GLFW\glfw3.h>
 
-class Asteroid {
+class Asteroid: public GameBehaviour {
 
 
 public:
 
 
 	Asteroid(SceneGraph& sg, Node& node);
+	~Asteroid();
 
-	void Start();
+	void Start() final;
 
-	void Update(float dt);
+	void Update(const float dt) final;
 
 	void asteroidDraw();
 

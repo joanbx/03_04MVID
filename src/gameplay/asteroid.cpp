@@ -5,6 +5,10 @@ Asteroid::Asteroid(SceneGraph& sg, Node& node) : _go(sg,node)
 	Start();
 }
 
+Asteroid::~Asteroid()
+{
+}
+
 void Asteroid::Start()
 {
 	glm::vec3 size = glm::vec3(0.5f);
@@ -25,7 +29,7 @@ void Asteroid::Start()
 	_go.Translate(_posAsteroid);
 }
 
-void Asteroid::Update(float dt)
+void Asteroid::Update(const float dt)
 {
 	
 	if (_used) {

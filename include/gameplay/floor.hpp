@@ -1,21 +1,22 @@
 #ifndef __FLOOR_H__
 #define __FLOOR_H__
-
+#include <engine\gamebehaviour.hpp>
 #include <engine\gameObject.hpp>
 #include <engine/input.hpp>
 #include <GLFW\glfw3.h>
 
-class Floor {
+class Floor : public GameBehaviour {
 
 
 public:
 
 
 	Floor(std::vector<GameObject>& floors);
+	~Floor();
 
-	void Start();
+	void Start() final;
 
-	void Update(float dt);
+	void Update(const float dt) final;
 
 
 

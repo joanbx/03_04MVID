@@ -5,6 +5,10 @@ Ship::Ship(SceneGraph& sg, Node& node, std::vector<Bullet>& bullets, std::vector
 	Start();
 }
 
+Ship::~Ship()
+{
+}
+
 //Start ship 
 void Ship::Start() {
 	//Init size
@@ -29,7 +33,7 @@ void Ship::Start() {
 	}
 }
 //Update ship
-void Ship::Update(float dt) {
+void Ship::Update(const float dt) {
 	handleInput(dt);
 	
 
@@ -161,6 +165,7 @@ void Ship::shipMovement(MovementShip direction, float dt) {
 void Ship::checkCollisionBullet() {
 	for (auto& b : _bullets) {
 		if (b.getUsed()) {
+			//b.setAngle(-atan2(_posShip.z - b.getGO().Position().z, _posShip.x - b.getGO().Position().x) * 180 / 3.14159265359f );
 			for (auto& enemy : _enemies) {
 				if (enemy.getInScene()) {
 					if (b.getGO().CheckCollisionXZ(enemy.getGO()) == true) {

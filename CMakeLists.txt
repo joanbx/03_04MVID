@@ -35,6 +35,7 @@ set(ENGINE_SRC_FILES
     ${CMAKE_CURRENT_LIST_DIR}/src/engine/easyGO.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/engine/textRenderer.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/engine/particleSystem.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/src/engine/gameBehaviour.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/engine/geometry/cube.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/engine/geometry/extcube.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/engine/geometry/geometry.cpp
@@ -62,6 +63,7 @@ set(ENGINE_HEADER_FILES
     ${CMAKE_CURRENT_LIST_DIR}/include/engine/easyGO.hpp
     ${CMAKE_CURRENT_LIST_DIR}/include/engine/textRenderer.hpp
     ${CMAKE_CURRENT_LIST_DIR}/include/engine/particleSystem.hpp
+    ${CMAKE_CURRENT_LIST_DIR}/include/engine/gameBehaviour.hpp
     ${CMAKE_CURRENT_LIST_DIR}/include/engine/geometry/cube.hpp
     ${CMAKE_CURRENT_LIST_DIR}/include/engine/geometry/extcube.hpp
     ${CMAKE_CURRENT_LIST_DIR}/include/engine/geometry/geometry.hpp

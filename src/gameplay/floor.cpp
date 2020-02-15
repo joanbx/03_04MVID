@@ -5,11 +5,15 @@ Floor::Floor(std::vector<GameObject>& floors) : _floors(floors)
 
 }
 
+Floor::~Floor()
+{
+}
+
 void Floor::Start()
 {
 }
 
-void Floor::Update(float dt)
+void Floor::Update(const float dt)
 {
 	int count = 0;
 	if (movement - count * _scale >= _scale * (_floors.size()-1)) { movement = 0; }

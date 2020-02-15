@@ -1,12 +1,12 @@
 #ifndef __ENEMY_H__
 #define __ENEMY_H__
-
+#include <engine\gamebehaviour.hpp>
 #include <engine\gameObject.hpp>
 #include <GLFW\glfw3.h>
 #include <gameplay\bullet.hpp>
 #include <engine\particleSystem.hpp>
 
-class Enemy {
+class Enemy : public GameBehaviour {
 
 public:
 
@@ -17,12 +17,13 @@ public:
 	};
 
 	Enemy(SceneGraph& sg, Node& node, std::vector<Bullet>& bullets, ParticleSystem& ps, EnemyTpye enemyType);
+	~Enemy();
 
-	void Start();
+	void Start() final;
 
-	void Update(float dt, glm::vec3& playerPos);
+	void Update(const float dt) final;
 
-	
+	void enemyDraw();
 
 	void setInScene(bool isInScene);
 	void setDestroy(bool destroy);
@@ -31,6 +32,10 @@ public:
 	void setFrequencyShoot(float freq);
 	void setSpeed(float speed);
 	void setSpeedBullet(float speed);
+	void setPlayerPos(glm::vec3& position);
+	
+
+	std::vector<Bullet>& getBullets() { return _bullets; }
 	bool getInScene() { return _inScene; }
 	GameObject& getGO() { return _go; }
 	bool getDestroy() { return _destroy; }
@@ -38,7 +43,8 @@ public:
 	float getFrequencyShoot() { return _frequencyShoot; }
 	glm::vec3 getDirectio() { return modPos; }
 	ParticleSystem& getPS() { return _ps; }
-	void enemyDraw();
+	
+	
 
 private:
 	enum class MovementShip {
@@ -54,6 +60,7 @@ private:
 	glm::vec3 posEnemy = glm::vec3(0, 1, -5.0f);
 	glm::vec3 modPos = glm::vec3(0,0,0);
 	glm::vec3 _rotEnemy = glm::vec3(0, 1, 0);
+	glm::vec3 _playerPos = glm::vec3(0, 1, 0);
 	float _frequencyShoot;
 	float _speedBullet;
 	float _angleEnemy;
@@ -69,7 +76,7 @@ private:
 	EnemyTpye _enemyType;
 
 	void doDirection(float dt);
-	void shoot(glm::vec3& playerPos);
+	void shoot();
 
 
 

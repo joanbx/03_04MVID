@@ -1,6 +1,7 @@
 #ifndef __ENEMYMANAGER_H__
 #define __ENEMYMANAGER_H__
 
+#include <engine\gamebehaviour.hpp>
 #include <engine\gameObject.hpp>
 #include <GLFW\glfw3.h>
 #include <gameplay\bullet.hpp>
@@ -9,36 +10,38 @@
 #include <engine\particleSystem.hpp>
 #include <gameplay\asteroid.hpp>
 
-class EnemyManager {
+class EnemyManager : public GameBehaviour {
 
 public:
 
-	EnemyManager(std::vector<Enemy>& enemies, std::vector<Bullet>& bullets, std::vector<Asteroid>& asteroids, Ship& player);
+	EnemyManager(std::vector<Enemy>& enemies, std::vector<Asteroid>& asteroids, Ship& player);
+	~EnemyManager();
 
-	void Start();
+	void Start() final;
 
-	void Update(float dt);
+	void Update(const float dt) final;
 
 	void UpdatePS(float dt);
 
 	void setTimeStart(float time);
 
+	uint32_t getWave() { return _wave; }
 	float getTimeElapsed() { return _time_elapsed; }
 
 private:
 
 	Ship& _player;
-	std::vector<Bullet>& _bullets;
 	std::vector<Enemy>& _enemies;
 	std::vector<Asteroid>& _asteroids;
 	bool _prevInScene = false;
-	float _initialSpeedEnemy = 0.5f;
-	float _initalFrequencyShootEnemy = 3.0f;
-	float _initialEnemyBulletSpeed = 0.5f;
+	float _initialSpeedEnemy = 0.4f;
+	float _initalFrequencyShootEnemy = 3.4f;
+	float _initialEnemyBulletSpeed = 0.6f;
 	float  _time_start;
 	float  _time_elapsed;
-	int _maxEnemies = 1;
-	int _maxAsteroids = 1;
+	uint32_t _maxEnemies = 1;
+	uint32_t _maxAsteroids = 1;
+	uint32_t _wave = 0;
 
 };
 

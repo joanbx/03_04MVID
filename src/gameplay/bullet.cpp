@@ -7,12 +7,16 @@ Bullet::Bullet(SceneGraph& sg, Node& node, Bullet::Bullettypes type) : _go(sg,no
 
 }
 
+Bullet::~Bullet()
+{
+}
+
 void Bullet::Start() {
 	_used = false;
 	_posBullet = glm::vec3(0, 1, 0);
 }
 
-void Bullet::Update(float dt) {
+void Bullet::Update(const float dt) {
 	if (_used) {
 		pushDirection(dt);
 		bulletDraw();
@@ -25,8 +29,23 @@ void Bullet::setUse(bool used) {
 	_used = used;
 }
 
+void Bullet::setStarted(bool start)
+{
+	_started = start;
+}
+
+void Bullet::setUpdated(bool updated)
+{
+	_updated = updated;
+}
+
 void Bullet::setPosition(glm::vec3& posBullet) {
 	_posBullet = posBullet;
+}
+
+void Bullet::setAngle(float angle)
+{
+	_angleBullet = angle;
 }
 
 void Bullet::pushDirection(float dt) {
@@ -41,26 +60,6 @@ void Bullet::checkAutoDestroy() {
 	}
 }
 
-bool Bullet::CheckCollisionXZ(GameObject go) // AABB - AABB collision
-{
-	// Collision x-axis?
-	bool collisionX = (_go.Position().x + _go.getSize().x >= go.Position().x &&
-		go.Position().x + go.getSize().x >= _go.Position().x) ||
-		(_go.Position().x - _go.getSize().x <= go.Position().x &&
-			go.Position().x - go.getSize().x <= _go.Position().x);
-	// Collision y-axis?
-	bool collisionZ = (_go.Position().z + _go.getSize().z >= go.Position().z &&
-		go.Position().z + go.getSize().z >= _go.Position().z) ||
-		(_go.Position().z - _go.getSize().z <= go.Position().z &&
-			go.Position().z - go.getSize().z <= _go.Position().z);
-	// Collision only if on both axes
-
-
-	//std::cout << collisionX << " " << collisionZ << std::endl;
-	//std::cout << collisionX << " " << _go.Transform().getPosition().x << " " << go.Transform().getPosition().x << std::endl;
-
-	return collisionX && collisionZ;
-}
 
 void Bullet::setDirection(glm::vec3 direction) { _direction = direction; }
 
@@ -74,7 +73,7 @@ void Bullet::bulletDraw() {
 	_go.Init();
 	_go.Translate(_posBullet);
 	_go.Rotate(-90.0f, glm::vec3(1.0f, 0.0f, 0.0f));
-	//_go.Rotate(180.0f, glm::vec3(0.0f, 1.0f, 0.0f));
-	_go.Scale(glm::vec3(2.3f));
+	_go.Rotate(_angleBullet, glm::vec3(0.0f, 0.0f, 1.0f));
+	_go.Scale(glm::vec3(2.3f,2.3f, 2.3f));
 	_go.readyToDraw();
 }

@@ -6,6 +6,10 @@ Game::Game(uint32_t width, uint32_t height) : _width(width), _height(height)
 	Start();
 }
 
+Game::~Game()
+{
+}
+
 void Game::Start()
 {
 	
@@ -13,7 +17,7 @@ void Game::Start()
 	Window* window = Window::instance();
 	window->setWidth(_width);
 	window->setHeight(_height);
-	glClearColor(0.0f, 0.3f, 0.6f, 1.0f);
+	glClearColor(0.0f, 0.0f, 0.1f, 1.0f);
 
 	//Define Shaders
 	const Shader s_normal("../projects/FINAL/phongFinal.vs", "../projects/FINAL/blinnFinal.fs");
@@ -26,7 +30,9 @@ void Game::Start()
 	const Model object("../assets/models/ships/SF_Fighter/SciFi_Fighter.obj");
 	const Model enemy01("../assets/models/UFO/Low_poly_UFO.obj");
 	const Model enemy02("../assets/models/ships/ship03/Spaceship.obj");
-	const Model msphere("../assets/models/bullets/sphere.obj");
+	const Model alienBullet("../assets/models/bullets/MetalAlien01/sphere.obj");
+	const Model metalBullet("../assets/models/bullets/Metal_Pattern/sphere.obj");
+	const Model shipBullet("../assets/models/bullets/Abstract_001/sphere.obj");
 	const Model asteroid01("../assets/models/asteroid/asteroid.obj");
 
 	//Define Geometries
@@ -68,8 +74,9 @@ void Game::Start()
 	int assetEnemy01 = assets.addNewModel(enemy01);
 	int assetEnemy02 = assets.addNewModel(enemy02);
 	int assetAsteroid01 = assets.addNewModel(asteroid01);
-	int assetBulletType01 = assets.addNewModel(msphere);
-	int assetBulletType02 = assets.addNewModel(msphere);
+	int assetBulletType01 = assets.addNewModel(shipBullet);
+	int assetBulletType02 = assets.addNewModel(alienBullet);
+	int assetBulletType03 = assets.addNewModel(metalBullet);
 	
 	//Camera
 	Camera camera(glm::vec3(0.0f, 15.0f, 0.0f), glm::vec3(0.0f, 0.0f, -1.0f), 0, -90);
@@ -104,6 +111,12 @@ void Game::Start()
 		Bullet(sceneGraph, Node(assetBulletType02, mainMaterial, Node::Type::isModel),Bullet::Bullettypes::isEnemy),
 		Bullet(sceneGraph, Node(assetBulletType02, mainMaterial, Node::Type::isModel),Bullet::Bullettypes::isEnemy)
 	};
+	std::vector<Bullet> bullets02Enemy = {
+		Bullet(sceneGraph, Node(assetBulletType03, mainMaterial, Node::Type::isModel),Bullet::Bullettypes::isEnemy),
+		Bullet(sceneGraph, Node(assetBulletType03, mainMaterial, Node::Type::isModel),Bullet::Bullettypes::isEnemy),
+		Bullet(sceneGraph, Node(assetBulletType03, mainMaterial, Node::Type::isModel),Bullet::Bullettypes::isEnemy),
+		Bullet(sceneGraph, Node(assetBulletType03, mainMaterial, Node::Type::isModel),Bullet::Bullettypes::isEnemy)
+	};
 	//Bullet Player Pool
 	std::vector<Bullet> bullets01Player = {
 		Bullet(sceneGraph, Node(assetBulletType01, mainMaterial, Node::Type::isModel),Bullet::Bullettypes::isPlayer),
@@ -120,14 +133,12 @@ void Game::Start()
 	std::vector<Enemy> enemies = {
 		Enemy(sceneGraph, Node(assetEnemy01, mainMaterial, Node::Type::isModel), bullets01Enemy, ps, Enemy::EnemyTpye::EnemyVersion01),
 		Enemy(sceneGraph, Node(assetEnemy01, mainMaterial, Node::Type::isModel), bullets01Enemy, ps, Enemy::EnemyTpye::EnemyVersion01),
-		Enemy(sceneGraph, Node(assetEnemy02, mainMaterial, Node::Type::isModel), bullets01Enemy, ps, Enemy::EnemyTpye::EnemyVersion02),
-		Enemy(sceneGraph, Node(assetEnemy02, mainMaterial, Node::Type::isModel), bullets01Enemy, ps, Enemy::EnemyTpye::EnemyVersion02)
+		Enemy(sceneGraph, Node(assetEnemy02, mainMaterial, Node::Type::isModel), bullets02Enemy, ps, Enemy::EnemyTpye::EnemyVersion02),
+		Enemy(sceneGraph, Node(assetEnemy02, mainMaterial, Node::Type::isModel), bullets02Enemy, ps, Enemy::EnemyTpye::EnemyVersion02)
 	};
 
 	//Asteroid pool
 	std::vector<Asteroid> asteroids = {
-		{sceneGraph, Node(assetAsteroid01, mainMaterial, Node::Type::isModel)},
-		{sceneGraph, Node(assetAsteroid01, mainMaterial, Node::Type::isModel)},
 		{sceneGraph, Node(assetAsteroid01, mainMaterial, Node::Type::isModel)},
 		{sceneGraph, Node(assetAsteroid01, mainMaterial, Node::Type::isModel)},
 		{sceneGraph, Node(assetAsteroid01, mainMaterial, Node::Type::isModel)},
@@ -140,7 +151,7 @@ void Game::Start()
 	Ship ship(sceneGraph, Node(assetShip, mainMaterial, Node::Type::isModel), bullets01Player, enemies) ;
 
 	//Enemy Manager
-	EnemyManager enemyMng(enemies, bullets01Enemy, asteroids, ship);
+	EnemyManager enemyMng(enemies, asteroids, ship);
 
 	//Loop - Update
 	float lastFrame = 0.0f;
@@ -153,24 +164,29 @@ void Game::Start()
 	}
 }
 
-void Game::Update(float dt, SceneGraph& sceneGraph, Ship& ship, Floor& floor, EnemyManager& enemyMng, TextRenderer& textRenderer)
+void Game::Update(const float dt, SceneGraph& sceneGraph, Ship& ship, Floor& floor, EnemyManager& enemyMng, TextRenderer& textRenderer)
 {
-	
+	//Scene graph update nodes
 	sceneGraph.updateNodes();
 
 	if (_gameStarted) {
 
+		//First time
 		if (_isFirstFrameinGame) {
 			enemyMng.Start();
 			ship.Start();
 			enemyMng.setTimeStart(glfwGetTime());
-			prevLifeShip = ship.getLife();
+			_prevLifeShip = ship.getLife();
 			_isFirstFrameinGame = false;
 		}
+		//Restart enemeies
 		else if (_restartEnemies) {
 			enemyMng.Start();
 			_restartEnemies = false;
 		}
+
+
+		//Updates:
 
 		floor.Update(dt);
 		
@@ -179,23 +195,38 @@ void Game::Update(float dt, SceneGraph& sceneGraph, Ship& ship, Floor& floor, En
 		enemyMng.Update(dt);
 
 		enemyMng.UpdatePS(dt);
-
-		textRenderer.addTextToRender("Life: "+ std::to_string(ship.getLife()), 5, 5, 1.0, glm::vec3(1.0, 1.0, 1.0)); //Text: life
-		textRenderer.addTextToRender("Points: " + std::to_string(ship.getKills()), _width - 200, 5, 1.0, glm::vec3(1.0, 1.0, 1.0)); //Text: Points
-		textRenderer.addTextToRender("Time: " + std::to_string((int)enemyMng.getTimeElapsed()), 5, _height - 25, 1.0, glm::vec3(1.0, 1.0, 1.0)); //Text: Time
-
-		if (prevLifeShip != ship.getLife()) {
+		
+		//ship life to check if an enemy restart is needed
+		if (_prevLifeShip != ship.getLife()) {
 			_restartEnemies = true;
 		}
-		prevLifeShip = ship.getLife();
-
+		_prevLifeShip = ship.getLife();
+		//Restart game
 		if (ship.getLife() == 0) { 
 			_isFirstFrameinGame = true;
 			_gameStarted = false; 
 		}
+
+		//Wave
+		if (_prevWave != enemyMng.getWave()) {
+			_timeShowWaveMsgInit = glfwGetTime();
+		}
+		if (glfwGetTime() - _timeShowWaveMsgInit < 3) {
+			_drawWave = true;
+		}
+		else {
+			_drawWave = false;
+		}
+		_prevWave = enemyMng.getWave();
 		
+		//Text renderer (Add) - HUD
+		textRenderer.addTextToRender("Life: " + std::to_string(ship.getLife()), 5, 5, 1.0, glm::vec3(1.0, 1.0, 1.0)); //Text: life
+		textRenderer.addTextToRender("Points: " + std::to_string(ship.getKills() + (enemyMng.getWave() - 1) * 50), _width - 200, 5, 1.0, glm::vec3(1.0, 1.0, 1.0)); //Text: Points
+		textRenderer.addTextToRender("Time: " + std::to_string((int)enemyMng.getTimeElapsed()), 5, _height - 25, 1.0, glm::vec3(1.0, 1.0, 1.0)); //Text: Time
+		if (_drawWave) textRenderer.addTextToRender("Wave " + std::to_string(enemyMng.getWave()), _width / 2 - 50.0, _height / 2, 1.0, glm::vec3(1.0, 1.0, 1.0)); //Draw new Wave
 	}
 	
+	//Start menu
 	else {
 		textRenderer.addTextToRender("Shoot Em Up 03_04MVID", _width / 2 - 130.0, _height / 2 -100, 1.0, glm::vec3(1.0, 1.0, 1.0));
 
@@ -206,6 +237,7 @@ void Game::Update(float dt, SceneGraph& sceneGraph, Ship& ship, Floor& floor, En
 		startButton();
 	}
 	
+	//Render text
 	textRenderer.RenderText();
 	
 }

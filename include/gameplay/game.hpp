@@ -17,14 +17,14 @@ class Game {
 public:
 	//Constructor
 	Game(uint32_t width = 600, uint32_t height= 800);
-	
+	~Game();
+
 	//Start (Definition)
 	void Start();
 	//Update / Loop
 	void Update(float dt, SceneGraph& sceneGraph, Ship& ship, Floor& floor, EnemyManager& enemyMng, TextRenderer& textRenderer);
 	
-	//Start game button
-	void startButton();
+	
 
 private:
 
@@ -32,8 +32,14 @@ private:
 	uint32_t _height;
 	bool _gameStarted = false;
 	bool _isFirstFrameinGame = true;
-	uint32_t prevLifeShip;
+	uint32_t _prevLifeShip;
+	uint32_t _prevWave;
 	bool _restartEnemies = false;
+	float _timeShowWaveMsgInit;
+	bool _drawWave = false;
+	
+	//Start game button
+	void startButton();
 };
 
 #endif

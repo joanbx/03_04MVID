@@ -1,24 +1,42 @@
 #include "..\..\include\gameplay\enemyManager.hpp"
 
-EnemyManager::EnemyManager(std::vector<Enemy>& enemies, std::vector<Bullet>& bullets, std::vector<Asteroid>& asteroids, Ship& player) : _enemies(enemies), _bullets(bullets), _asteroids(asteroids), _player(player)
+EnemyManager::EnemyManager(std::vector<Enemy>& enemies, std::vector<Asteroid>& asteroids, Ship& player) : _enemies(enemies), _asteroids(asteroids), _player(player)
 {
 	Start();
 }
 
+EnemyManager::~EnemyManager()
+{
+}
+
 void EnemyManager::Start()
 {
+	//Start enemies and its bullets
 	for (auto& enemy : _enemies) {
 		enemy.Start();
+		for (auto& bullet : enemy.getBullets()) {
+			if (!bullet.getStarted()) {
+				bullet.Start();
+				bullet.setStarted(true);
+			}
+		}
 	}
 	for (auto& asteroid : _asteroids) {
 		asteroid.Start();
 	}
-	for (auto& bullet : _bullets) {
-		bullet.Start();
+
+	//Reset start flag from bullets
+	for (auto& enemy : _enemies) {
+		for (auto& bullet : enemy.getBullets()) {
+			if (bullet.getStarted()) {
+				bullet.setStarted(false);
+			}
+		}
 	}
+	
 }
 
-void EnemyManager::Update(float dt)
+void EnemyManager::Update(const float dt)
 {
 	//std::cout << _enemies.size() << std::endl;
 	_time_elapsed = glfwGetTime() - _time_start;
@@ -27,11 +45,13 @@ void EnemyManager::Update(float dt)
 	float bulletSpeed = _initialEnemyBulletSpeed;
 
 	if (_time_elapsed < 60) { //Wave1
-		_maxEnemies = 2;
+		_wave = 1;
+		_maxEnemies = 1;
 		_maxAsteroids = 1;
 	}
 	else if (_time_elapsed < 120) { //Wave2
-		_maxEnemies = 3;
+		_wave = 2;
+		_maxEnemies = 1;
 		_maxAsteroids = 2;
 		frequency_shoot_enemy *= 0.8f;
 		speedEnemy *= 1.2f;
@@ -39,18 +59,20 @@ void EnemyManager::Update(float dt)
 		
 	}
 	else if (_time_elapsed < 180) { //Wave3
+		_wave = 3;
 		_maxEnemies = 3;
 		_maxAsteroids = 4;
+		frequency_shoot_enemy *= 0.7f;
+		speedEnemy *= 1.3f;
+		bulletSpeed *= 1.3;
+	}
+	else if (_time_elapsed < 240) { //Wave4
+		_wave = 4;
+		_maxEnemies = 4;
+		_maxAsteroids = 6;
 		frequency_shoot_enemy *= 0.6f;
 		speedEnemy *= 1.4f;
 		bulletSpeed *= 1.4;
-	}
-	else if (_time_elapsed < 240) { //Wave4
-		_maxEnemies = 4;
-		_maxAsteroids = 8;
-		frequency_shoot_enemy *= 0.5f;
-		speedEnemy *= 1.5f;
-		bulletSpeed *= 1.5;
 	}
 
 	uint32_t enemycount = 0;
@@ -77,36 +99,41 @@ void EnemyManager::Update(float dt)
 				}	
 			}
 
-			/*for (auto& asteroid : _asteroids) {
-				if (asteroid.getUsed()) {
-					if (enemy.getChangeDirection() == false && enemy.getGO().CheckCollisionXZ(asteroid.getGO(), glm::vec3(0.5f, 0, 0.50f))) {
-						enemy.setChangeDirection(true);
-					}
-					else if (enemy.getChangeDirection() == true && enemy.getGO().CheckCollisionXZ(asteroid.getGO(), glm::vec3(0.5f, 0, 0.5f))) {
-						continueStoped = true;
-					}
-
-				}
-				
-			}*/
-
 			if (enemy.getChangeDirection() && continueStoped == false) {
 				enemy.setChangeDirection(false);
 			}
 
-			enemy.Update(dt, _player.getPosition());
+			//Update enemy
+			enemy.setPlayerPos(_player.getPosition());
+			enemy.Update(dt);
+
+			//Bullets: For each bullet, check wich one has been used and updated. If it has not been updated->update bullet, then check collision with player
+			for (auto& bullet : enemy.getBullets()) {
+				if (!bullet.getUpdated() && bullet.getUsed()) {
+					bullet.setUpdated(true);
+					bullet.Update(dt);
+					if (bullet.getUsed() && bullet.getGO().CheckCollisionXZ(_player.getGO())) {
+						_player.setDestroy();
+						bullet.setUse(false);
+					}
+				}
+			}
+
 		}
-		
-		
+
 		enemycount++;
 	}
-	for (auto& bullet : _bullets) {
-		bullet.Update(dt);
-		if (bullet.getUsed() && bullet.getGO().CheckCollisionXZ(_player.getGO())) {
-			_player.setDestroy();
-			bullet.setUse(false);
+
+	//Reset update flag bullets
+	for (auto& enemy : _enemies) {
+		for (auto& bullet : enemy.getBullets()) {
+			if (bullet.getUpdated()) {
+				bullet.setUpdated(false);
+			}
 		}
 	}
+	
+	//Asteroids
 	uint32_t asteroidCount = 0;
 	for (auto& asteroid : _asteroids) {
 		if (asteroidCount < _maxAsteroids) {
@@ -124,6 +151,7 @@ void EnemyManager::Update(float dt)
 					if (asteroid.getGO().CheckCollisionXZ(enemy.getGO())) {
 						//enemy.setDestroy(true);
 						//enemy.setInScene(false);
+						//Restart asteroid
 						asteroid.setUse(false);
 						asteroid.Start();
 					}

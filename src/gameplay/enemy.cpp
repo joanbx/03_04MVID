@@ -7,6 +7,10 @@ Enemy::Enemy(SceneGraph& sg, Node& node, std::vector<Bullet>& bullets, ParticleS
 	//Start();
 }
 
+Enemy::~Enemy()
+{
+}
+
 
 void Enemy::Start() {
 
@@ -47,7 +51,7 @@ void Enemy::Start() {
 	//std::cout << "RandomX " <<posEnemy.x << std::endl;
 }
 
-void Enemy::Update(float dt, glm::vec3& playerPos) {
+void Enemy::Update(const float dt) {
 	if (_inScene) {
 		doDirection(dt);				
 		//std::cout << posEnemy.x << "," << posEnemy.y << " " << posEnemy.z << " " << _go.in_frustum() <<std :: endl;
@@ -58,8 +62,8 @@ void Enemy::Update(float dt, glm::vec3& playerPos) {
 		else if (!_inFrustum && _go.in_frustum()==true) {
 			_inFrustum = true;
 		}
-		_angleEnemy = -atan2(playerPos.z - posEnemy.z, playerPos.x - posEnemy.x) * 180 / 3.14159265359f + 90.0f;
-		shoot(playerPos);
+		_angleEnemy = -atan2(_playerPos.z - posEnemy.z, _playerPos.x - posEnemy.x) * 180 / 3.14159265359f + 90.0f;
+		shoot();
 		enemyDraw();
 
 	}
@@ -103,12 +107,17 @@ void Enemy::setSpeedBullet(float speed)
 	_speedBullet = speed;
 }
 
+void Enemy::setPlayerPos(glm::vec3& position)
+{
+	_playerPos = position;
+}
+
 void Enemy::doDirection(float dt) {
 	if(_changeDirection==false) posEnemy += modPos * _speed * dt;
 	else posEnemy += -modPos * _speed * dt;
 }
 
-void Enemy::shoot(glm::vec3& playerPos) {
+void Enemy::shoot() {
 	if (_prevInScene == false) {
 		//std::cout << _prevInScene << std::endl;
 		time_start = glfwGetTime();
@@ -120,7 +129,7 @@ void Enemy::shoot(glm::vec3& playerPos) {
 			if (_bullets[i].getUsed() == false) {
 				_bullets[i].setUse(true);
 				_bullets[i].setSpeed(_speedBullet);
-				_bullets[i].setDirection(glm::vec3(playerPos.x - posEnemy.x, posEnemy.y, playerPos.z - posEnemy.z));//(_go.Position()-glm::vec3(0,0,0));
+				_bullets[i].setDirection(glm::vec3(_playerPos.x - posEnemy.x, posEnemy.y, _playerPos.z - posEnemy.z));//(_go.Position()-glm::vec3(0,0,0));
 				_bullets[i].setPosition(posEnemy);
 				
 				//std::cout << "shoot" << std::endl;
@@ -130,6 +139,7 @@ void Enemy::shoot(glm::vec3& playerPos) {
 		}
 	}
 
+	
 	
 
 }
