@@ -57,7 +57,7 @@ struct SpotLight {
     float outerCutOff;
 };
 
-#define NUMBER_POINT_LIGHTS 1
+#define NUMBER_POINT_LIGHTS 2
 #define NUMBER_SPOT_LIGHTS 1
 uniform PointLight pointLight[NUMBER_POINT_LIGHTS];
 uniform SpotLight spotLight[NUMBER_SPOT_LIGHTS];

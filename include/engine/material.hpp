@@ -30,7 +30,7 @@ class Material {
 		const Shader& _shader; //Shader used for this material class
 		
 		//Constructor
-		Material(const Shader& shader, Shadow& shadow, DirLight dirLight, std::vector<SpotLight> spotLights, std::vector<PointLight> pointLights);
+		Material(const Shader& shader, Shadow& shadow, DirLight& dirLight, std::vector<SpotLight>& spotLights, std::vector<PointLight>& pointLights);
 		~Material();
 		Material() = delete;
 
@@ -48,11 +48,11 @@ class Material {
 			return _name;
 		}
 		//getDirLight: return dirLight
-		DirLight getDirLight() { return _dirLight;  }
+		DirLight& getDirLight() { return _dirLight;  }
 		//getSpotLights: return vectors of spot light
-		std::vector<SpotLight> getSpotLights() { return _spotLights;  }
+		std::vector<SpotLight>& getSpotLights() { return _spotLights;  }
 		//getPointLights: return vector of point light
-		std::vector<PointLight> getPointLights() { return _pointLights; }
+		std::vector<PointLight>& getPointLights() { return _pointLights; }
 		//getShadow: return shadow
 		Shadow& getShadow() { return _shadow; }
 };

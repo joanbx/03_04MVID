@@ -68,7 +68,6 @@ void Enemy::Update(const float dt) {
 
 	}
 	else if (_destroy) {
-		//Start();
 	}
 	_prevInScene = _inScene;
 		
@@ -126,13 +125,13 @@ void Enemy::shoot() {
 
 	if (time_elapsed > _frequencyShoot) {
 		for (int i = 0; i < _bullets.size(); ++i) {
-			if (_bullets[i].getUsed() == false) {
+			if (_bullets[i].getUsed() == false && _destroy==false) {
 				_bullets[i].setUse(true);
 				_bullets[i].setSpeed(_speedBullet);
 				_bullets[i].setDirection(glm::vec3(_playerPos.x - posEnemy.x, posEnemy.y, _playerPos.z - posEnemy.z));//(_go.Position()-glm::vec3(0,0,0));
 				_bullets[i].setPosition(posEnemy);
 				
-				//std::cout << "shoot" << std::endl;
+				//std::cout << "Enemy shoot" << std::endl;
 				time_start = glfwGetTime();
 				break;
 			}

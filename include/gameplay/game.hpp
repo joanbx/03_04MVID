@@ -10,7 +10,7 @@
 #include <gameplay\ship.hpp>
 #include <gameplay\enemyManager.hpp>
 #include <engine\textRenderer.hpp>
-
+#include <gameplay\powerUp.hpp>
 
 //class Game: Shootem up Game
 class Game {
@@ -22,7 +22,7 @@ public:
 	//Start (Definition)
 	void Start();
 	//Update / Loop
-	void Update(float dt, SceneGraph& sceneGraph, Ship& ship, Floor& floor, EnemyManager& enemyMng, TextRenderer& textRenderer);
+	void Update(float dt, SceneGraph& sceneGraph, Ship& ship, Floor& floor, EnemyManager& enemyMng, TextRenderer& textRenderer, PowerUp& powerUp);
 	
 	
 
@@ -40,6 +40,7 @@ private:
 	
 	//Start game button
 	void startButton();
+	std::string convertTimeToStringmmss(float time);
 };
 
 #endif

@@ -3,7 +3,7 @@
 #include <chrono>
 
 
-Material::Material(const Shader& shader, Shadow& shadow, DirLight dirLight, std::vector<SpotLight> spotLights, std::vector<PointLight> pointLights) : _shader(shader), _shadow(shadow), _dirLight(dirLight), _pointLights(pointLights), _spotLights(spotLights) {
+Material::Material(const Shader& shader, Shadow& shadow, DirLight& dirLight, std::vector<SpotLight>& spotLights, std::vector<PointLight>& pointLights) : _shader(shader), _shadow(shadow), _dirLight(dirLight), _pointLights(pointLights), _spotLights(spotLights) {
 	hasLightPorperties = true;
 	using namespace std::chrono;
 	milliseconds ms = duration_cast<milliseconds>(

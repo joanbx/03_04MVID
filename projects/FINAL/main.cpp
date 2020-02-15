@@ -1,5 +1,4 @@
 #include <gameplay\game.hpp>
-//#include <chrono>
 
 
 void onKeyPress(int key, int action) {
@@ -16,7 +15,6 @@ void onKeyPress(int key, int action) {
 
 int main(int, char* []) {
 
-	//srand(time(NULL)); //Init random seed
 
 	Input::instance()->setKeyPressedCallback(onKeyPress);
 

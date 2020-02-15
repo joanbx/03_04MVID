@@ -110,6 +110,7 @@ set(GAMEPLAY_SRC_FILES
     ${CMAKE_CURRENT_LIST_DIR}/src/gameplay/enemyManager.cpp
 	${CMAKE_CURRENT_LIST_DIR}/src/gameplay/floor.cpp
 	${CMAKE_CURRENT_LIST_DIR}/src/gameplay/asteroid.cpp
+	${CMAKE_CURRENT_LIST_DIR}/src/gameplay/powerUp.cpp
 	)
 set(GAMEPLAY_HEADER_FILES
 	${CMAKE_CURRENT_LIST_DIR}/include/gameplay/game.hpp
@@ -119,6 +120,7 @@ set(GAMEPLAY_HEADER_FILES
     ${CMAKE_CURRENT_LIST_DIR}/include/gameplay/enemyManager.hpp
 	${CMAKE_CURRENT_LIST_DIR}/include/gameplay/floor.hpp
 	${CMAKE_CURRENT_LIST_DIR}/include/gameplay/asteroid.hpp
+	${CMAKE_CURRENT_LIST_DIR}/include/gameplay/powerUp.hpp
 	)
 
 source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR}/src/gameplay/ PREFIX "Source Files" FILES ${GAMEPLAY_SRC_FILES})

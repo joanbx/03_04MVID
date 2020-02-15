@@ -18,6 +18,7 @@ void Ship::Start() {
 	_rotShip = glm::vec3(0, 0, 0);
 	_angleShip = 0.0f;
 	_shoot = false;
+	_speedBullet = 3.5f;
 	_angleMAX = 30.0f;
 	_angleShipStep = 1.0f;
 	_life = 3;
@@ -27,6 +28,7 @@ void Ship::Start() {
 	_actualSeqBlink = 0;
 	_speedM = 1.0;
 	_speedR = 10.0;
+	_extraBullet = false;
 	//Init Bullets
 	for (auto& bullet : _bullets) {
 		bullet.Start();
@@ -116,17 +118,42 @@ void Ship::handleInput(float dt) {
 }
 //Action shoot
 void Ship::shipShoot() {
-
-	//Instance new bullet (if there is an unused one)
-	for (int i = 0; i < _bullets.size(); ++i) {
-		if (_bullets[i].getUsed() == false) {
-			//std::cout <<"BULLET No " << i << std::endl;
-			_bullets[i].setUse(true);
-			_bullets[i].setDirection(glm::vec3(0.0f, 0.0f, -1.0f));
-			_bullets[i].setPosition(_posShip);
-			break;
+	
+	if (!_extraBullet) {
+		//Instance new bullet (if there is an unused one)
+		for (int i = 0; i < _bullets.size(); ++i) {
+			if (_bullets[i].getUsed() == false) {
+				//std::cout <<"BULLET No " << i << std::endl;
+				_bullets[i].setSpeed(_speedBullet);
+				_bullets[i].setUse(true);
+				_bullets[i].setDirection(glm::vec3(0.0f, 0.0f, -1.0f));
+				_bullets[i].setPosition(_posShip);
+				break;
+			}
 		}
 	}
+	else {
+		uint32_t bulletsMax = 3;
+		uint32_t bulletsUsed = 0;
+		for (int i = 0; i < _bullets.size(); ++i) {
+			if (_bullets[i].getUsed() == false) {
+				//std::cout <<"BULLET No " << i << std::endl;
+				_bullets[i].setUse(true);
+				if(bulletsUsed == 0)
+					_bullets[i].setDirection(glm::vec3(0.0f, 0.0f, -1.0f));
+				else if(bulletsUsed == 1)
+					_bullets[i].setDirection(glm::vec3(0.5f, 0.0f, -1.0f));
+				else if (bulletsUsed == 2)
+					_bullets[i].setDirection(glm::vec3(-0.5f, 0.0f, -1.0f));
+				_bullets[i].setPosition(_posShip);
+				bulletsUsed++;
+				if (bulletsUsed >= bulletsMax)
+					break;
+			}
+		}
+
+	}
+	
 
 }
 //Controls movement of the ship
@@ -179,6 +206,10 @@ void Ship::checkCollisionBullet() {
 		}
 	}
 
+}
+void Ship::setPowerUp(bool power)
+{
+	_extraBullet = power;
 }
 //Destroy ship (or game over)
 void Ship::setDestroy()

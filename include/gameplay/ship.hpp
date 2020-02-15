@@ -26,6 +26,7 @@ private:
 	glm::vec3 _rotShip; //Rotation
 	float _angleShip; //Angle
 	bool _shoot; //is shooting
+	float _speedBullet; //speed bullet
 	float _angleMAX; // Max angle roll
 	float _angleShipStep; // Step roll
 	float _speedM; //Speed movement
@@ -35,6 +36,7 @@ private:
 	bool _stateBlink; //State blinking (true = draw)
 	uint32_t _actualSeqBlink; //Blinking sequence
 	uint32_t _enemyKills; //Number of enemies killed
+	bool _extraBullet; //Powerup ammo
 	
 	//Handles key input
 	void handleInput(float dt);
@@ -66,6 +68,7 @@ public:
 	//Get number of kills
 	uint32_t getKills() { return _enemyKills; }
 	
+	void setPowerUp(bool power);
 	//Destroy ship (or game over)
 	void setDestroy();
 

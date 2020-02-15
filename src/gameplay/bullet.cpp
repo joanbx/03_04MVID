@@ -50,7 +50,7 @@ void Bullet::setAngle(float angle)
 
 void Bullet::pushDirection(float dt) {
 	//glm::vec3 forwardBullet(0.0f, 0.0f, -1.0f);
-	_posBullet += _direction * _speed * dt;
+	_posBullet += glm::normalize(_direction) * _speed * dt;
 }
 
 void Bullet::checkAutoDestroy() {

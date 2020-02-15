@@ -9,7 +9,7 @@
 #include <gameplay\enemy.hpp>
 #include <engine\particleSystem.hpp>
 #include <gameplay\asteroid.hpp>
-//Class EnemyManager: Handles all the enemies wtih bullets plus asteroids
+//Class EnemyManager: Handles all the enemies wtih its bullets plus asteroids
 class EnemyManager : public GameBehaviour {
 
 public:
@@ -37,7 +37,7 @@ private:
 	bool _prevInScene = false;
 	float _initialSpeedEnemy = 0.4f;
 	float _initalFrequencyShootEnemy = 3.4f;
-	float _initialEnemyBulletSpeed = 0.6f;
+	float _initialEnemyBulletSpeed = 3.0f;
 	float  _time_start;
 	float  _time_elapsed;
 	uint32_t _maxEnemies = 1;
