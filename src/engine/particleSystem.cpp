@@ -21,45 +21,44 @@ void ParticleSystem::Start()
 
 
 
-void ParticleSystem::Update(float dt, uint32_t newParticles, GameObject& go, glm::vec3 offset)
+void ParticleSystem::Update(float dt, uint32_t newParticles, GameObject& go, glm::vec3 offset, float maxScale)
 {
 
+	
+	// Add new particles 
+	_position = go.Position();
+	for (uint32_t i = 0; i < newParticles; ++i)
+	{
+		int unusedParticle = firstUnusedParticle();
+		respawnParticle(particles[unusedParticle], offset);
+	}
+	// Update all particles
+	for (uint32_t i = 0; i < amount; ++i)
+	{
+		Particle& p = particles[i];
+		p.Life -= dt; // reduce life
+		if (p.Life > 0.0f)
+		{	// particle is alive, thus update
+			p.Position -= p.Velocity * dt;
+			p.Color.a -= dt * 2.5;
+		}
+	}
+
 	if (loop < maxLoop) {
-		// Add new particles 
-		_position = go.Position();
-		for (uint32_t i = 0; i < newParticles; ++i)
-		{
-			int unusedParticle = firstUnusedParticle();
-			respawnParticle(particles[unusedParticle], offset);
-		}
-		// Update all particles
-		for (uint32_t i = 0; i < amount; ++i)
-		{
-			Particle& p = particles[i];
-			p.Life -= dt; // reduce life
-			if (p.Life > 0.0f)
-			{	// particle is alive, thus update
-				p.Position -= p.Velocity * dt;
-				p.Color.a -= dt * 2.5;
-			}
-		}
-		if (_scalemulti > 5 && expansionDirection) { expansionDirection = false; }
+		//Scale Paricle
+		if (_scalemulti > maxScale && expansionDirection) { expansionDirection = false; }
 		else if (_scalemulti <= 1.0 && !expansionDirection) { expansionDirection = true; loop++; }
 
-		std::cout << _scalemulti << std::endl;
 		if (expansionDirection) _scalemulti *= (1+(5.0f * dt));
 		else _scalemulti /= (1+(5.0f * dt));
-
-		Draw(go.getProj(), go.getView());
 	}
 	else {
-		//std::cout << "FINISH" << std::endl;
 		_finish = true;
 	}
-	
 
-	
-	//std::cout << _scalemulti << std::endl;
+	///Draw Particle
+	Draw(go.getProj(), go.getView());
+
 }
 
 void ParticleSystem::setFinished(bool finish) {
@@ -69,7 +68,6 @@ void ParticleSystem::setFinished(bool finish) {
 // Render all particles
 void ParticleSystem::Draw(glm::mat4& proj, glm::mat4& view)
 {
-	// Use additive blending to give it a 'glow' effect
 	if (!_finish) {
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE);
 		glEnable(GL_BLEND);
@@ -79,16 +77,14 @@ void ParticleSystem::Draw(glm::mat4& proj, glm::mat4& view)
 			if (particle.Life > 0.0f)
 			{
 				_shader.use();
-				//std::cout << "RENDER PS -> " << _position.x <<"," <<_position.y << ","<<_position.z << std::endl;
 				_texture.use(_shader, "tex", 0);
 				glm::mat4 model = glm::mat4(1.0);
-				model = glm::translate(model, _position); //glm::vec3(particle.Position.x, particle.Position.y, particle.Position.z)
+				model = glm::translate(model, _position);
 				model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
 				//model = glm::scale(model, particle.Scale);
 				_shader.set("model", model);
 				_shader.set("proj", proj);
 				_shader.set("view", view);
-				//std::cout << particle.Scale.x << " " << particle.Scale.y << " " << particle.Scale.z << std::endl;
 				_shader.set("scale", particle.Scale);
 				_shader.set("offset", particle.Position);
 				_shader.set("color", glm::vec4(1, 1, 1, 1));
@@ -97,9 +93,8 @@ void ParticleSystem::Draw(glm::mat4& proj, glm::mat4& view)
 			}
 		}
 		// Don't forget to reset to default blending mode
-
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-		//glEnable(GL_BLEND);
+
 	}
 	
 }

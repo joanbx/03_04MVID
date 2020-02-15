@@ -5,7 +5,7 @@
 #include <string>
 
 class Shader;
-
+//Class texture: It gets a texture from a path to be used. It contains different options (wrap, filter)
 class Texture {
     public:
         enum class Wrap {
@@ -25,7 +25,7 @@ class Texture {
             RGB,
             RGBA
         };
-
+		//Constructor
         Texture(const char* path, Format format);
         Texture() = delete;
         ~Texture();
@@ -34,14 +34,17 @@ class Texture {
         Texture(Texture&&) = default;
         Texture& operator=(const Texture&) = default;
         Texture& operator=(Texture&&) = default;
-
+		//use: Use the texture in a given shader
         void use(const Shader& shader, const char* name, uint32_t unit = 0) const;
-
+		//setWrap
         void setWrap(Wrap s, Wrap t);
+		//setFilter
         void setFilter(Filter mag, Filter min, Filter mipMapMag = Filter::None, Filter mipMapMin = Filter::None);
 
     private:
+		//applyWrapping
         void applyWrapping() const;
+		//applyFilter
         void applyFilter() const;
 
     private:

@@ -51,7 +51,7 @@ void EnemyManager::Update(const float dt)
 	}
 	else if (_time_elapsed < 120) { //Wave2
 		_wave = 2;
-		_maxEnemies = 1;
+		_maxEnemies = 2;
 		_maxAsteroids = 2;
 		frequency_shoot_enemy *= 0.8f;
 		speedEnemy *= 1.2f;
@@ -119,6 +119,9 @@ void EnemyManager::Update(const float dt)
 				}
 			}
 
+		}
+		else {
+			enemy.setInScene(false);
 		}
 
 		enemycount++;

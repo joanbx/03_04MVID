@@ -2,27 +2,23 @@
 
 #include <glm/gtc/matrix_transform.hpp>
 #include <engine\window.hpp>
-
+//Contructor camera with vectors
 Camera::Camera(const glm::vec3& position, const glm::vec3& up, float yaw, float pitch)
  : _position(position), _worldUp(up), _yaw(yaw), _pitch(pitch), _fov(k_FOV) {
     updateCameraVectors();
 }
-
+//Contructor camera with floats
 Camera::Camera(float posX, float posY, float posZ, float upX, float upY, float upZ, float yaw, float pitch)
     : _position(glm::vec3(posX, posY, posZ)), _worldUp(glm::vec3(upX, upY, upZ)), _yaw(yaw), _pitch(pitch), _fov(k_FOV) {
     updateCameraVectors();
 }
 
-
+//getViewMatrix: Return mat4 view Matrix (LookAt function)
 glm::mat4 Camera::getViewMatrix() const {
     return glm::lookAt(_position, _position + _front, _up);
 }
 
-glm::mat4 Camera::getProj() const {
-	return glm::perspective(glm::radians(_fov), static_cast<float>(Window::instance()->getWidth()) / Window::instance()->getHeight(), _near, _far);
-}
-
-
+//getViewMatrixCustom: Return customized mat4 view Matrix
 glm::mat4 Camera::getViewMatrixCustom() const {
 	//Integrar de forma manual la función lookAt
 	//La función LookAt devuelve una mat4 tal que así:   
@@ -65,20 +61,27 @@ glm::mat4 Camera::getViewMatrixCustom() const {
 
 }
 
+//getProj: mat4 projection of camera
+glm::mat4 Camera::getProj() const {
+	return glm::perspective(glm::radians(_fov), static_cast<float>(Window::instance()->getWidth()) / Window::instance()->getHeight(), _near, _far);
+}
 
-
+//getFOV: Return Field of view
 float Camera::getFOV() const {
     return _fov;
 }
 
+//getPosition: vec3 position of camera
 glm::vec3 Camera::getPosition() const {
     return _position;
 }
 
+//getFront: vec3 front of camera
 glm::vec3 Camera::getFront() const {
 	return _front;
 }
 
+//updateCameraVectors: update vectors front, right, up
 void Camera::updateCameraVectors() {
     glm::vec3 front;
     front.x = cos(glm::radians(_yaw)) * cos(glm::radians(_pitch));
@@ -90,6 +93,7 @@ void Camera::updateCameraVectors() {
     _up = glm::normalize(glm::cross(_right, _front));
 }
 
+//handleKeyboard: Handles keboard to change position
 void Camera::handleKeyboard(Movement direction, float dt) {
     const float velocity = k_Speed * dt;
 
@@ -102,11 +106,11 @@ void Camera::handleKeyboard(Movement direction, float dt) {
     }
 	if (_fps) _position.y = 0;
 }
-
+//setFPS: set fps mode (true/false)
 void Camera::setFPS(bool fps) {
 	_fps = fps;
 }
-
+//handleMouseMovement: handles mouse to change rotation
 void Camera::handleMouseMovement(float xoffset, float yoffset, bool constrainPitch) {
     const float xoff = xoffset * k_Sensitivity;
     const float yoff = yoffset * k_Sensitivity;
@@ -121,7 +125,7 @@ void Camera::handleMouseMovement(float xoffset, float yoffset, bool constrainPit
 
     updateCameraVectors();
 }
-
+//handleMouseScroll: handle mouse scroll to change fov
 void Camera::handleMouseScroll(float yoffset) {
     if (_fov >= 1.0f && _fov <= 45.0f) _fov -= yoffset;
     if (_fov <= 1.0f) _fov = 1.0f;

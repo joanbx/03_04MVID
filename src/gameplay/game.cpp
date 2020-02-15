@@ -78,7 +78,7 @@ void Game::Start()
 	int assetBulletType02 = assets.addNewModel(alienBullet);
 	int assetBulletType03 = assets.addNewModel(metalBullet);
 	
-	//Camera
+	//Main Camera
 	Camera camera(glm::vec3(0.0f, 15.0f, 0.0f), glm::vec3(0.0f, 0.0f, -1.0f), 0, -90);
 
 	//Scene graph with the assets to be used and the main camera
@@ -132,8 +132,8 @@ void Game::Start()
 	//Enemy pool
 	std::vector<Enemy> enemies = {
 		Enemy(sceneGraph, Node(assetEnemy01, mainMaterial, Node::Type::isModel), bullets01Enemy, ps, Enemy::EnemyTpye::EnemyVersion01),
-		Enemy(sceneGraph, Node(assetEnemy01, mainMaterial, Node::Type::isModel), bullets01Enemy, ps, Enemy::EnemyTpye::EnemyVersion01),
 		Enemy(sceneGraph, Node(assetEnemy02, mainMaterial, Node::Type::isModel), bullets02Enemy, ps, Enemy::EnemyTpye::EnemyVersion02),
+		Enemy(sceneGraph, Node(assetEnemy01, mainMaterial, Node::Type::isModel), bullets01Enemy, ps, Enemy::EnemyTpye::EnemyVersion01),	
 		Enemy(sceneGraph, Node(assetEnemy02, mainMaterial, Node::Type::isModel), bullets02Enemy, ps, Enemy::EnemyTpye::EnemyVersion02)
 	};
 

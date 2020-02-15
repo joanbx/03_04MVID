@@ -5,8 +5,6 @@
 
 Shadow::Shadow(const Shader& depth, const Shader& sDebug, const Geometry& quadDebug, glm::vec3& direction) : _depth(depth), _sDebug(sDebug), _quadDebug(quadDebug), _direction(direction) {
 	fbo = createFBO();
-	//uint32_t _fbo;
-	//uint32_t _depth_map;
 }
 
 Shadow::~Shadow() {

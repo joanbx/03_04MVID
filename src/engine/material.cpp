@@ -13,8 +13,10 @@ Material::Material(const Shader& shader, Shadow& shadow, DirLight dirLight, std:
 	_name = "mat" + std::to_string(ms.count()) + std::to_string(rand() % 1000); //TO BE IMPROVED
 }
 
-//Material::Material(const Shader& shader) : _shader(shader) {
-//}
+Material::~Material()
+{
+}
+
 
 void Material::setMaterialTextures(const Texture& albedo, const Texture& specular, const Texture& normal)
 {
@@ -23,9 +25,6 @@ void Material::setMaterialTextures(const Texture& albedo, const Texture& specula
 	normal.use(_shader, "material.normal", 2);
 }
 
-//void Material::setMaterial() {
-//
-//}
 
 void Material::setMaterialProperties(glm::vec3& cameraPos, glm::mat4& view, glm::mat4& proj) {
 	

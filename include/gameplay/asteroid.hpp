@@ -3,7 +3,7 @@
 #include <engine\gamebehaviour.hpp>
 #include <engine\gameObject.hpp>
 #include <GLFW\glfw3.h>
-
+//class Asteroid: Asteroid gameobject
 class Asteroid: public GameBehaviour {
 
 

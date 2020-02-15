@@ -5,36 +5,24 @@ SceneGraph::SceneGraph(Assets& assets, Camera& camera) : _assets(assets), _camer
 int SceneGraph::addNewNode(Node& node) {
 	int idNode = nodesCount;
 	_nodes.push_back(nodes(idNode, node));
-	//std::cout << _nodes.size() << std::endl;
 	nodesCount++;
 	return idNode;
 }
 
-//void SceneGraph::setViewProj(glm::mat4& view, glm::mat4& proj, Camera& camera) {
-//	_view = view;
-//	_proj = proj;
-//	_camera = camera;
-//}
 
 void SceneGraph::nodeReady(int id, Transform t ) {
 	
-	//std::cout << _nodes.size() << std::endl;
-	//std::cout << "ReadyNode " << _nodes[0].nodeID << std::endl;
 	for (int i=0; i< _nodes.size(); ++i) {
-		//std::cout << _nodes.size() << " " <<id << " " << _nodes[i].nodeID << std::endl;
 		if (_nodes[i].nodeID == id) {
-			//std::cout << "node found " << id<< std::endl;
 			_nodes[i].node.setDirtyFlag(true);
-			_nodes[i].node.setTrans(t);
-			// _nodes[i].node._trans = t;
-			
+			_nodes[i].node.setTrans(t);			
 		}
 	}
 }
 
 void SceneGraph::updateNodes() {
 
-	//First Pass
+	
 
 	//Group by shaders/Material
 	std::vector<std::string> shadersToUse;
@@ -68,10 +56,8 @@ void SceneGraph::updateNodes() {
 		for (auto& node : _nodes) {
 			if (node.node.dirtyFlag()) {
 				if (!initializedDepth) {
-					//std::cout << "FIRST PASS "  << std::endl;
 					node.node.getMaterial().getShadow().FirstPass();
-					initializedDepth = true;
-					
+					initializedDepth = true;				
 				}
 				node.node.drawNode(_assets, true);
 			}
@@ -80,32 +66,41 @@ void SceneGraph::updateNodes() {
 	}
 
 	//SECOND PASS
-	//_nodes[0].node.getMaterial()._shadow.unBindFrameBuffer();
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	glViewport(0, 0, Window::instance()->getWidth(), Window::instance()->getHeight());
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	glm::mat4 view = _camera.getViewMatrix(); //glm::lookAt(glm::vec3(0, 15.0f, 0), glm::vec3(0, 0, 0), glm::vec3(0, 0, -1.0f)); //camera.getViewMatrix();
-	glm::mat4 proj = _camera.getProj();//glm::perspective(glm::radians(camera.getFOV()), static_cast<float>(Window::instance()->getWidth()) / Window::instance()->getHeight(), 0.1f, 100.0f);
+	glm::mat4 view = _camera.getViewMatrix();
+	glm::mat4 proj = _camera.getProj();
 	
 	for (auto& s : shadersToUse) {
 		bool initialized = false;
 		for (auto& node : _nodes) {
 			if (node.node.dirtyFlag()) {
 				if (!initialized) {
-					//std::cout << "SECOND PASS " << std::endl;		
-
 					node.node.getMaterial().setMaterialProperties(_camera.getPosition(), view, proj);
-
 					initialized = true;
 				}
-				//draw
-				//std::cout << "DRAW" << node.nodeID << std::endl;
-				node.node.drawNode(_assets, false);
-				node.node.setDirtyFlag(false);
+				//draw node
+				if (node.node.hasParent() == false) {
+					node.node.drawNode(_assets, false);
+					node.node.setDirtyFlag(false);
+					//<-TODO: Following To be Tested
+					for (auto& nodec : _nodes) {
+						if (nodec.node.hasParent()) {
+							if (nodec.node.getParent() == node.node.getId()) {
+								nodec.node.drawNode(_assets, false);
+								nodec.node.setDirtyFlag(false);
+							}
+						}
+
+					}
+				}
+				
 			}
 
 		}
-		//TEST DEPTH
+
+		//TEST DEPTH (Only for testing purposes)
 		//_nodes[0].node.getMaterial()._shadow.setTestDepth();
 
 	}

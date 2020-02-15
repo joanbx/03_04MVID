@@ -10,10 +10,11 @@
 #include <engine\window.hpp>
 #include <engine\camera.hpp>
 
+//Class SceneGraph: Used to manage all the nodes present on the scene
 class SceneGraph {
 
 private:
-
+	//Struct nodes
 	struct nodes
 	{
 		int nodeID;
@@ -26,18 +27,19 @@ private:
 	
 	Assets& _assets;
 	Camera& _camera;
-	//glm::mat4 _view;
-	//glm::mat4 _proj;
-	///Camera _camera;
 
 public:
+	//Constructor
 	SceneGraph(Assets& assets, Camera& camera);
+	//addNewNode: Add new node and returns an ID integer
 	int addNewNode(Node& node);
-	//void setViewProj(glm::mat4& view, glm::mat4& proj, Camera& camera);
+	//updateNodes: Update nodes in the game
 	void updateNodes();
+	//NodeReady
 	void nodeReady(int id, Transform t);
+	//getNode: Get node at a given integer id
 	Node getNode(int node) { return _nodes[node].node; }
-
+	//getCamera: return main camera
 	Camera& getCamera() { return _camera; }
 };
 

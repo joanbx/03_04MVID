@@ -5,40 +5,51 @@
 #include <engine/input.hpp>
 #include <GLFW\glfw3.h>
 
+//Class Bullet: Bullet (ammo) object
 class Bullet : public GameBehaviour {
 
 
 public:
-	
+	//Bullet types (player or enemy)
 	enum class Bullettypes {
 		isPlayer,
 		isEnemy
 	};
-
+	//Constructor
 	Bullet(SceneGraph& sg, Node& node, Bullet::Bullettypes types);
 	~Bullet();
-
+	
 	void Start() final;
 
 	void Update(const float dt) final;
-
+	//bulletDraw: Ready to Draw bullet
 	void bulletDraw();
 
 
-
+	//setUse
 	void setUse(bool use);
+	//setStarted
 	void setStarted(bool start);
+	//setUpdated
 	void setUpdated(bool updated);
+	//setPosition
 	void setPosition(glm::vec3& posBullet);
+	//setAngle
 	void setAngle(float angle);
+	//setDirection
 	void setDirection(glm::vec3 direction);
+	//setSpeed
 	void setSpeed(float speed);
 	
-
+	//getUsed
 	bool getUsed() { return _used; }
+	//getStarted
 	bool getStarted() { return _started; }
+	//getUpdated
 	bool getUpdated() { return _updated; }
+	//getDirection
 	glm::vec3 getDirection() { return _direction; }
+	//getGO: GameObject
 	GameObject& getGO() { return _go; }
 
 private:
@@ -55,7 +66,9 @@ private:
 	bool _started = false;
 	bool _updated = false;
 
+	//pushDirection
 	void pushDirection(float dt);
+	//checkAutoDestroy
 	void checkAutoDestroy();
 
 };

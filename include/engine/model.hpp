@@ -8,7 +8,7 @@ class aiNode;
 struct aiScene;
 class aiMesh;
 class aiMaterial;
-
+//Class Model: used to import 3d models with assimp
 class Model {
 public:
   /*  Model Data */

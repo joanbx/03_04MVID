@@ -12,7 +12,7 @@
 #include <engine\textRenderer.hpp>
 
 
-//Shootem up Game
+//class Game: Shootem up Game
 class Game {
 public:
 	//Constructor

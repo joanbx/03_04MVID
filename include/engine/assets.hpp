@@ -13,7 +13,7 @@
 #include <engine\geometry\cube.hpp>
 #include <engine\geometry\sphere.hpp>
 
-
+//Class AssetGeometry: Contains textures and plain geometry
 class AssetsGeometry {
 
 private:
@@ -25,8 +25,7 @@ private:
 	
 public:
 	
-	
-	
+	//Enum type geomtry: quad, cube, sphere
 	enum typeGeometry {
 		isQuad,
 		isCube,
@@ -34,20 +33,22 @@ public:
 	};
 	
 	AssetsGeometry(const Geometry& geometry, const Texture& albedo, const Texture& specular, const Texture& normal);
-	//AssetsGeometry(typeGeometry type, float size, const Texture& albedo, const Texture& difuse, const Texture& nomral);
-	//AssetsGeometry(AssetsGeometry::typeGeometry type, float size);
 
+	//getGeometry: return geometry
 	const Geometry& getGeometry() { return _geometry; }
+	//getTextures: return all textures
 	const std::vector<Texture> getTextures() { return _textures; }
+	//getAlbedo: return albedo texture
 	const Texture& getAlbedo() { return _albedo; }
+	//getSpecular: return specular texture
 	const Texture& getSpecular() { return _specular; }
+	//getNormal: return normal
 	const Texture& getNormal() { return _normal; }
-	//std::vector<Texture>& getTextures() { return _textures; }
 
 };
-
+//Class Assets: Container of Models and Geometries
 class Assets {
-
+	//struct for models with ID
 	struct models
 	{
 		int assetID;
@@ -55,7 +56,7 @@ class Assets {
 		models(int n, const Model& m) : assetID(n), model(m) {}
 
 	};
-
+	//struct geometries with ID
 	struct geometries
 	{
 		int assetID;
@@ -67,30 +68,19 @@ class Assets {
 private:
 	
 
-	std::vector<geometries> _geometries;
-	std::vector<models> _models;
+	std::vector<geometries> _geometries; //vector geometries
+	std::vector<models> _models; //vector models
 
-	//std::vector<Model> models_;
-
-	int countAssets = 0;
+	int countAssets = 0; //Incremental ID
 	
 
 public:
 	
-	//const Assets(const Model& m);
 	int addNewModel(const Model& m);
-	//void addNewTexture(char* path, std::string name);
-	//void addNewShader(char* pathVertex, char* pathFragment,std::string name);
+
 	int addNewGeometry(const Geometry& geometry, const Texture& albedo, const Texture& difuse, const Texture& nomral);
-	//int addNewGeometry(AssetsGeometry::typeGeometry type, float size);
 
-	//void Render(const Shader& shader);
-
-	/*const Model& getModel_() {
-		return models_[0];
-	};*/
-
-	//Shader getShader(std::string name) { return _shaders[name]; };
+	//getModel: Get model with a given ID
 	const Model& getModel(int id) {
 		for (auto& m : _models) {			
 			if (m.assetID == id) {	
@@ -98,6 +88,7 @@ public:
 			}	
 		}
 	};
+	//getAssetGeometry: Get AssetGeometry with a given id
 	AssetsGeometry getAssetGeometry(int id) {
 		for (auto& g : _geometries) {
 			if (g.assetID == id)

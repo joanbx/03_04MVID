@@ -3,7 +3,7 @@
 
 #include <functional>
 #include "engine/window.hpp"
-
+//Class Input: instance of input keyboard events
 class Input {
 public:
     static Input* instance() {

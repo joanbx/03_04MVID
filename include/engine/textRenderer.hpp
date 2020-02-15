@@ -22,14 +22,10 @@ struct TextQueue {
 	glm::vec3 TextQueue_color;
 };
 
-// A renderer class for rendering text displayed by a font loaded using the 
-// FreeType library. A single font is loaded, processed into a list of Character
-// items for later rendering.
+//class TextRenderer: A renderer class for rendering text displayed by a font loaded using the FreeType library. 
 class TextRenderer
 {
 public:
-
-	
 
 	// Holds a list of pre-compiled Characters
 	std::map<GLchar, Character> Characters;
@@ -41,11 +37,11 @@ public:
 	//TextRenderer() = delete;
 	~TextRenderer();
 
-	// Pre-compiles a list of characters from the given font
+	//Load: Pre-compiles a list of characters from the given font
 	void Load(std::string font, uint32_t fontSize);
-	// Renders a string of text using the precompiled list of characters
+	//RenderText: Renders a string of text using the precompiled list of characters
 	void RenderText();
-
+	//addTextToRender: Add text into the container to be rendererd in renderText function
 	void addTextToRender(std::string text, float x, float y, float scale, glm::vec3 color = glm::vec3(1.0f));
 
 private:

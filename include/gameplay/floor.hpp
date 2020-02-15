@@ -4,7 +4,7 @@
 #include <engine\gameObject.hpp>
 #include <engine/input.hpp>
 #include <GLFW\glfw3.h>
-
+//Class floor: Move quads with texture to give a movement effect in the scene
 class Floor : public GameBehaviour {
 
 

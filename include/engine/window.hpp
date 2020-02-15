@@ -4,7 +4,7 @@
 #include <cstdint>
 
 class GLFWwindow;
-
+//Class window: Creates a window instance with a given width and height
 class Window {
     public:
         static Window* instance() {

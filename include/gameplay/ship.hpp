@@ -7,7 +7,7 @@
 #include <gameplay\bullet.hpp>
 #include <gameplay\enemy.hpp>
 
-//Player class (controls the player ship)
+//class Ship: Player class (controls the player ship)
 class Ship : public GameBehaviour {
 
 private:

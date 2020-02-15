@@ -9,23 +9,24 @@
 #include <gameplay\enemy.hpp>
 #include <engine\particleSystem.hpp>
 #include <gameplay\asteroid.hpp>
-
+//Class EnemyManager: Handles all the enemies wtih bullets plus asteroids
 class EnemyManager : public GameBehaviour {
 
 public:
-
+	//Constructor
 	EnemyManager(std::vector<Enemy>& enemies, std::vector<Asteroid>& asteroids, Ship& player);
 	~EnemyManager();
 
 	void Start() final;
 
 	void Update(const float dt) final;
-
+	//UpdatePS: Update particle system 
 	void UpdatePS(float dt);
-
+	//setTimeStart: float
 	void setTimeStart(float time);
-
+	//getWave: int
 	uint32_t getWave() { return _wave; }
+	//getTimeElapsed: float
 	float getTimeElapsed() { return _time_elapsed; }
 
 private:

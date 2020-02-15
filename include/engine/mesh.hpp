@@ -21,10 +21,12 @@ struct Texture2 {
   std::string path;
 };
 
+//Class Mesh: render in a given shader a mesh (vertices, indices and textures)
 class Mesh {
 public:
+	//Constructor
   Mesh(std::vector<Vertex> vertices, std::vector<uint32_t> indices, std::vector<Texture2> textures);
-
+  //render: Render to a given shader
   void render(const Shader& shader) const;
 
   std::vector<Vertex> vertices_;

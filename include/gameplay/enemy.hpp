@@ -5,7 +5,7 @@
 #include <GLFW\glfw3.h>
 #include <gameplay\bullet.hpp>
 #include <engine\particleSystem.hpp>
-
+//Class enemy: Enemy object
 class Enemy : public GameBehaviour {
 
 public:
@@ -22,26 +22,41 @@ public:
 	void Start() final;
 
 	void Update(const float dt) final;
-
+	//enemyDraw: Ready to draw node
 	void enemyDraw();
 
+	//setInScene: visible
 	void setInScene(bool isInScene);
+	//setDestroy
 	void setDestroy(bool destroy);
+	//setDirection: vec3
 	void setDirection(glm::vec3 direction);
+	//setChangeDirection: bool
 	void setChangeDirection(bool stoped);
+	//setFrequencyShoot: float
 	void setFrequencyShoot(float freq);
+	//setSpeed: float
 	void setSpeed(float speed);
+	//setSpeedBullet: float
 	void setSpeedBullet(float speed);
+	//setPlayerPos: vec3
 	void setPlayerPos(glm::vec3& position);
 	
-
+	//getBullets
 	std::vector<Bullet>& getBullets() { return _bullets; }
+	//getInScene: visible
 	bool getInScene() { return _inScene; }
+	//getGO: GameObject
 	GameObject& getGO() { return _go; }
+	//getDestroy: bool
 	bool getDestroy() { return _destroy; }
+	//getChangeDirection: bool
 	bool getChangeDirection() { return _changeDirection; }
+	//getFrequencyShoot
 	float getFrequencyShoot() { return _frequencyShoot; }
+	//getDirectio
 	glm::vec3 getDirectio() { return modPos; }
+	//getPS: Particle System
 	ParticleSystem& getPS() { return _ps; }
 	
 	
@@ -75,7 +90,9 @@ private:
 	float  time_elapsed;
 	EnemyTpye _enemyType;
 
+	//doDirection
 	void doDirection(float dt);
+	//shoot
 	void shoot();
 
 
