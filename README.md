@@ -1,7 +1,7 @@
 ### 04MVID
 OpenGL project regarding the subject "Programación I" (Programming I) from "Máster en Diseño y Desarrollo de Videojuegos" (Design and game development Master) at VIU University.
 
-##Folders
+## Folders
 - **Activities**: Description of different activities (spanish)
 - **Assets**: 3D Models, textures and fonts used in the scope of this project.
 - **CMake**: Compiler
@@ -12,7 +12,7 @@ OpenGL project regarding the subject "Programación I" (Programming I) from "Má
 - **Projects**: Different activities made during the course to learn OpenGL. Including the Final project.
 - **Sources**: Divided by deps, engine and gameplay (shootme up or final project).
 
-##Engine
+## Engine
 Our engine consists in the following classes:
 - **Assets**: Container of Models and Geometries
 - **Camera**: Creates a (perspective) camera
@@ -34,10 +34,10 @@ It is customized for our normal blinn phong shader with directional shadow and m
 - **Transform**: Container for position, rotation and scale
 - **Window**: Creates a window instance with a given width and height
 
-##Architecture
+## Architecture
 ![alt text](https://github.com/joanbx/03_04MVID/blob/develop/Architecture.png)
 
-##GamePlay
+## GamePlay
 In the FINAL project we propose a shootem up game with 2d dynamics and 3d rendering.
 - **Asteroid**: Asteroid gameobject behaviour
 - **Bullet**: Bullet (ammo) object
