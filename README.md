@@ -31,3 +31,5 @@ It is customized for our normal blinn phong shader with directional shadow and m
 - **Texture**: It gets a texture from a path to be used. It contains different options (wrap, filter)
 - **Transform**: Container for position, rotation and scale
 - **Window**: Creates a window instance with a given width and height
+##Arquitecture
+![alt text](https://github.com/joanbx/03_04MVID/blob/develop/Architecture.png)
