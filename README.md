@@ -1,5 +1,6 @@
 ### 04MVID
 OpenGL project regarding the subject "Programación I" (Programming I) from "Máster en Diseño y Desarrollo de Videojuegos" (Design and game development Master) at VIU University.
+
 ##Folders
 - **Activities**: Description of different activities (spanish)
 - **Assets**: 3D Models, textures and fonts used in the scope of this project.
@@ -10,6 +11,7 @@ OpenGL project regarding the subject "Programación I" (Programming I) from "Má
 - **libs**: Assimp and freetype compiled libraries for windows.
 - **Projects**: Different activities made during the course to learn OpenGL. Including the Final project.
 - **Sources**: Divided by deps, engine and gameplay (shootme up or final project).
+
 ##Engine
 Our engine consists in the following classes:
 - **Assets**: Container of Models and Geometries
@@ -31,5 +33,17 @@ It is customized for our normal blinn phong shader with directional shadow and m
 - **Texture**: It gets a texture from a path to be used. It contains different options (wrap, filter)
 - **Transform**: Container for position, rotation and scale
 - **Window**: Creates a window instance with a given width and height
-##Arquitecture
+
+##Architecture
 ![alt text](https://github.com/joanbx/03_04MVID/blob/develop/Architecture.png)
+
+##GamePlay
+In the FINAL project we propose a shootem up game with 2d dynamics and 3d rendering.
+- **Asteroid**: Asteroid gameobject behaviour
+- **Bullet**: Bullet (ammo) object
+- **Enemy**: Enemy ships
+- **EnemyManager**: Handles all the enemies wtih its bullets plus asteroids and the incoming waves
+- **Floor**: Move quads with texture to give a movement effect in the scene
+- **Game**: Handles the loading of all objects and classes plus the main loop
+- **PowerUp**: Power up behaviour (Extra shoot)
+- **Ship**: Player
