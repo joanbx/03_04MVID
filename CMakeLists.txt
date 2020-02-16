@@ -28,11 +28,9 @@ set(ENGINE_SRC_FILES
     ${CMAKE_CURRENT_LIST_DIR}/src/engine/light.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/engine/shadow.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/engine/transform.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/src/engine/drawable.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/engine/node.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/engine/sceneGraph.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/engine/gameObject.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/src/engine/easyGO.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/engine/textRenderer.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/engine/particleSystem.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/engine/gameBehaviour.cpp
@@ -56,11 +54,9 @@ set(ENGINE_HEADER_FILES
     ${CMAKE_CURRENT_LIST_DIR}/include/engine/light.hpp
     ${CMAKE_CURRENT_LIST_DIR}/include/engine/shadow.hpp
     ${CMAKE_CURRENT_LIST_DIR}/include/engine/transform.hpp
-    ${CMAKE_CURRENT_LIST_DIR}/include/engine/drawable.hpp
     ${CMAKE_CURRENT_LIST_DIR}/include/engine/node.hpp
     ${CMAKE_CURRENT_LIST_DIR}/include/engine/sceneGraph.hpp
     ${CMAKE_CURRENT_LIST_DIR}/include/engine/gameObject.hpp
-    ${CMAKE_CURRENT_LIST_DIR}/include/engine/easyGO.hpp
     ${CMAKE_CURRENT_LIST_DIR}/include/engine/textRenderer.hpp
     ${CMAKE_CURRENT_LIST_DIR}/include/engine/particleSystem.hpp
     ${CMAKE_CURRENT_LIST_DIR}/include/engine/gameBehaviour.hpp

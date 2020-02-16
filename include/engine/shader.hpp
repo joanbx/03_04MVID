@@ -6,7 +6,7 @@
 #include <glm/glm.hpp>
 #include <string>
 
-//Class Shader: 
+//Class Shader: Sets properties into the shader
 class Shader {
     enum class Type {
         Vertex,
