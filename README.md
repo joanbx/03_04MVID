@@ -35,7 +35,6 @@ It is customized for our normal blinn phong shader with directional shadow and m
 - **Window**: Creates a window instance with a given width and height
 
 ##Architecture
-
 ![alt text](https://github.com/joanbx/03_04MVID/blob/develop/Architecture.png)
 
 ##GamePlay
