@@ -1,0 +1,17 @@
+newmtl ship_1_weld1_blinnSG
+	Ns 9.999999
+	Ni 1.500000
+	d 1.000000
+	Tr 0.000000
+	Tf 1.000000 1.000000 1.000000 
+	illum 2
+	Ka 0.588235 0.588235 0.588235
+	Kd 0.588235 0.588235 0.588235
+	Ks 1.000000 1.000000 1.000000
+	Ke 0.000000 0.000000 0.000000
+	map_Kd Spaceship_BaseColor.png
+	map_Ks Spaceship_Specular.png
+	map_bump Spaceship_Normal.png
+
+
+
