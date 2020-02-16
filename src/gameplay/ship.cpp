@@ -12,7 +12,7 @@ Ship::~Ship()
 //Start ship 
 void Ship::Start() {
 	//Init size
-	_go.setSize(glm::vec3(0.7f,1.0f,0.9f));
+	_go.setSize(glm::vec3(0.62f,1.0f,0.8f));
 	//Init Variables
 	_posShip = glm::vec3(0, 1, 0);
 	_rotShip = glm::vec3(0, 0, 0);

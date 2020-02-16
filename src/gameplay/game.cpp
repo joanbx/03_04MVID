@@ -27,7 +27,7 @@ void Game::Start()
 
 	//Define models
 	const Model object("../assets/models/ships/SF_Fighter/SciFi_Fighter.obj");
-	const Model enemy01("../assets/models/UFO/Low_poly_UFO.obj");
+	const Model enemy01("../assets/models/ships/UFO/Low_poly_UFO.obj");
 	const Model enemy02("../assets/models/ships/ship03/Spaceship.obj");
 	const Model alienBullet("../assets/models/bullets/MetalAlien01/sphere.obj");
 	const Model metalBullet("../assets/models/bullets/Metal_Pattern/sphere.obj");
@@ -251,7 +251,7 @@ void Game::Update(const float dt, SceneGraph& sceneGraph, Ship& ship, Floor& flo
 		if ((int)glfwGetTime() % 2 == 1) {
 			textRenderer.addTextToRender("PRESS X TO START ", _width / 2 - 110.0, _height / 2, 1.0, glm::vec3(1.0, 1.0, 1.0));
 		}
-
+		textRenderer.addTextToRender("Controls: WASD + SPACEBAR", _width / 2 - 148.0, _height / 2 + 100, 1.0, glm::vec3(1.0, 1.0, 1.0));
 		startButton();
 	}
 	
