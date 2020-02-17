@@ -6,7 +6,6 @@
 #include <engine\transform.hpp>
 #include <engine\model.hpp>
 #include <engine\material.hpp>
-#include <engine\drawable.hpp>
 #include <engine\assets.hpp>
 //Class Node: Nodes that hangs from the scnegraph
 //It has also a drawable function
